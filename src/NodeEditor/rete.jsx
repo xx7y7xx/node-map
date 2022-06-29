@@ -6,11 +6,8 @@ import AreaPlugin from 'rete-area-plugin';
 import MyNode from './MyNode';
 import NumControl from './NumControl';
 import TextControl from './TextControl';
-import NumComponent from './NumComponent';
-import TextComponent from './TextComponent';
-
-const numSocket = new Rete.Socket('Number value');
-const textSocket = new Rete.Socket('Text value');
+import NumComponent, { numSocket } from './NumComponent';
+import TextComponent, { textSocket } from './TextComponent';
 
 class AddComponent extends Rete.Component {
   constructor() {

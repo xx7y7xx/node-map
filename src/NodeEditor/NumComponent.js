@@ -1,7 +1,7 @@
 import Rete from 'rete';
 import NumControl from './NumControl';
 
-const numSocket = new Rete.Socket('Number value');
+export const numSocket = new Rete.Socket('Number value');
 
 export default class NumComponent extends Rete.Component {
   constructor() {

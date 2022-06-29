@@ -1,7 +1,7 @@
 import Rete from 'rete';
 import TextControl from './TextControl';
 
-const textSocket = new Rete.Socket('Text value');
+export const textSocket = new Rete.Socket('Text value');
 
 export default class TextComponent extends Rete.Component {
   constructor() {
