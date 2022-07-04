@@ -2,6 +2,8 @@
 
 Use node editor to control data transform then visualize on the map.
 
+![](node-map.jpg)
+
 ## Start dev
 
 ```
