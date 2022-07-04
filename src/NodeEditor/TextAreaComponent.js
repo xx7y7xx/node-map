@@ -1,22 +1,23 @@
 import Rete from 'rete';
-import TextControl from './TextControl';
+import TextAreaControl from './TextAreaControl';
 
 export const textSocket = new Rete.Socket('Text value');
 
-export default class TextComponent extends Rete.Component {
+export default class TextAreaComponent extends Rete.Component {
   constructor() {
     super('Text Node'); // node title
   }
 
   builder(node) {
     const out1 = new Rete.Output('text', 'Text Socket', textSocket);
-    const ctrl = new TextControl(this.editor, 'text', node);
+    const ctrl = new TextAreaControl(this.editor, 'text', node);
 
     return node.addControl(ctrl).addOutput(out1);
   }
 
   // eslint-disable-next-line class-methods-use-this
   worker(node, inputs, outputs) {
+    // eslint-disable-line class-methods-use-this
     outputs.text = node.data.text; // eslint-disable-line no-param-reassign
   }
 }

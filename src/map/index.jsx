@@ -8,13 +8,13 @@ export default function Map() {
   const mapboxElRef = useRef(null); // DOM element to render map
 
   useEffect(() => {
-    const map = new mapboxgl.Map({
+    window.mapbox = new mapboxgl.Map({
       container: mapboxElRef.current,
       style: 'mapbox://styles/mapbox/light-v10',
       center: [103.7041631, 1.3139961],
       zoom: 9,
     });
-    console.log('map', map);
+    console.log('map', window.mapbox);
   }, []);
 
   return (
