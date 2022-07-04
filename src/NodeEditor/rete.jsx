@@ -30,9 +30,9 @@ export async function createEditor(container) {
   const transformNode = await transformComponent.createNode();
   const previewNode = await previewComponent.createNode();
 
-  jsonNode.position = [0, 0];
-  transformNode.position = [400, 100];
-  previewNode.position = [700, 0];
+  jsonNode.position = [0, 100];
+  transformNode.position = [500, 0];
+  previewNode.position = [800, 0];
 
   editor.addNode(jsonNode);
   editor.addNode(transformNode);

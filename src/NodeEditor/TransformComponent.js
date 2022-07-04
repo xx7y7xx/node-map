@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import Rete from 'rete';
 import { jsonSocket } from './JsonComponent';
-import TextControl from './TextControl';
+import InputControl from './InputControl';
 import DivControl from './DivControl';
 
 export default class TransformComponent extends Rete.Component {
@@ -17,9 +17,9 @@ export default class TransformComponent extends Rete.Component {
       .addInput(input)
       .addOutput(output)
       .addControl(new DivControl('latKeyLabel', 'Lat Key'))
-      .addControl(new TextControl(this.editor, 'latKey', node, true))
+      .addControl(new InputControl(this.editor, 'latKey', node, true))
       .addControl(new DivControl('lngKeyLabel', 'Lng Key'))
-      .addControl(new TextControl(this.editor, 'lngKey', node, true));
+      .addControl(new InputControl(this.editor, 'lngKey', node, true));
   }
 
   worker(node, inputs, outputs) {

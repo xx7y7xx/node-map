@@ -4,7 +4,8 @@ import Rete from 'rete';
 export default class JsonControl extends Rete.Control {
   static component = ({ value, onChange }) => (
     <textarea
-      rows={4}
+      rows={5}
+      cols={40}
       value={value}
       onChange={(e) => onChange(e.target.value)}
     />

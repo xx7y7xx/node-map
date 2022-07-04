@@ -3,7 +3,7 @@ import Rete from 'rete';
 
 export default class TextControl extends Rete.Control {
   static component = ({ value, onChange }) => (
-    <textarea rows={4} value={value} onChange={(e) => onChange(e.target.value)} />
+    <input value={value} onChange={(e) => onChange(e.target.value)} />
   );
 
   constructor(emitter, key, node) {
