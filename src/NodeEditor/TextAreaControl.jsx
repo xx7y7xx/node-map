@@ -1,16 +1,20 @@
 import React from 'react';
 import Rete from 'rete';
 
-export default class TextControl extends Rete.Control {
+export default class TextAreaControl extends Rete.Control {
   static component = ({ value, onChange }) => (
-    <textarea rows={4} value={value} onChange={(e) => onChange(e.target.value)} />
+    <textarea
+      rows="4"
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+    />
   );
 
   constructor(emitter, key, node) {
     super(key);
     this.emitter = emitter;
     this.key = key;
-    this.component = TextControl.component;
+    this.component = TextAreaControl.component;
 
     const initial = node.data[key] || '';
 

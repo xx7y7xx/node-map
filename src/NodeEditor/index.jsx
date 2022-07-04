@@ -1,15 +1,11 @@
 import React from 'react';
 import { useRete } from './rete';
 
-export default function App() {
+export default function NodeEditor() {
   const [setContainer] = useRete();
   return (
-    <div className="App">
+    <div className="node-editor">
       <div
-        style={{
-          width: '100vw',
-          height: '100vh',
-        }}
         ref={(ref) => ref && setContainer(ref)}
       />
     </div>

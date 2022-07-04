@@ -1,9 +1,17 @@
 {
   "data": [
     {
-      "data": {
-        "lat": 1,
-        "lng": 103
+      "name": "VivoCity Station",
+      "point": {
+        "Lat": 1.2655414,
+        "Lng": 103.8254528
+      }
+    },
+    {
+      "name": "Jurong Point",
+      "point": {
+        "Lat": 1.3397443,
+        "Lng": 103.704541
       }
     }
   ]

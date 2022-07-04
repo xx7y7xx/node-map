@@ -3,63 +3,15 @@ import Rete from 'rete';
 import ReactRenderPlugin from 'rete-react-render-plugin';
 import ConnectionPlugin from 'rete-connection-plugin';
 import AreaPlugin from 'rete-area-plugin';
-import MyNode from './MyNode';
-import NumControl from './NumControl';
-import TextControl from './TextControl';
-import NumComponent, { numSocket } from './NumComponent';
-import TextComponent, { textSocket } from './TextComponent';
-import JsonComponent, { JsonControl, jsonSocket } from './JsonComponent';
+import JsonComponent from './JsonComponent';
+import TransformComponent from './TransformComponent';
+import PreviewComponent from './PreviewComponent';
 import mockJsonData from './mockData.json';
 
-class AddComponent extends Rete.Component {
-  constructor() {
-    super('Add');
-    this.data.component = MyNode; // optional
-  }
-
-  builder(node) {
-    const inp1 = new Rete.Input('num1', 'Number Socket', numSocket);
-    const inp2 = new Rete.Input('num2', 'Number Socket 2', numSocket);
-    const inp3 = new Rete.Input('text1', 'Text Socket', textSocket);
-    const inp4 = new Rete.Input('json1', 'Json Socket', jsonSocket);
-    const out = new Rete.Output('num', 'Number', numSocket);
-
-    inp1.addControl(new NumControl(this.editor, 'num1', node));
-    inp2.addControl(new NumControl(this.editor, 'num2', node));
-    inp3.addControl(new TextControl(this.editor, 'text1', node));
-    inp4.addControl(new JsonControl(this.editor, 'text1', node));
-
-    return node
-      .addInput(inp1)
-      .addInput(inp2)
-      .addInput(inp3)
-      .addInput(inp4)
-      .addControl(new TextControl(this.editor, 'preview', node, true))
-      .addOutput(out);
-  }
-
-  worker(node, inputs, outputs) {
-    const n1 = inputs.num1.length ? inputs.num1[0] : node.data.num1;
-    const n2 = inputs.num2.length ? inputs.num2[0] : node.data.num2;
-    const n3 = inputs.text1.length ? inputs.text1[0] : node.data.text1;
-    const n4 = inputs.json1.length ? inputs.json1[0] : node.data.json1;
-    const sum = n1 + n2;
-
-    this.editor.nodes
-      .find((n) => n.id === node.id)
-      .controls.get('preview')
-      .setValue(`${sum}|${n3}|${n4}`);
-    outputs.num = sum; // eslint-disable-line no-param-reassign
-  }
-}
-
 export async function createEditor(container) {
-  const components = [
-    new NumComponent(),
-    new AddComponent(),
-    new TextComponent(),
-    new JsonComponent(),
-  ];
+  const jsonComponent = new JsonComponent();
+  const transformComponent = new TransformComponent();
+  const previewComponent = new PreviewComponent();
 
   const editor = new Rete.NodeEditor('demo@0.1.0', container);
   editor.use(ConnectionPlugin);
@@ -67,33 +19,33 @@ export async function createEditor(container) {
 
   const engine = new Rete.Engine('demo@0.1.0');
 
-  components.forEach((c) => {
+  [jsonComponent, transformComponent, previewComponent].forEach((c) => {
     editor.register(c);
     engine.register(c);
   });
 
-  const n1 = await components[0].createNode({ num: 2 });
-  const n2 = await components[0].createNode({ num: 3 });
-  const n3 = await components[2].createNode({ text: 'foo' });
-  const n4 = await components[3].createNode({ json: JSON.stringify(mockJsonData) });
-  const addNode = await components[1].createNode();
+  const jsonNode = await jsonComponent.createNode({
+    json: mockJsonData,
+  });
+  const transformNode = await transformComponent.createNode();
+  const previewNode = await previewComponent.createNode();
 
-  n1.position = [80, 200];
-  n2.position = [80, 400];
-  n3.position = [80, 600];
-  n4.position = [80, 800];
-  addNode.position = [500, 240];
+  jsonNode.position = [0, 100];
+  transformNode.position = [500, 0];
+  previewNode.position = [800, 0];
 
-  editor.addNode(n1);
-  editor.addNode(n2);
-  editor.addNode(n3);
-  editor.addNode(n4);
-  editor.addNode(addNode);
+  editor.addNode(jsonNode);
+  editor.addNode(transformNode);
+  editor.addNode(previewNode);
 
-  editor.connect(n1.outputs.get('num'), addNode.inputs.get('num1'));
-  editor.connect(n2.outputs.get('num'), addNode.inputs.get('num2'));
-  editor.connect(n3.outputs.get('text'), addNode.inputs.get('text1'));
-  editor.connect(n4.outputs.get('json'), addNode.inputs.get('json1'));
+  editor.connect(
+    jsonNode.outputs.get('json'),
+    transformNode.inputs.get('json'),
+  );
+  editor.connect(
+    transformNode.outputs.get('json'),
+    previewNode.inputs.get('json'),
+  );
 
   editor.on(
     'process nodecreated noderemoved connectioncreated connectionremoved',
@@ -124,12 +76,15 @@ export function useRete() {
     }
   }, [container]);
 
-  useEffect(() => () => {
-    if (editorRef.current) {
-      console.log('destroy');
-      editorRef.current.destroy();
-    }
-  }, []);
+  useEffect(
+    () => () => {
+      if (editorRef.current) {
+        console.log('destroy');
+        editorRef.current.destroy();
+      }
+    },
+    [],
+  );
 
   return [setContainer];
 }
