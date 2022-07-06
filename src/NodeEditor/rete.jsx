@@ -7,8 +7,10 @@ import JsonComponent from './JsonComponent';
 import TransformComponent from './TransformComponent';
 import PreviewComponent from './PreviewComponent';
 import mockJsonData from './mockData.json';
+import UploadComponent from './UploadComponent';
 
 export async function createEditor(container) {
+  const uploadComponent = new UploadComponent();
   const jsonComponent = new JsonComponent();
   const transformComponent = new TransformComponent();
   const previewComponent = new PreviewComponent();
@@ -19,27 +21,30 @@ export async function createEditor(container) {
 
   const engine = new Rete.Engine('demo@0.1.0');
 
-  [jsonComponent, transformComponent, previewComponent].forEach((c) => {
+  [uploadComponent, jsonComponent, transformComponent, previewComponent].forEach((c) => {
     editor.register(c);
     engine.register(c);
   });
 
+  const uploadNode = await uploadComponent.createNode({ upload: {} });
   const jsonNode = await jsonComponent.createNode({
     json: mockJsonData,
   });
   const transformNode = await transformComponent.createNode();
   const previewNode = await previewComponent.createNode();
 
+  uploadNode.position = [0, 400];
   jsonNode.position = [0, 100];
   transformNode.position = [500, 0];
   previewNode.position = [800, 0];
 
+  editor.addNode(uploadNode);
   editor.addNode(jsonNode);
   editor.addNode(transformNode);
   editor.addNode(previewNode);
 
   editor.connect(
-    jsonNode.outputs.get('json'),
+    uploadNode.outputs.get('json'),
     transformNode.inputs.get('json'),
   );
   editor.connect(
