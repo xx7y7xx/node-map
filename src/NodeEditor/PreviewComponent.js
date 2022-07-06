@@ -6,6 +6,7 @@ import { jsonSocket } from './JsonComponent';
 export default class PreviewComponent extends Rete.Component {
   constructor() {
     super('Preview');
+    this.markers = [];
   }
 
   builder(node) {
@@ -20,11 +21,16 @@ export default class PreviewComponent extends Rete.Component {
   worker(node, inputs, outputs) {
     const jsonNodeValue = inputs.json.length ? inputs.json[0] : node.data.json;
 
+    this.markers.forEach((m) => {
+      m.remove();
+    });
+    this.markers = [];
+
     jsonNodeValue.filter((lngLat) => lngLat[0] && lngLat[1]).forEach((lngLat) => {
-      const marker1 = new mapboxgl.Marker()
+      const marker = new mapboxgl.Marker()
         .setLngLat(lngLat)
         .addTo(window.mapbox);
-      console.log('marker:', marker1);
+      this.markers.push(marker);
     });
 
     this.editor.nodes

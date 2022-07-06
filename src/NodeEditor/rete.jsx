@@ -4,15 +4,19 @@ import ReactRenderPlugin from 'rete-react-render-plugin';
 import ConnectionPlugin from 'rete-connection-plugin';
 import AreaPlugin from 'rete-area-plugin';
 import JsonComponent from './JsonComponent';
-import TransformComponent from './TransformComponent';
+import TransformEvalComponent from './TransformEvalComponent';
 import PreviewComponent from './PreviewComponent';
 import mockJsonData from './mockData.json';
 import UploadComponent from './UploadComponent';
 
+const defaultFnStr = `return input.data.map((item) => (
+  [item.point.Lng, item.point.Lat]
+))`;
+
 export async function createEditor(container) {
   const uploadComponent = new UploadComponent();
   const jsonComponent = new JsonComponent();
-  const transformComponent = new TransformComponent();
+  const transformEvalComponent = new TransformEvalComponent();
   const previewComponent = new PreviewComponent();
 
   const editor = new Rete.NodeEditor('demo@0.1.0', container);
@@ -21,7 +25,7 @@ export async function createEditor(container) {
 
   const engine = new Rete.Engine('demo@0.1.0');
 
-  [uploadComponent, jsonComponent, transformComponent, previewComponent].forEach((c) => {
+  [uploadComponent, jsonComponent, transformEvalComponent, previewComponent].forEach((c) => {
     editor.register(c);
     engine.register(c);
   });
@@ -30,25 +34,25 @@ export async function createEditor(container) {
   const jsonNode = await jsonComponent.createNode({
     json: mockJsonData,
   });
-  const transformNode = await transformComponent.createNode();
+  const transformEvalNode = await transformEvalComponent.createNode({ fnStr: defaultFnStr });
   const previewNode = await previewComponent.createNode();
 
   uploadNode.position = [0, 400];
   jsonNode.position = [0, 100];
-  transformNode.position = [500, 0];
-  previewNode.position = [800, 0];
+  transformEvalNode.position = [500, 0];
+  previewNode.position = [1000, 0];
 
   editor.addNode(uploadNode);
   editor.addNode(jsonNode);
-  editor.addNode(transformNode);
+  editor.addNode(transformEvalNode);
   editor.addNode(previewNode);
 
   editor.connect(
     uploadNode.outputs.get('json'),
-    transformNode.inputs.get('json'),
+    transformEvalNode.inputs.get('json'),
   );
   editor.connect(
-    transformNode.outputs.get('json'),
+    transformEvalNode.outputs.get('json'),
     previewNode.inputs.get('json'),
   );
 
