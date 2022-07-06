@@ -16,6 +16,12 @@ export default class JsonComponent extends Rete.Component {
 
   // eslint-disable-next-line class-methods-use-this
   worker(node, inputs, outputs) {
-    outputs.json = node.data.json; // eslint-disable-line no-param-reassign
+    if (typeof node.data.json === 'string') {
+      // eslint-disable-next-line no-param-reassign
+      outputs.json = JSON.parse(node.data.json);
+      return;
+    }
+    // eslint-disable-next-line no-param-reassign
+    outputs.json = node.data.json;
   }
 }

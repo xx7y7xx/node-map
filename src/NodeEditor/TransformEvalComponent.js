@@ -5,7 +5,7 @@ import DivControl from './DivControl';
 
 export default class TransformEvalComponent extends Rete.Component {
   constructor() {
-    super('Transform');
+    super('Transform Eval');
   }
 
   builder(node) {
@@ -21,6 +21,12 @@ export default class TransformEvalComponent extends Rete.Component {
 
   worker(node, inputs, outputs) {
     const jsonNodeValue = inputs.json.length ? inputs.json[0] : node.data.json;
+
+    if (!jsonNodeValue.data) {
+      // eslint-disable-next-line no-param-reassign
+      outputs.json = [];
+      return;
+    }
 
     const { controls } = this.editor.nodes.find((n) => n.id === node.id);
     const fnStr = controls.get('fnStr').getValue();
