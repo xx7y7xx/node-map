@@ -20,7 +20,12 @@ export default class TransformEvalComponent extends Rete.Component {
   }
 
   worker(node, inputs, outputs) {
-    const jsonNodeValue = inputs.json.length ? inputs.json[0] : node.data.json;
+    if (inputs.json.length === 0) {
+      // there is no input
+      return;
+    }
+
+    const jsonNodeValue = inputs.json[0];
 
     if (!jsonNodeValue.data) {
       // eslint-disable-next-line no-param-reassign

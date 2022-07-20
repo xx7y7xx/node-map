@@ -3,6 +3,9 @@ import Rete from 'rete';
 import ReactRenderPlugin from 'rete-react-render-plugin';
 import ConnectionPlugin from 'rete-connection-plugin';
 import AreaPlugin from 'rete-area-plugin';
+// import ContextMenuPlugin, { Menu, Item, Search } from 'rete-context-menu-plugin';
+import ContextMenuPlugin from 'rete-context-menu-plugin';
+
 import JsonComponent from './JsonComponent';
 import TransformComponent from './TransformComponent';
 import TransformEvalComponent from './TransformEvalComponent';
@@ -26,6 +29,28 @@ export async function createEditor(container) {
   const editor = new Rete.NodeEditor('demo@0.1.0', container);
   editor.use(ConnectionPlugin);
   editor.use(ReactRenderPlugin);
+  editor.use(ContextMenuPlugin, {
+    searchBar: false, // true by default
+    // leave item when searching, optional. For example, title => ['Refresh'].includes(title)
+    // searchKeep: (title) => true,
+    searchKeep: () => true,
+    delay: 100,
+    allocate(component) {
+      console.log('allocate(component)', component);
+      return ['Submenu'];
+    },
+    rename(component) {
+      return component.name;
+    },
+    items: {
+      'Click me': () => { console.log('Works!'); },
+    },
+    nodeItems: {
+      'Click me': () => { console.log('Works for node!'); },
+      Delete: true, // delete this node
+      Clone: true, // clone this node
+    },
+  });
 
   const engine = new Rete.Engine('demo@0.1.0');
 

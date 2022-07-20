@@ -38,10 +38,13 @@ export default class ConcatComponent extends Rete.Component {
   worker(node, inputs, outputs) {
     let out = [];
 
-    Object.keys(inputs).forEach((key) => {
-      const inputValue = inputs[key].length ? inputs[key][0] : node.data[key];
-      out = [...out, ...inputValue];
-    });
+    Object.keys(inputs)
+      .filter((key) => inputs[key].length) // filter out input socket which has no data input
+      .filter((key) => inputs[key][0]) // when line remove from node, inputs[key]=[undefined]
+      .forEach((key) => {
+        const inputValue = inputs[key].length ? inputs[key][0] : node.data[key];
+        out = [...out, ...inputValue];
+      });
 
     // eslint-disable-next-line no-param-reassign
     outputs.json = out;
