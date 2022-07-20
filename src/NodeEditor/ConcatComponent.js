@@ -19,7 +19,7 @@ export default class ConcatComponent extends Rete.Component {
     };
 
     // Add input
-    [0, 1].forEach(() => {
+    [...Array(node.inputs.size).keys()].forEach(() => {
       node.addInput(new Rete.Input(`json${index}`, `Json ${index}`, jsonSocket));
       index += 1;
     });
