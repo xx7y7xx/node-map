@@ -72,7 +72,7 @@ export async function createEditor(container) {
     });
     const transformNode = await transformComponent.createNode();
     const transformEvalNode = await transformEvalComponent.createNode({ fnStr: defaultFnStr });
-    const concatNode = await concatComponent.createNode();
+    const concatNode = await concatComponent.createNode({ inputCount: 2 });
     const previewNode = await previewComponent.createNode();
 
     uploadNode.position = [0, 500];
