@@ -61,49 +61,54 @@ export async function createEditor(container) {
     engine.register(c);
   });
 
-  const uploadNode = await uploadComponent.createNode({ upload: {} });
-  const jsonNode = await jsonComponent.createNode({
-    json: mockJsonData,
-  });
-  const transformNode = await transformComponent.createNode();
-  const transformEvalNode = await transformEvalComponent.createNode({ fnStr: defaultFnStr });
-  const concatNode = await concatComponent.createNode();
-  const previewNode = await previewComponent.createNode();
+  const localData = localStorage.getItem('node-map');
+  if (localData) {
+    editor.fromJSON(JSON.parse(localData));
+  } else {
+    const uploadNode = await uploadComponent.createNode({ upload: {} });
+    const jsonNode = await jsonComponent.createNode({
+      json: mockJsonData,
+    });
+    const transformNode = await transformComponent.createNode();
+    const transformEvalNode = await transformEvalComponent.createNode({ fnStr: defaultFnStr });
+    const concatNode = await concatComponent.createNode();
+    const previewNode = await previewComponent.createNode();
 
-  uploadNode.position = [0, 500];
-  jsonNode.position = [0, 0];
-  transformNode.position = [500, 0];
-  transformEvalNode.position = [500, 500];
-  concatNode.position = [1000, 0];
-  previewNode.position = [1500, 0];
+    uploadNode.position = [0, 500];
+    jsonNode.position = [0, 0];
+    transformNode.position = [500, 0];
+    transformEvalNode.position = [500, 500];
+    concatNode.position = [1000, 0];
+    previewNode.position = [1500, 0];
 
-  editor.addNode(uploadNode);
-  editor.addNode(jsonNode);
-  editor.addNode(transformNode);
-  editor.addNode(transformEvalNode);
-  editor.addNode(concatNode);
-  editor.addNode(previewNode);
+    editor.addNode(uploadNode);
+    editor.addNode(jsonNode);
+    editor.addNode(transformNode);
+    editor.addNode(transformEvalNode);
+    editor.addNode(concatNode);
+    editor.addNode(previewNode);
 
-  editor.connect(
-    jsonNode.outputs.get('json'),
-    transformNode.inputs.get('json'),
-  );
-  editor.connect(
-    uploadNode.outputs.get('json'),
-    transformEvalNode.inputs.get('json'),
-  );
-  editor.connect(
-    transformNode.outputs.get('json'),
-    concatNode.inputs.get('json0'),
-  );
-  editor.connect(
-    transformEvalNode.outputs.get('json'),
-    concatNode.inputs.get('json1'),
-  );
-  editor.connect(
-    concatNode.outputs.get('json'),
-    previewNode.inputs.get('json'),
-  );
+    editor.connect(
+      jsonNode.outputs.get('json'),
+      transformNode.inputs.get('json'),
+    );
+    editor.connect(
+      uploadNode.outputs.get('json'),
+      transformEvalNode.inputs.get('json'),
+    );
+    editor.connect(
+      transformNode.outputs.get('json'),
+      concatNode.inputs.get('json0'),
+    );
+    editor.connect(
+      transformEvalNode.outputs.get('json'),
+      concatNode.inputs.get('json1'),
+    );
+    editor.connect(
+      concatNode.outputs.get('json'),
+      previewNode.inputs.get('json'),
+    );
+  }
 
   editor.on(
     'process nodecreated noderemoved connectioncreated connectionremoved',
@@ -111,6 +116,7 @@ export async function createEditor(container) {
       console.log('process', editor.toJSON());
       await engine.abort();
       await engine.process(editor.toJSON());
+      localStorage.setItem('node-map', JSON.stringify(editor.toJSON()));
     },
   );
 
