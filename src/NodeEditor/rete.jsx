@@ -63,7 +63,7 @@ export async function createEditor(container) {
 
   const localData = localStorage.getItem('node-map');
   if (localData) {
-    editor.fromJSON(JSON.parse(localData));
+    await editor.fromJSON(JSON.parse(localData));
   } else {
     const uploadNode = await uploadComponent.createNode({ upload: {} });
     const jsonNode = await jsonComponent.createNode({
