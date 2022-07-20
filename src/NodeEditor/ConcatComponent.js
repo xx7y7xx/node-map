@@ -9,19 +9,26 @@ export default class ConcatComponent extends Rete.Component {
 
   builder(node) {
     let index = 0;
+    const initCount = node.data.inputCount;
+    // eslint-disable-next-line no-param-reassign
+    node.data.inputCount = 0;
 
     const onClick = () => {
       node.addInput(
         new Rete.Input(`json${index}`, `Json ${index}`, jsonSocket),
       );
       index += 1;
+      // eslint-disable-next-line no-param-reassign
+      node.data.inputCount += 1;
       node.update(); // Rerender ConcatComponent
     };
 
     // Add input
-    [0, 1].forEach(() => {
+    [...Array(initCount).keys()].forEach(() => {
       node.addInput(new Rete.Input(`json${index}`, `Json ${index}`, jsonSocket));
       index += 1;
+      // eslint-disable-next-line no-param-reassign
+      node.data.inputCount += 1;
     });
 
     return node

@@ -63,6 +63,7 @@ export async function createEditor(container) {
 
   const localData = localStorage.getItem('node-map');
   if (localData) {
+    console.debug('load data from local', JSON.parse(localData));
     await editor.fromJSON(JSON.parse(localData));
   } else {
     const uploadNode = await uploadComponent.createNode({ upload: {} });
@@ -71,7 +72,7 @@ export async function createEditor(container) {
     });
     const transformNode = await transformComponent.createNode();
     const transformEvalNode = await transformEvalComponent.createNode({ fnStr: defaultFnStr });
-    const concatNode = await concatComponent.createNode();
+    const concatNode = await concatComponent.createNode({ inputCount: 2 });
     const previewNode = await previewComponent.createNode();
 
     uploadNode.position = [0, 500];
@@ -116,7 +117,10 @@ export async function createEditor(container) {
       console.log('process', editor.toJSON());
       await engine.abort();
       await engine.process(editor.toJSON());
-      localStorage.setItem('node-map', JSON.stringify(editor.toJSON()));
+
+      const data = JSON.stringify(editor.toJSON());
+      console.debug('Save data to local:', editor.toJSON());
+      localStorage.setItem('node-map', data);
     },
   );
 
