@@ -2,6 +2,7 @@
   "name": "node-map",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://xx7y7xx.github.io/node-map",
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.3.0",
