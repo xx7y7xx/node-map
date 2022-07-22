@@ -13,6 +13,8 @@ import PreviewComponent from './PreviewComponent';
 import mockJsonData from './mockData.json';
 import UploadComponent from './UploadComponent';
 import ConcatComponent from './ConcatComponent';
+import CsvToJsonComponent from './CsvToJsonComponent';
+import UploadCsvComponent from './UploadCsvComponent';
 
 const defaultFnStr = `return input.data.map((item) => (
   [item.point.Lng, item.point.Lat]
@@ -25,6 +27,8 @@ export async function createEditor(container) {
   const transformEvalComponent = new TransformEvalComponent();
   const concatComponent = new ConcatComponent();
   const previewComponent = new PreviewComponent();
+  const csvToJsonComponent = new CsvToJsonComponent();
+  const uploadCsvComponent = new UploadCsvComponent();
 
   const editor = new Rete.NodeEditor('demo@0.1.0', container);
   editor.use(ConnectionPlugin);
@@ -55,7 +59,7 @@ export async function createEditor(container) {
   const engine = new Rete.Engine('demo@0.1.0');
 
   [uploadComponent, jsonComponent, transformComponent, transformEvalComponent,
-    concatComponent, previewComponent,
+    concatComponent, previewComponent, csvToJsonComponent, uploadCsvComponent,
   ].forEach((c) => {
     editor.register(c);
     engine.register(c);

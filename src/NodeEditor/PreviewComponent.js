@@ -20,7 +20,11 @@ export default class PreviewComponent extends Rete.Component {
   // eslint-disable-next-line no-unused-vars
   worker(node, inputs) {
     console.debug('PreviewComponent.worker:', inputs);
-    const jsonNodeValue = inputs.json.length ? inputs.json[0] : node.data.json;
+    const jsonNodeValue = inputs.json[0];
+
+    if (!jsonNodeValue) {
+      return;
+    }
 
     this.markers.forEach((m) => {
       m.remove();

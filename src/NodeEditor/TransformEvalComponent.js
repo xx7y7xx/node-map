@@ -45,11 +45,11 @@ export default class TransformEvalComponent extends Rete.Component {
 
     const jsonNodeValue = inputs.json[0];
 
-    if (!jsonNodeValue.data) {
-      // eslint-disable-next-line no-param-reassign
-      outputs.json = [];
-      return;
-    }
+    // if (!jsonNodeValue.data) {
+    //   // eslint-disable-next-line no-param-reassign
+    //   outputs.json = [];
+    //   return;
+    // }
 
     const { controls } = this.editor.nodes.find((n) => n.id === nodeData.id);
     const fnStr = controls.get('fnStr').getValue();
