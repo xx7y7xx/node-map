@@ -89,9 +89,11 @@ export default class TransformEvalComponent extends Rete.Component {
   }
 
   hideError(nodeId) {
-    this.nodes[nodeId]
-      .removeControl(this.errorMessageControls[nodeId])
-      .update(); // Rerender this component
+    const node = this.nodes[nodeId];
+    console.debug('hideError() node.removeControl'); // TODO remove
+    node.removeControl(this.errorMessageControls[nodeId]);
+    console.debug('hideError() node.update'); // TODO remove
+    node.update(); // Rerender this component
     this.errorMessageControls[nodeId] = null;
   }
 }
