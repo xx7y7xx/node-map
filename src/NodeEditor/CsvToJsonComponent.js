@@ -7,13 +7,15 @@ import { jsonSocket } from './JsonComponent';
 import DivControl from './DivControl';
 import { stringSocket } from './UploadCsvComponent';
 
+const INPUT_KEY = 'csv';
+
 export default class CsvToJsonComponent extends Rete.Component {
   constructor() {
     super('CSV to JSON');
   }
 
   builder(node) {
-    const input = new Rete.Input('csv', 'CSV', stringSocket);
+    const input = new Rete.Input(INPUT_KEY, 'CSV', stringSocket);
     const output = new Rete.Output('json', 'JSON', jsonSocket);
 
     return node
@@ -23,12 +25,12 @@ export default class CsvToJsonComponent extends Rete.Component {
   }
 
   worker(nodeData, inputs, outputs) {
-    if (inputs.csv.length === 0) {
+    if (inputs[INPUT_KEY].length === 0) {
       // there is no input
       return;
     }
 
-    const csvStr = inputs.csv[0];
+    const csvStr = inputs[INPUT_KEY][0];
 
     if (!csvStr) {
       // eslint-disable-next-line no-param-reassign

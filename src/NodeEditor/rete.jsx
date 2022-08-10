@@ -15,6 +15,7 @@ import UploadComponent from './UploadComponent';
 import ConcatComponent from './ConcatComponent';
 import CsvToJsonComponent from './CsvToJsonComponent';
 import UploadCsvComponent from './UploadCsvComponent';
+import RemoteDataComponent from './RemoteDataComponent';
 
 const defaultFnStr = `return input.data.map((item) => (
   [item.point.Lng, item.point.Lat]
@@ -29,6 +30,7 @@ export async function createEditor(container) {
   const previewComponent = new PreviewComponent();
   const csvToJsonComponent = new CsvToJsonComponent();
   const uploadCsvComponent = new UploadCsvComponent();
+  const remoteDataComponent = new RemoteDataComponent();
 
   const editor = new Rete.NodeEditor('demo@0.1.0', container);
   editor.use(ConnectionPlugin);
@@ -60,6 +62,7 @@ export async function createEditor(container) {
 
   [uploadComponent, jsonComponent, transformComponent, transformEvalComponent,
     concatComponent, previewComponent, csvToJsonComponent, uploadCsvComponent,
+    remoteDataComponent,
   ].forEach((c) => {
     editor.register(c);
     engine.register(c);
