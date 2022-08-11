@@ -3,14 +3,20 @@ import mapboxgl from 'mapbox-gl';
 import TextControl from './TextControl';
 import { jsonSocket } from './JsonComponent';
 
+const SOURCE_ID = 'nm-line-string-source';
+const LAYER_ID = 'nm-line-string-layer';
 export default class PreviewComponent extends Rete.Component {
   constructor() {
     super('Preview');
     this.markers = [];
+
+    window.mapbox.on('load', () => {
+      this.mapReady = true;
+    });
   }
 
   builder(node) {
-    const input = new Rete.Input('json', 'Json', jsonSocket);
+    const input = new Rete.Input('json', 'JSON', jsonSocket);
 
     return node
       .addInput(input)
@@ -35,12 +41,20 @@ export default class PreviewComponent extends Rete.Component {
 
     // filter out invalid latlng, then add markers to map
     jsonNodeValue
-      .filter((lngLat) => lngLat[0] && lngLat[1])
-      .forEach((lngLat) => {
-        const marker = new mapboxgl.Marker()
-          .setLngLat(lngLat)
-          .addTo(window.mapbox);
-        this.markers.push(marker);
+      // .filter((lngLat) => lngLat[0] && lngLat[1])
+      .forEach((feature) => {
+        if (typeof feature[0] === 'number') {
+          const marker = new mapboxgl.Marker()
+            .setLngLat(feature)
+            .addTo(window.mapbox);
+          this.markers.push(marker);
+        } else if (this.mapReady) {
+          this.renderLineString(feature);
+        } else {
+          window.mapbox.on('load', () => {
+            this.renderLineString(feature);
+          });
+        }
       });
 
     this.updatePreviewControlText(node, `${JSON.stringify(jsonNodeValue)}`);
@@ -61,5 +75,44 @@ export default class PreviewComponent extends Rete.Component {
       m.remove();
     });
     this.markers = [];
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  renderLineString(feature) {
+    const map = window.mapbox;
+
+    if (map.getLayer(LAYER_ID)) {
+      map.removeLayer(LAYER_ID);
+    }
+
+    const mpSource = map.getSource(SOURCE_ID);
+    if (mpSource) {
+      map.removeSource(SOURCE_ID);
+    }
+
+    window.mapbox.addSource(SOURCE_ID, {
+      type: 'geojson',
+      data: {
+        type: 'Feature',
+        properties: {},
+        geometry: {
+          type: 'LineString',
+          coordinates: feature,
+        },
+      },
+    });
+    window.mapbox.addLayer({
+      id: LAYER_ID,
+      type: 'line',
+      source: SOURCE_ID,
+      layout: {
+        'line-join': 'round',
+        'line-cap': 'round',
+      },
+      paint: {
+        'line-color': '#888',
+        'line-width': 8,
+      },
+    });
   }
 }

@@ -1,27 +1,48 @@
 import Rete from 'rete';
 import JsonControl from './JsonControl';
 
-export const jsonSocket = new Rete.Socket('Json value');
+export const jsonSocket = new Rete.Socket('JSON value');
+
+const OUTPUT_KEY = 'json1';
+const CONTROL_KEY = 'json2';
 
 export default class JsonComponent extends Rete.Component {
   constructor() {
-    super('Json Node'); // node title
+    super('JSON Node'); // node title
   }
 
   builder(node) {
     return node
-      .addControl(new JsonControl(this.editor, 'json', node))
-      .addOutput(new Rete.Output('json', 'Json Socket', jsonSocket));
+      .addControl(new JsonControl(this.editor, CONTROL_KEY, node))
+      .addOutput(new Rete.Output(OUTPUT_KEY, 'JSON', jsonSocket));
   }
 
   // eslint-disable-next-line class-methods-use-this
   worker(node, inputs, outputs) {
-    if (typeof node.data.json === 'string') {
-      // eslint-disable-next-line no-param-reassign
-      outputs.json = JSON.parse(node.data.json);
-      return;
-    }
+    // `node.data` is `{}` (empty object) when node just created on board
+    if (!node.data[CONTROL_KEY]) return;
+
     // eslint-disable-next-line no-param-reassign
-    outputs.json = node.data.json;
+    outputs[OUTPUT_KEY] = node.data[CONTROL_KEY].obj; // obj could be null
   }
 }
+
+// Mock data
+/*
+## Input has 1 Point Feature
+[
+  [103.704541,1.3397443]
+]
+
+## Input has 2 Point Feature and 1 LineString Feature
+[
+  [103.8254528,1.2655414],
+  [103.704541,1.3397443],
+  [
+    [103.8254528,1.2655414],
+    [103.704541,1.3397443],
+    [103.794541,1.3997443],
+    [103.854541,1.3297443]
+  ]
+]
+*/

@@ -18,17 +18,34 @@ export default class JsonControl extends Rete.Control {
     this.component = JsonControl.component;
 
     this.props = {
-      value: node.data[key] ? JSON.stringify(node.data[key]) : '',
-      onChange: (v) => {
-        this.setValue(v);
+      onChange: (text) => {
+        this.setValue(text);
         this.emitter.trigger('process');
       },
     };
+
+    // initialize textbox content
+    if (node.data[key]) {
+      if (node.data[key].text !== undefined) {
+        this.props.value = node.data[key].text;
+      }
+    }
   }
 
-  setValue(val) {
-    this.props.value = val;
-    this.putData(this.key, val); // put data on node
+  setValue(text) {
+    this.props.value = text;
+
+    let obj = null;
+    try {
+      obj = JSON.parse(text);
+    } catch (err) {
+      console.error('[JsonControl] Failed to parse textbox content into JSON Object!', err);
+    }
+
+    // save both string and parsed object to node
+    // `text` will be used to keep as internal state
+    // `obj` will be used as output data to downstream like PreviewComponent
+    this.putData(this.key, { text, obj }); // put data on node
     this.update(); // Call react to render this control only
   }
 }

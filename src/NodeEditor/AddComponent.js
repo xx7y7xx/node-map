@@ -17,7 +17,7 @@ export default class AddComponent extends Rete.Component {
     const inp1 = new Rete.Input('num1', 'Number Socket', numSocket);
     const inp2 = new Rete.Input('num2', 'Number Socket 2', numSocket);
     const inp3 = new Rete.Input('text1', 'Text Socket', textSocket);
-    const inp4 = new Rete.Input('json1', 'Json Socket', jsonSocket);
+    const inp4 = new Rete.Input('json1', 'JSON Socket', jsonSocket);
     const out = new Rete.Output('num', 'Number', numSocket);
 
     inp1.addControl(new NumControl(this.editor, 'num1', node));
