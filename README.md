@@ -10,6 +10,12 @@ Use node editor to control data transform then visualize on the map.
 $ npm start
 ```
 
+test production build at local
+
+```
+$ npm run build-localhost
+```
+
 ## Remove react v18 warn
 
 ```
