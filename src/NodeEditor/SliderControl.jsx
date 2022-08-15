@@ -1,12 +1,19 @@
 import React from 'react';
 import Rete from 'rete';
-import { Input } from 'antd';
+import { Slider, InputNumber } from 'antd';
 
-export default class InputControl extends Rete.Control {
+export default class SliderControl extends Rete.Control {
   static component = ({ label, value, onChange }) => (
     <div>
       <span>{label}</span>
-      <Input value={value} onChange={(e) => onChange(e.target.value)} />
+      <Slider
+        min={1}
+        max={20}
+        defaultValue={1}
+        value={value}
+        onChange={(val) => onChange(val)}
+      />
+      <InputNumber value={value} onChange={(val) => onChange(val)} />
     </div>
 
   );
@@ -15,9 +22,9 @@ export default class InputControl extends Rete.Control {
     super(key);
     this.emitter = emitter;
     this.key = key;
-    this.component = InputControl.component;
+    this.component = SliderControl.component;
 
-    const initial = node.data[key] || '';
+    const initial = node.data[key] || 1;
 
     node.data[key] = initial; // eslint-disable-line no-param-reassign
     this.props = {

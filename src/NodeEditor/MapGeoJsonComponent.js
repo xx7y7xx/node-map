@@ -60,10 +60,10 @@ export default class MapGeoJsonComponent extends Rete.Component {
       // .filter((lngLat) => lngLat[0] && lngLat[1])
       .forEach((feature) => {
         if (this.mapReady) {
-          this.addSource(feature, node);
+          this.addOrUpdateSource(feature, node);
         } else {
           window.mapbox.on('load', () => {
-            this.addSource(feature, node);
+            this.addOrUpdateSource(feature, node);
           });
         }
       });
@@ -79,13 +79,8 @@ export default class MapGeoJsonComponent extends Rete.Component {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  addSource(feature, node) {
+  addOrUpdateSource(feature, node) {
     const map = window.mapbox;
-
-    const mpSource = map.getSource(SOURCE_ID);
-    if (mpSource) {
-      map.removeSource(SOURCE_ID);
-    }
 
     const geojson = {
       type: 'geojson',
@@ -98,7 +93,16 @@ export default class MapGeoJsonComponent extends Rete.Component {
         },
       },
     };
+
     this.updateText(node, `${JSON.stringify(geojson)}`);
-    window.mapbox.addSource(SOURCE_ID, geojson);
+
+    const mpSource = map.getSource(SOURCE_ID);
+    if (mpSource) {
+      // some layers may use this source now
+      // map.removeSource(SOURCE_ID);
+      map.getSource(SOURCE_ID).setData(geojson);
+    } else {
+      window.mapbox.addSource(SOURCE_ID, geojson);
+    }
   }
 }

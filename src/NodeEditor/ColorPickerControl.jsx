@@ -2,11 +2,11 @@ import React from 'react';
 import Rete from 'rete';
 import { Input } from 'antd';
 
-export default class InputControl extends Rete.Control {
+export default class TextControl extends Rete.Control {
   static component = ({ label, value, onChange }) => (
     <div>
       <span>{label}</span>
-      <Input value={value} onChange={(e) => onChange(e.target.value)} />
+      <Input type="color" value={value} onChange={(e) => onChange(e.target.value)} />
     </div>
 
   );
@@ -15,7 +15,7 @@ export default class InputControl extends Rete.Control {
     super(key);
     this.emitter = emitter;
     this.key = key;
-    this.component = InputControl.component;
+    this.component = TextControl.component;
 
     const initial = node.data[key] || '';
 

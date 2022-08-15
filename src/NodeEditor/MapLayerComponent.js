@@ -1,9 +1,13 @@
 import Rete from 'rete';
 
 import { stringSocket } from './UploadCsvComponent';
+import ColorPickerControl from './ColorPickerControl';
+import SliderControl from './SliderControl';
 
 const LAYER_ID = 'nm-line-string-layer';
 const INPUT_KEY = 'sourceId';
+const CONTROL_KEY = 'colorControl';
+const CONTROL_KEY_LINE_WIDTH = 'lineWidthWidth';
 export default class MapLayerComponent extends Rete.Component {
   constructor() {
     super('MapLayer');
@@ -18,7 +22,9 @@ export default class MapLayerComponent extends Rete.Component {
     const input = new Rete.Input(INPUT_KEY, 'sourceId', stringSocket);
 
     return node
-      .addInput(input);
+      .addInput(input)
+      .addControl(new ColorPickerControl(this.editor, CONTROL_KEY, node, { label: 'color' }))
+      .addControl(new SliderControl(this.editor, CONTROL_KEY_LINE_WIDTH, node, { label: 'line-width' }));
   }
 
   // eslint-disable-next-line no-unused-vars
@@ -38,16 +44,16 @@ export default class MapLayerComponent extends Rete.Component {
     }
 
     if (this.mapReady) {
-      this.renderLineString(sourceId);
+      this.renderLineString(sourceId, node);
     } else {
       window.mapbox.on('load', () => {
-        this.renderLineString(sourceId);
+        this.renderLineString(sourceId, node);
       });
     }
   }
 
   // eslint-disable-next-line class-methods-use-this
-  renderLineString(sourceId) {
+  renderLineString(sourceId, node) {
     const map = window.mapbox;
 
     if (map.getLayer(LAYER_ID)) {
@@ -63,8 +69,8 @@ export default class MapLayerComponent extends Rete.Component {
         'line-cap': 'round',
       },
       paint: {
-        'line-color': '#888',
-        'line-width': 8,
+        'line-color': node.data[CONTROL_KEY],
+        'line-width': node.data[CONTROL_KEY_LINE_WIDTH],
       },
     });
   }
