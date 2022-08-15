@@ -16,6 +16,9 @@ import ConcatComponent from './ConcatComponent';
 import CsvToJsonComponent from './CsvToJsonComponent';
 import UploadCsvComponent from './UploadCsvComponent';
 import RemoteDataComponent from './RemoteDataComponent';
+import MapMarkersComponent from './MapMarkersComponent';
+import MapGeoJsonComponent from './MapGeoJsonComponent';
+import MapLayerComponent from './MapLayerComponent';
 
 const defaultFnStr = `return input.data.map((item) => (
   [item.point.Lng, item.point.Lat]
@@ -31,6 +34,9 @@ export async function createEditor(container) {
   const csvToJsonComponent = new CsvToJsonComponent();
   const uploadCsvComponent = new UploadCsvComponent();
   const remoteDataComponent = new RemoteDataComponent();
+  const mapMarkersComponent = new MapMarkersComponent();
+  const mapGeoJsonComponent = new MapGeoJsonComponent();
+  const mapLayerComponent = new MapLayerComponent();
 
   const editor = new Rete.NodeEditor('demo@0.1.0', container);
   editor.use(ConnectionPlugin);
@@ -62,7 +68,7 @@ export async function createEditor(container) {
 
   [uploadComponent, jsonComponent, transformComponent, transformEvalComponent,
     concatComponent, previewComponent, csvToJsonComponent, uploadCsvComponent,
-    remoteDataComponent,
+    remoteDataComponent, mapMarkersComponent, mapGeoJsonComponent, mapLayerComponent,
   ].forEach((c) => {
     editor.register(c);
     engine.register(c);
