@@ -133,7 +133,12 @@ export async function createEditor(container) {
       console.log('process', editor.toJSON());
       await engine.abort();
       await engine.process(editor.toJSON());
+    },
+  );
 
+  editor.on(
+    'process nodecreated nodedraged noderemoved connectioncreated connectionremoved',
+    async () => {
       const data = JSON.stringify(editor.toJSON());
       console.debug('Save data to local:', editor.toJSON());
       localStorage.setItem('node-map', data);
