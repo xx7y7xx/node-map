@@ -32,7 +32,7 @@ export default class MapGeoJsonComponent extends Rete.Component {
   }
 
   builder(node) {
-    const input = new Rete.Input('json', 'JSON', objectSocket);
+    const input = new Rete.Input('json', 'GeoJSON', objectSocket);
     const output = new Rete.Output(OUTPUT_KEY, 'sourceId', stringSocket);
 
     return node
@@ -45,9 +45,9 @@ export default class MapGeoJsonComponent extends Rete.Component {
   worker(node, inputs, outputs) {
     // inputs.json=[] // no data
     // inputs.json=[[[103.8254528,1.2655414]]]
-    const jsonNodeValue = inputs.json[0];
+    const geojson = inputs.json[0];
 
-    if (!jsonNodeValue) {
+    if (!geojson) {
       // no data input, maybe link disconnect
       this.updateText(node, '');
       return;
@@ -55,18 +55,13 @@ export default class MapGeoJsonComponent extends Rete.Component {
 
     outputs[OUTPUT_KEY] = SOURCE_ID; // eslint-disable-line no-param-reassign
 
-    // filter out invalid latlng, then add markers to map
-    jsonNodeValue
-      // .filter((lngLat) => lngLat[0] && lngLat[1])
-      .forEach((feature) => {
-        if (this.mapReady) {
-          this.addOrUpdateSource(feature, node);
-        } else {
-          window.mapbox.on('load', () => {
-            this.addOrUpdateSource(feature, node);
-          });
-        }
+    if (this.mapReady) {
+      this.addOrUpdateSource(geojson, node);
+    } else {
+      window.mapbox.on('load', () => {
+        this.addOrUpdateSource(geojson, node);
       });
+    }
   }
 
   // update text in preview control
@@ -79,30 +74,23 @@ export default class MapGeoJsonComponent extends Rete.Component {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  addOrUpdateSource(feature, node) {
+  addOrUpdateSource(geojson, node) {
     const map = window.mapbox;
 
-    const geojson = {
+    const sourceData = {
       type: 'geojson',
-      data: {
-        type: 'Feature',
-        properties: {},
-        geometry: {
-          type: 'LineString',
-          coordinates: feature,
-        },
-      },
+      data: geojson,
     };
 
-    this.updateText(node, `${JSON.stringify(geojson)}`);
+    this.updateText(node, `${JSON.stringify(sourceData)}`);
 
     const mpSource = map.getSource(SOURCE_ID);
     if (mpSource) {
       // some layers may use this source now
       // map.removeSource(SOURCE_ID);
-      map.getSource(SOURCE_ID).setData(geojson);
+      map.getSource(SOURCE_ID).setData(sourceData);
     } else {
-      window.mapbox.addSource(SOURCE_ID, geojson);
+      window.mapbox.addSource(SOURCE_ID, sourceData);
     }
   }
 }

@@ -20,6 +20,7 @@ import MapMarkersComponent from './MapMarkersComponent';
 import MapGeoJsonComponent from './MapGeoJsonComponent';
 import MapLayerComponent from './MapLayerComponent';
 import AuthComponent from './AuthComponent';
+import TurfLineStringComponent from './TurfLineStringComponent';
 
 const defaultFnStr = `return input.data.map((item) => (
   [item.point.Lng, item.point.Lat]
@@ -39,6 +40,7 @@ export async function createEditor(container) {
   const mapGeoJsonComponent = new MapGeoJsonComponent();
   const mapLayerComponent = new MapLayerComponent();
   const authComponent = new AuthComponent();
+  const turfLineStringComponent = new TurfLineStringComponent();
 
   const editor = new Rete.NodeEditor('demo@0.1.0', container);
   editor.use(ConnectionPlugin);
@@ -71,7 +73,7 @@ export async function createEditor(container) {
   [uploadComponent, jsonComponent, transformComponent, transformEvalComponent,
     concatComponent, previewComponent, csvToJsonComponent, uploadCsvComponent,
     remoteDataComponent, mapMarkersComponent, mapGeoJsonComponent, mapLayerComponent,
-    authComponent,
+    authComponent, turfLineStringComponent,
   ].forEach((c) => {
     editor.register(c);
     engine.register(c);
