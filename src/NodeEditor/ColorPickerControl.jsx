@@ -2,7 +2,7 @@ import React from 'react';
 import Rete from 'rete';
 import { Input } from 'antd';
 
-export default class TextControl extends Rete.Control {
+export default class ColorPickerControl extends Rete.Control {
   static component = ({ label, value, onChange }) => (
     <div>
       <span>{label}</span>
@@ -15,9 +15,9 @@ export default class TextControl extends Rete.Control {
     super(key);
     this.emitter = emitter;
     this.key = key;
-    this.component = TextControl.component;
+    this.component = ColorPickerControl.component;
 
-    const initial = node.data[key] || '';
+    const initial = node.data[key] || '#000';
 
     node.data[key] = initial; // eslint-disable-line no-param-reassign
     this.props = {

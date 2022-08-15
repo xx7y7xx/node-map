@@ -11,7 +11,7 @@ const OUTPUT_KEY = 'sourceId';
 
 export default class MapGeoJsonComponent extends Rete.Component {
   constructor() {
-    super('MapGeoJson');
+    super('Map GeoJSON Node');
 
     const map = window.mapbox;
 

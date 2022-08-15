@@ -8,7 +8,7 @@ const INPUT_KEY = 'coordinatesArray';
 
 export default class TurfLineStringComponent extends Rete.Component {
   constructor() {
-    super('TurfLineString');
+    super('Turf LineString Node');
   }
 
   // eslint-disable-next-line class-methods-use-this

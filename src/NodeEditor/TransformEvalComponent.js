@@ -8,7 +8,7 @@ const log = (...args) => {
 };
 export default class TransformEvalComponent extends Rete.Component {
   constructor() {
-    super('Transform Eval');
+    super('Transform Eval Node');
 
     // Store all nodes ref related to this component
     // May use node ref later to add control
@@ -32,7 +32,7 @@ export default class TransformEvalComponent extends Rete.Component {
       .addInput(input)
       .addOutput(output)
       .addControl(new DivControl(`evalScriptLabel[node${node.id}]`, `Eval Script(node:${node.id})`))
-      .addControl(new TextAreaControl(this.editor, 'fnStr', node, { cols: 40 }));
+      .addControl(new TextAreaControl(this.editor, 'fnStr', node, { rows: 6, cols: 80 }));
   }
 
   worker(nodeData, inputs, outputs) {

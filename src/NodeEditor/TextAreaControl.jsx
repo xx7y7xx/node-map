@@ -5,17 +5,19 @@ import { Input } from 'antd';
 const { TextArea } = Input;
 
 export default class TextAreaControl extends Rete.Control {
-  static component = ({ cols, value, onChange }) => (
+  static component = ({
+    cols, rows = 4, value, onChange,
+  }) => (
     <TextArea
       style={{ fontFamily: 'monospace' }}
-      rows={4}
+      rows={rows}
       cols={cols}
       value={value}
       onChange={(e) => onChange(e.target.value)}
     />
   );
 
-  constructor(emitter, key, node, { cols }) {
+  constructor(emitter, key, node, textAreaProps) {
     super(key);
     this.emitter = emitter;
     this.key = key;
@@ -26,11 +28,11 @@ export default class TextAreaControl extends Rete.Control {
     node.data[key] = initial; // eslint-disable-line no-param-reassign
     this.props = {
       value: initial,
-      cols,
       onChange: (v) => {
         this.setValue(v);
         this.emitter.trigger('process');
       },
+      ...textAreaProps,
     };
   }
 

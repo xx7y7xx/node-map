@@ -10,7 +10,7 @@ const CONTROL_KEY = 'colorControl';
 const CONTROL_KEY_LINE_WIDTH = 'lineWidthWidth';
 export default class MapLayerComponent extends Rete.Component {
   constructor() {
-    super('MapLayer');
+    super('Map Layer Node');
 
     window.mapbox.on('load', () => {
       this.mapReady = true;
