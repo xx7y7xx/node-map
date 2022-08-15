@@ -1,5 +1,7 @@
 import Rete from 'rete';
 import mapboxgl from 'mapbox-gl';
+import * as turf from '@turf/turf';
+
 import TextControl from './TextControl';
 import { objectSocket } from './JsonComponent';
 
@@ -10,8 +12,21 @@ export default class PreviewComponent extends Rete.Component {
     super('Preview');
     this.markers = [];
 
+    const map = window.mapbox;
+
     window.mapbox.on('load', () => {
       this.mapReady = true;
+    });
+
+    window.mapbox.on('sourcedata', (e) => {
+      if (e.sourceId !== SOURCE_ID || !e.isSourceLoaded) return;
+      const f = map.querySourceFeatures(SOURCE_ID);
+      if (f.length === 0) return;
+      const bbox = turf.bbox({
+        type: 'FeatureCollection',
+        features: f,
+      });
+      map.fitBounds(bbox, { padding: 20 });
     });
   }
 
