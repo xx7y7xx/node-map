@@ -1,7 +1,7 @@
 import Rete from 'rete';
 import mapboxgl from 'mapbox-gl';
 import TextControl from './TextControl';
-import { jsonSocket } from './JsonComponent';
+import { objectSocket } from './JsonComponent';
 
 const SOURCE_ID = 'nm-line-string-source';
 const LAYER_ID = 'nm-line-string-layer';
@@ -16,7 +16,7 @@ export default class PreviewComponent extends Rete.Component {
   }
 
   builder(node) {
-    const input = new Rete.Input('json', 'JSON', jsonSocket);
+    const input = new Rete.Input('json', 'JSON', objectSocket);
 
     return node
       .addInput(input)

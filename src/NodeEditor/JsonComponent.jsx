@@ -1,7 +1,7 @@
 import Rete from 'rete';
 import JsonControl from './JsonControl';
 
-export const jsonSocket = new Rete.Socket('JSON value');
+export const objectSocket = new Rete.Socket('Object value');
 
 const OUTPUT_KEY = 'json1';
 const CONTROL_KEY = 'json2';
@@ -14,7 +14,7 @@ export default class JsonComponent extends Rete.Component {
   builder(node) {
     return node
       .addControl(new JsonControl(this.editor, CONTROL_KEY, node))
-      .addOutput(new Rete.Output(OUTPUT_KEY, 'JSON', jsonSocket));
+      .addOutput(new Rete.Output(OUTPUT_KEY, 'JSON', objectSocket));
   }
 
   // eslint-disable-next-line class-methods-use-this

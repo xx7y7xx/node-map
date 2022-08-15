@@ -1,5 +1,5 @@
 import Rete from 'rete';
-import { jsonSocket } from './JsonComponent';
+import { objectSocket } from './JsonComponent';
 import ButtonControl from './ButtonControl';
 
 export default class ConcatComponent extends Rete.Component {
@@ -15,7 +15,7 @@ export default class ConcatComponent extends Rete.Component {
 
     const onClick = () => {
       node.addInput(
-        new Rete.Input(`json${index}`, `JSON ${index}`, jsonSocket),
+        new Rete.Input(`json${index}`, `JSON ${index}`, objectSocket),
       );
       index += 1;
       // eslint-disable-next-line no-param-reassign
@@ -25,14 +25,14 @@ export default class ConcatComponent extends Rete.Component {
 
     // Add input
     [...Array(initCount).keys()].forEach(() => {
-      node.addInput(new Rete.Input(`json${index}`, `JSON ${index}`, jsonSocket));
+      node.addInput(new Rete.Input(`json${index}`, `JSON ${index}`, objectSocket));
       index += 1;
       // eslint-disable-next-line no-param-reassign
       node.data.inputCount += 1;
     });
 
     return node
-      .addOutput(new Rete.Output('json', 'JSON', jsonSocket))
+      .addOutput(new Rete.Output('json', 'JSON', objectSocket))
       .addControl(
         new ButtonControl(this.editor, 'addInputSocket', {
           text: 'Add Input Socket',

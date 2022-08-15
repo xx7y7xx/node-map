@@ -1,12 +1,17 @@
 import React from 'react';
 import Rete from 'rete';
+import { Input } from 'antd';
 
 export default class TextControl extends Rete.Control {
-  static component = ({ value, onChange }) => (
-    <input value={value} onChange={(e) => onChange(e.target.value)} />
+  static component = ({ label, value, onChange }) => (
+    <div>
+      <span>{label}</span>
+      <Input value={value} onChange={(e) => onChange(e.target.value)} />
+    </div>
+
   );
 
-  constructor(emitter, key, node) {
+  constructor(emitter, key, node, props = {}) {
     super(key);
     this.emitter = emitter;
     this.key = key;
@@ -16,6 +21,7 @@ export default class TextControl extends Rete.Control {
 
     node.data[key] = initial; // eslint-disable-line no-param-reassign
     this.props = {
+      ...props,
       value: initial,
       onChange: (v) => {
         this.setValue(v);

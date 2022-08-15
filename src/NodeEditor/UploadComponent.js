@@ -1,6 +1,6 @@
 import Rete from 'rete';
 import UploadControl from './UploadControl';
-import { jsonSocket } from './JsonComponent';
+import { objectSocket } from './JsonComponent';
 
 export default class UploadComponent extends Rete.Component {
   constructor() {
@@ -10,7 +10,7 @@ export default class UploadComponent extends Rete.Component {
   builder(node) {
     return node
       .addControl(new UploadControl(this.editor, 'upload', node))
-      .addOutput(new Rete.Output('json', 'JSON Socket', jsonSocket));
+      .addOutput(new Rete.Output('json', 'JSON Socket', objectSocket));
   }
 
   // eslint-disable-next-line class-methods-use-this

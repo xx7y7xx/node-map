@@ -1,5 +1,5 @@
 import Rete from 'rete';
-import { jsonSocket } from './JsonComponent';
+import { objectSocket } from './JsonComponent';
 import TextAreaControl from './TextAreaControl';
 import DivControl from './DivControl';
 
@@ -25,8 +25,8 @@ export default class TransformEvalComponent extends Rete.Component {
     log('build', node.id);
     this.nodes[node.id] = node;
 
-    const input = new Rete.Input('json', 'Json', jsonSocket);
-    const output = new Rete.Output('json', 'Json', jsonSocket);
+    const input = new Rete.Input('json', 'Json', objectSocket);
+    const output = new Rete.Output('json', 'Json', objectSocket);
 
     return node
       .addInput(input)

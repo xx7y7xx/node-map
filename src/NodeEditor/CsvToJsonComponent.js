@@ -3,7 +3,7 @@
 import Rete from 'rete';
 import Papa from 'papaparse';
 
-import { jsonSocket } from './JsonComponent';
+import { objectSocket } from './JsonComponent';
 import DivControl from './DivControl';
 import { stringSocket } from './UploadCsvComponent';
 
@@ -16,7 +16,7 @@ export default class CsvToJsonComponent extends Rete.Component {
 
   builder(node) {
     const input = new Rete.Input(INPUT_KEY, 'CSV', stringSocket);
-    const output = new Rete.Output('json', 'JSON', jsonSocket);
+    const output = new Rete.Output('json', 'JSON', objectSocket);
 
     return node
       .addInput(input)

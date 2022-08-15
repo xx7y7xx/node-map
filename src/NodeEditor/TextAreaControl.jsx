@@ -1,10 +1,14 @@
 import React from 'react';
 import Rete from 'rete';
+import { Input } from 'antd';
+
+const { TextArea } = Input;
 
 export default class TextAreaControl extends Rete.Control {
   static component = ({ cols, value, onChange }) => (
-    <textarea
-      rows="4"
+    <TextArea
+      style={{ fontFamily: 'monospace' }}
+      rows={4}
       cols={cols}
       value={value}
       onChange={(e) => onChange(e.target.value)}
