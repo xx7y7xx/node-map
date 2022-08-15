@@ -21,13 +21,24 @@ export default class RemoteDataControl extends Rete.Control {
     this.props = {
       onClick: () => {
         const node = this.getNode();
+
+        let xAuthMethod = window.NM_X_AUTH_METHOD;
+        let jwt = window.NM_JWT;
+
+        if (node.data.inputControlXAuthMethod) {
+          xAuthMethod = node.data.inputControlXAuthMethod;
+        }
+        if (node.data.inputControlJwt) {
+          jwt = node.data.inputControlJwt;
+        }
+
         axios({
           method: 'get',
           // https://gist.githubusercontent.com/xx7y7xx/487ec183c80e1fb04523cd08d6986f8c/raw/7adde5adce75f0a97f1fb1b6ac45274c11f0847e/mw1.csv
           url: node.data.inputControlUrl,
           headers: {
-            'x-auth-method': node.data.inputControlXAuthMethod,
-            authorization: node.data.inputControlJwt,
+            'x-auth-method': xAuthMethod,
+            authorization: jwt,
           },
         }).then((response) => {
           this.setContent(response.data);
