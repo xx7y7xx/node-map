@@ -53,6 +53,8 @@ export default class MapMarkersComponent extends Rete.Component {
         }
       });
 
+    window.mapbox.fitBounds(jsonNodeValue, { padding: 200 });
+
     this.updateText(node, `${JSON.stringify(jsonNodeValue)}`);
   }
 
