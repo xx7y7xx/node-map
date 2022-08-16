@@ -36,10 +36,12 @@ export default class JsonControl extends Rete.Control {
     this.props.value = text;
 
     let obj = null;
-    try {
-      obj = JSON.parse(text);
-    } catch (err) {
-      console.error('[JsonControl] Failed to parse textbox content into JSON Object!', err);
+    if (text !== '') {
+      try {
+        obj = JSON.parse(text);
+      } catch (err) {
+        console.error('[JsonControl] Failed to parse textbox content into JSON Object!', err);
+      }
     }
 
     // save both string and parsed object to node

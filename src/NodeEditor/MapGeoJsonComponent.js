@@ -88,7 +88,7 @@ export default class MapGeoJsonComponent extends Rete.Component {
     if (mpSource) {
       // some layers may use this source now
       // map.removeSource(SOURCE_ID);
-      map.getSource(SOURCE_ID).setData(sourceData);
+      map.getSource(SOURCE_ID).setData(sourceData.data);
     } else {
       window.mapbox.addSource(SOURCE_ID, sourceData);
     }
