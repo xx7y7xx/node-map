@@ -25,6 +25,11 @@ export default class TransformComponent extends Rete.Component {
   worker(node, inputs, outputs) {
     const jsonNodeValue = inputs.json.length ? inputs.json[0] : node.data.json;
 
+    if (!jsonNodeValue) {
+      console.debug('[TransformComponent] No input!');
+      return;
+    }
+
     const { controls } = this.editor.nodes.find((n) => n.id === node.id);
     const latKey = controls.get('latKey').getValue();
     const lngKey = controls.get('lngKey').getValue();

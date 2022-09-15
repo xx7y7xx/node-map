@@ -16,6 +16,7 @@ import ConcatComponent from './ConcatComponent';
 import CsvToJsonComponent from './CsvToJsonComponent';
 import UploadCsvComponent from './UploadCsvComponent';
 import RemoteDataComponent from './RemoteDataComponent';
+import MapComponent from './MapComponent';
 import MapMarkersComponent from './MapMarkersComponent';
 import MapGeoJsonComponent from './MapGeoJsonComponent';
 import MapLayerComponent from './MapLayerComponent';
@@ -36,6 +37,7 @@ export async function createEditor(container) {
   const csvToJsonComponent = new CsvToJsonComponent();
   const uploadCsvComponent = new UploadCsvComponent();
   const remoteDataComponent = new RemoteDataComponent();
+  const mapComponent = new MapComponent();
   const mapMarkersComponent = new MapMarkersComponent();
   const mapGeoJsonComponent = new MapGeoJsonComponent();
   const mapLayerComponent = new MapLayerComponent();
@@ -72,7 +74,7 @@ export async function createEditor(container) {
 
   [uploadComponent, jsonComponent, transformComponent, transformEvalComponent,
     concatComponent, previewComponent, csvToJsonComponent, uploadCsvComponent,
-    remoteDataComponent, mapMarkersComponent, mapGeoJsonComponent, mapLayerComponent,
+    remoteDataComponent, mapComponent, mapMarkersComponent, mapGeoJsonComponent, mapLayerComponent,
     authComponent, turfLineStringComponent,
   ].forEach((c) => {
     editor.register(c);
