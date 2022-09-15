@@ -13,7 +13,10 @@ export default class SliderControl extends Rete.Control {
         value={value}
         onChange={(val) => onChange(val)}
       />
-      <InputNumber value={value} onChange={(val) => onChange(val)} />
+      <InputNumber
+        value={value}
+        onChange={(val) => onChange(val)}
+      />
     </div>
 
   );
