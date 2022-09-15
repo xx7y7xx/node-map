@@ -15,6 +15,7 @@ Use node editor to control data transform then visualize on the map.
 ## Start dev
 
 ```
+$ npm i # --force
 $ npm start
 ```
 
