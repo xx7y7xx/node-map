@@ -4,7 +4,11 @@ import { Slider, InputNumber } from 'antd';
 
 export default class SliderControl extends Rete.Control {
   static component = ({ label, value, onChange }) => (
-    <div>
+    <div onPointerDown={(e) => {
+      // When drag slider, the node should not move
+      e.stopPropagation();
+    }}
+    >
       <span>{label}</span>
       <Slider
         min={1}
