@@ -10,7 +10,6 @@ import JsonComponent from './JsonComponent';
 import TransformComponent from './TransformComponent';
 import TransformEvalComponent from './TransformEvalComponent';
 import PreviewComponent from './PreviewComponent';
-import mockJsonData from './mockData.json';
 import UploadComponent from './UploadComponent';
 import ConcatComponent from './ConcatComponent';
 import CsvToJsonComponent from './CsvToJsonComponent';
@@ -22,10 +21,7 @@ import MapGeoJsonComponent from './MapGeoJsonComponent';
 import MapLayerComponent from './MapLayerComponent';
 import AuthComponent from './AuthComponent';
 import TurfLineStringComponent from './TurfLineStringComponent';
-
-const defaultFnStr = `return input.data.map((item) => (
-  [item.point.Lng, item.point.Lat]
-))`;
+import { createSampleNodes } from './helpers';
 
 export async function createEditor(container) {
   const uploadComponent = new UploadComponent();
@@ -86,49 +82,14 @@ export async function createEditor(container) {
     console.debug('load data from local', JSON.parse(localData));
     await editor.fromJSON(JSON.parse(localData));
   } else {
-    const uploadNode = await uploadComponent.createNode({ upload: {} });
-    const jsonNode = await jsonComponent.createNode({
-      json: mockJsonData,
+    createSampleNodes(editor, {
+      uploadComponent,
+      jsonComponent,
+      transformComponent,
+      transformEvalComponent,
+      concatComponent,
+      previewComponent,
     });
-    const transformNode = await transformComponent.createNode();
-    const transformEvalNode = await transformEvalComponent.createNode({ fnStr: defaultFnStr });
-    const concatNode = await concatComponent.createNode({ inputCount: 2 });
-    const previewNode = await previewComponent.createNode();
-
-    uploadNode.position = [0, 500];
-    jsonNode.position = [0, 0];
-    transformNode.position = [500, 0];
-    transformEvalNode.position = [500, 500];
-    concatNode.position = [1000, 0];
-    previewNode.position = [1500, 0];
-
-    editor.addNode(uploadNode);
-    editor.addNode(jsonNode);
-    editor.addNode(transformNode);
-    editor.addNode(transformEvalNode);
-    editor.addNode(concatNode);
-    editor.addNode(previewNode);
-
-    editor.connect(
-      jsonNode.outputs.get('json'),
-      transformNode.inputs.get('json'),
-    );
-    editor.connect(
-      uploadNode.outputs.get('json'),
-      transformEvalNode.inputs.get('json'),
-    );
-    editor.connect(
-      transformNode.outputs.get('json'),
-      concatNode.inputs.get('json0'),
-    );
-    editor.connect(
-      transformEvalNode.outputs.get('json'),
-      concatNode.inputs.get('json1'),
-    );
-    editor.connect(
-      concatNode.outputs.get('json'),
-      previewNode.inputs.get('json'),
-    );
   }
 
   editor.on(

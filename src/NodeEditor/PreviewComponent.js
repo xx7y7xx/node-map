@@ -43,6 +43,7 @@ export default class PreviewComponent extends Rete.Component {
     console.debug('PreviewComponent.worker:', inputs);
     // inputs.json=[] // no data
     // inputs.json=[[[103.8254528,1.2655414]]]
+    // jsonNodeValue=[[103.8254528,1.2655414]]
     const jsonNodeValue = inputs.json[0];
 
     if (!jsonNodeValue) {
@@ -71,6 +72,10 @@ export default class PreviewComponent extends Rete.Component {
           });
         }
       });
+    console.debug('[PreviewComponent] fit bounds to markers');
+    window.mapbox.fitBounds(turf.bbox(turf.featureCollection(
+      jsonNodeValue.filter((f) => typeof f[0] === 'number').map((f) => turf.point(f)),
+    )), { padding: 20 });
 
     this.updatePreviewControlText(node, `${JSON.stringify(jsonNodeValue)}`);
   }

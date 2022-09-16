@@ -9,6 +9,7 @@ const LAYER_ID_POINT = 'nm-point-layer';
 const INPUT_KEY = 'sourceId';
 const CONTROL_KEY = 'colorControl';
 const CONTROL_KEY_LINE_WIDTH = 'lineWidthWidth';
+
 export default class MapLayerComponent extends Rete.Component {
   constructor() {
     super('Map Layer Node');
