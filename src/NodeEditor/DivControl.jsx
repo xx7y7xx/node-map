@@ -2,17 +2,27 @@ import React from 'react';
 import Rete from 'rete';
 
 export default class DivControl extends Rete.Control {
-  static component = ({ text }) => (
-    <div>{text}</div>
+  static component = ({ value }) => (
+    <div>{value}</div>
   );
 
-  constructor(key, text) {
+  constructor(key, value) {
     super(key);
     this.key = key;
     this.component = DivControl.component;
 
     this.props = {
-      text,
+      value,
     };
+  }
+
+  setValue(val) {
+    this.props.value = val;
+    this.putData(this.key, val);
+    this.update();
+  }
+
+  getValue() {
+    return this.props.value;
   }
 }

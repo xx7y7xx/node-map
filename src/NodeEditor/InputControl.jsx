@@ -6,7 +6,18 @@ export default class InputControl extends Rete.Control {
   static component = ({ label, value, onChange }) => (
     <div>
       <span>{label}</span>
-      <Input value={value} onChange={(e) => onChange(e.target.value)} />
+      <Input
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        onPointerDown={(e) => {
+          // When selecting text in input box, the node should not move
+          e.stopPropagation();
+        }}
+        onDoubleClick={(e) => {
+        // When double clicking in this text box, the node should not move
+          e.stopPropagation();
+        }}
+      />
     </div>
 
   );
