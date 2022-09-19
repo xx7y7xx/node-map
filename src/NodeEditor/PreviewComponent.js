@@ -5,7 +5,6 @@ import * as turf from '@turf/turf';
 import TextControl from './TextControl';
 import FaqControl from './FaqControl';
 import { objectSocket } from './JsonComponent';
-import PreviewFaq from './PreviewFaq';
 
 const SOURCE_ID = 'nm-line-string-source';
 const LAYER_ID = 'nm-line-string-layer';
@@ -38,7 +37,7 @@ export default class PreviewComponent extends Rete.Component {
     return node
       .addInput(input)
       .addControl(new FaqControl(this.editor, 'faq', node, {
-        content: PreviewFaq,
+        path: 'PreviewFaq',
       }))
       .addControl(new TextControl(this.editor, 'preview', node, true));
   }

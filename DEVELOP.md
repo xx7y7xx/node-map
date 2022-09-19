@@ -11,3 +11,9 @@ Search for "ReactDOM.render is no longer supported in React 18", and comment thi
 ```
 $ mv node_modules/.cache/default-development /tmp
 ```
+
+## How to create FAQ
+
+* Write markdow in `src/NodeEditor/FooBarFaq.md` for `FooBarComponent.js` node
+* Register this markdow in `src/NodeEditor/Faq.jsx`
+* Use it in retejs component `.addControl(new FaqControl(this.editor, 'faq', node, {path: 'FooBarFaq'}))`
