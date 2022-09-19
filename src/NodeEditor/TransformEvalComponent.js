@@ -1,14 +1,17 @@
 import Rete from 'rete';
+
 import { objectSocket } from './JsonComponent';
 import TextAreaControl from './TextAreaControl';
 import DivControl from './DivControl';
+import FaqControl from './FaqControl';
+import TransformEvalFaq from './TransformEvalFaq';
 
 const log = (...args) => {
   console.debug('TransformEvalComponent', ...args);
 };
 export default class TransformEvalComponent extends Rete.Component {
   constructor() {
-    super('Transform Eval Node');
+    super('TransformEval');
 
     // Store all nodes ref related to this component
     // May use node ref later to add control
@@ -31,7 +34,10 @@ export default class TransformEvalComponent extends Rete.Component {
     return node
       .addInput(input)
       .addOutput(output)
-      .addControl(new DivControl(`evalScriptLabel[node${node.id}]`, `Eval Script(node:${node.id})`))
+      .addControl(new FaqControl(this.editor, 'faq', node, {
+        content: TransformEvalFaq,
+      }))
+      .addControl(new DivControl(`evalScriptLabel[node${node.id}]`, `Eval Script(node:${node.id}): Please use variable "input".`))
       .addControl(new TextAreaControl(this.editor, 'fnStr', node, { rows: 6, cols: 80 }));
   }
 

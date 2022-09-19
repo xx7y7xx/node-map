@@ -12,16 +12,16 @@ const OUTPUT_KEY = 'csv';
 
 export default class RemoteDataComponent extends Rete.Component {
   constructor() {
-    super('Remote Data Node'); // node title
+    super('RemoteData'); // node title
   }
 
   builder(node) {
     node
       .addControl(new InputControl(this.editor, CONTROL_KEY_URL, node, { label: 'url' }))
-      .addControl(new InputControl(this.editor, CONTROL_KEY_JWT, node, { label: 'jwt' }))
-      .addControl(new InputControl(this.editor, CONTROL_KEY_X_AUTH_METHOD, node, { label: 'x-auth-method' }))
+      .addControl(new InputControl(this.editor, CONTROL_KEY_JWT, node, { label: 'headers.authorization' }))
+      .addControl(new InputControl(this.editor, CONTROL_KEY_X_AUTH_METHOD, node, { label: 'headers.x-auth-method' }))
       .addControl(new RemoteDataControl(this.editor, CONTROL_KEY, node))
-      .addOutput(new Rete.Output(OUTPUT_KEY, 'Object', objectSocket));
+      .addOutput(new Rete.Output(OUTPUT_KEY, 'JSON', objectSocket));
     if (node.data[CONTROL_KEY]) {
       node
         .addControl(new DivControl('title', 'cached data'));

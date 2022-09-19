@@ -8,6 +8,10 @@ export default class JsonControl extends Rete.Control {
       cols={40}
       value={value}
       onChange={(e) => onChange(e.target.value)}
+      onPointerDown={(e) => {
+        // When drag slider, the node should not move
+        e.stopPropagation();
+      }}
     />
   );
 

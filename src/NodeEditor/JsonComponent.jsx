@@ -8,7 +8,7 @@ const CONTROL_KEY = 'json2';
 
 export default class JsonComponent extends Rete.Component {
   constructor() {
-    super('JSON Node'); // node title
+    super('JSON'); // node title
   }
 
   builder(node) {

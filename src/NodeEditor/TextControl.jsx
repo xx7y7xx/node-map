@@ -3,7 +3,15 @@ import Rete from 'rete';
 
 export default class TextControl extends Rete.Control {
   static component = ({ value, onChange }) => (
-    <textarea rows={4} value={value} onChange={(e) => onChange(e.target.value)} />
+    <textarea
+      rows={4}
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      onPointerDown={(e) => {
+        // When drag slider, the node should not move
+        e.stopPropagation();
+      }}
+    />
   );
 
   constructor(emitter, key, node) {

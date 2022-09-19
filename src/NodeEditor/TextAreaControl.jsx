@@ -14,6 +14,14 @@ export default class TextAreaControl extends Rete.Control {
       cols={cols}
       value={value}
       onChange={(e) => onChange(e.target.value)}
+      onPointerDown={(e) => {
+        // When selecting in this text box, the node should not move
+        e.stopPropagation();
+      }}
+      onDoubleClick={(e) => {
+        // When double clicking in this text box, the node should not move
+        e.stopPropagation();
+      }}
     />
   );
 
