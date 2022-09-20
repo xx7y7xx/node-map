@@ -14,7 +14,7 @@ export default function Map() {
       center: [103.7041631, 1.3139961],
       zoom: 9,
     });
-    console.log('map', window.mapbox);
+    // console.log('map', window.mapbox);
   }, []);
 
   return (

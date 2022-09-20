@@ -6,6 +6,7 @@ import ConnectionPlugin from 'rete-connection-plugin';
 import AreaPlugin from 'rete-area-plugin';
 // import ContextMenuPlugin, { Menu, Item, Search } from 'rete-context-menu-plugin';
 import ContextMenuPlugin from 'rete-context-menu-plugin';
+import { LS_KEY_NODE_EDITOR_DATA } from '../constants';
 
 import JsonComponent from './JsonComponent';
 import TransformComponent from './TransformComponent';
@@ -78,9 +79,9 @@ export async function createEditor(container) {
     engine.register(c);
   });
 
-  const localData = localStorage.getItem('node-map');
+  const localData = localStorage.getItem(LS_KEY_NODE_EDITOR_DATA);
   if (localData) {
-    console.debug('load data from local', JSON.parse(localData));
+    console.debug('Load data from local', JSON.parse(localData));
     await editor.fromJSON(JSON.parse(localData));
   } else {
     createSampleNodes(editor, {
@@ -96,7 +97,7 @@ export async function createEditor(container) {
   editor.on(
     'process nodecreated noderemoved connectioncreated connectionremoved',
     async () => {
-      console.log('process', editor.toJSON());
+      // console.log('process', editor.toJSON());
       await engine.abort();
       await engine.process(editor.toJSON());
     },
@@ -107,7 +108,7 @@ export async function createEditor(container) {
     async () => {
       const data = JSON.stringify(editor.toJSON());
       console.debug('Save data to local:', editor.toJSON());
-      localStorage.setItem('node-map', data);
+      localStorage.setItem(LS_KEY_NODE_EDITOR_DATA, data);
     },
   );
 
@@ -125,7 +126,7 @@ export function useRete() {
   useEffect(() => {
     if (container) {
       createEditor(container).then((value) => {
-        console.log('created');
+        // console.log('created');
         editorRef.current = value;
       });
     }
