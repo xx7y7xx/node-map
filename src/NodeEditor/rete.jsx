@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { createRoot } from 'react-dom/client';
 import Rete from 'rete';
 import ReactRenderPlugin from 'rete-react-render-plugin';
 import ConnectionPlugin from 'rete-connection-plugin';
@@ -42,7 +43,7 @@ export async function createEditor(container) {
 
   const editor = new Rete.NodeEditor('demo@0.1.0', container);
   editor.use(ConnectionPlugin);
-  editor.use(ReactRenderPlugin);
+  editor.use(ReactRenderPlugin, { createRoot });
   editor.use(ContextMenuPlugin, {
     searchBar: false, // true by default
     // leave item when searching, optional. For example, title => ['Refresh'].includes(title)

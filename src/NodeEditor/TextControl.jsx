@@ -35,7 +35,8 @@ export default class TextControl extends Rete.Control {
   setValue(val) {
     this.props.value = val;
     this.putData(this.key, val);
-    this.update();
+    // there is no `update` function for control, consider calling `update` on node
+    // this.update();
   }
 
   getValue() {
