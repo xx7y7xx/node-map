@@ -35,8 +35,13 @@ export default class TextControl extends Rete.Control {
   setValue(val) {
     this.props.value = val;
     this.putData(this.key, val);
-    // there is no `update` function for control, consider calling `update` on node
-    // this.update();
+    // `update` function for control is defined when event "rendercontrol"
+    // so `update` function may be undefined at the initial stage of page loading
+    // https://github.com/retejs/rete/blob/master/src/view/control.ts#L9
+    // https://github.com/retejs/react-render-plugin/blob/master/src/index.jsx#L25
+    if (this.update) {
+      this.update();
+    }
   }
 
   getValue() {
