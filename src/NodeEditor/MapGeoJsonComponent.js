@@ -1,9 +1,12 @@
+/* eslint-disable no-param-reassign */
+
 import Rete from 'rete';
 import * as turf from '@turf/turf';
 
 import TextControl from './TextControl';
 import { objectSocket } from './JsonComponent';
 import { stringSocket } from './UploadCsvComponent';
+import ButtonControl from './ButtonControl';
 
 const CONTROL_KEY = 'mapGeoJsonControl';
 const SOURCE_ID = 'nm-line-string-source';
@@ -32,16 +35,43 @@ export default class MapGeoJsonComponent extends Rete.Component {
   }
 
   builder(node) {
+    let index = 0;
+
     const input = new Rete.Input('json', 'GeoJSON', objectSocket);
     const output = new Rete.Output(OUTPUT_KEY, 'sourceId', stringSocket);
 
-    return node
+    const onClick = () => {
+      node.addOutput(
+        new Rete.Output(`${OUTPUT_KEY}${index}`, `${OUTPUT_KEY}${index}`, stringSocket),
+      );
+      index += 1;
+      node.data.outputCount += 1;
+      node.update(); // Rerender ConcatComponent
+    };
+
+    node
       .addInput(input)
       .addOutput(output)
-      .addControl(new TextControl(this.editor, CONTROL_KEY, node, true));
+      .addControl(new TextControl(this.editor, CONTROL_KEY, node, true))
+      .addControl(
+        new ButtonControl(this.editor, 'addOutputSocket', {
+          text: 'Add Output Socket',
+          onClick,
+        }),
+      );
+
+    if (node.data.outputCount > 0) {
+      for (let i = 0; i < node.data.outputCount; i += 1) {
+        node.addOutput(
+          new Rete.Output(`${OUTPUT_KEY}${i}`, `${OUTPUT_KEY}${i}`, stringSocket),
+        );
+        index += 1;
+      }
+    }
+
+    return node;
   }
 
-  // eslint-disable-next-line no-unused-vars
   worker(node, inputs, outputs) {
     // inputs.json=[] // no data
     // inputs.json=[[[103.8254528,1.2655414]]]
@@ -53,7 +83,10 @@ export default class MapGeoJsonComponent extends Rete.Component {
       return;
     }
 
-    outputs[OUTPUT_KEY] = SOURCE_ID; // eslint-disable-line no-param-reassign
+    outputs[OUTPUT_KEY] = SOURCE_ID;
+    for (let i = 0; i < node.data.outputCount; i += 1) {
+      outputs[`${OUTPUT_KEY}${i}`] = SOURCE_ID;
+    }
 
     if (this.mapReady) {
       this.addOrUpdateSource(geojson, node);
