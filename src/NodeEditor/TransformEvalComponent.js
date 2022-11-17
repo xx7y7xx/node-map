@@ -70,7 +70,7 @@ export default class TransformEvalComponent extends Rete.Component {
         this.hideError(nodeData.id);
       }
     } catch (err) {
-      console.log('[ERROR] Failed to eval function!', err);
+      console.log('[ERROR] Failed to eval function!');
 
       this.showError(nodeData.id, err);
     }
