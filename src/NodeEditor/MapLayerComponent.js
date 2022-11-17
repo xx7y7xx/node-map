@@ -40,6 +40,9 @@ export default class MapLayerComponent extends Rete.Component {
       if (map.getLayer(LAYER_ID)) {
         map.removeLayer(LAYER_ID);
       }
+      if (map.getLayer(LAYER_ID_POINT)) {
+        map.removeLayer(LAYER_ID_POINT);
+      }
       return;
     }
 
