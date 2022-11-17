@@ -11,6 +11,7 @@ import { LS_KEY_NODE_EDITOR_DATA } from '../constants';
 import AuthComponent from './AuthComponent';
 import ConcatComponent from './ConcatComponent';
 import CsvToJsonComponent from './CsvToJsonComponent';
+import GoogleLoginComponent from './GoogleLoginComponent';
 import JsonComponent from './JsonComponent';
 import TransformComponent from './TransformComponent';
 import TransformEvalComponent from './TransformEvalComponent';
@@ -27,6 +28,7 @@ import { createSampleNodes } from './helpers';
 
 export async function createEditor(container) {
   const concatComponent = new ConcatComponent();
+  const googleLoginComponent = new GoogleLoginComponent();
   const jsonComponent = new JsonComponent();
   const transformComponent = new TransformComponent();
   const transformEvalComponent = new TransformEvalComponent();
@@ -73,7 +75,7 @@ export async function createEditor(container) {
   [uploadComponent, jsonComponent, transformComponent, transformEvalComponent,
     concatComponent, previewComponent, csvToJsonComponent, uploadCsvComponent,
     remoteDataComponent, mapComponent, mapMarkersComponent, mapGeoJsonComponent, mapLayerComponent,
-    authComponent, turfLineStringComponent,
+    authComponent, turfLineStringComponent, googleLoginComponent,
   ].forEach((c) => {
     editor.register(c);
     engine.register(c);
