@@ -27,7 +27,6 @@ import { createSampleNodes } from './helpers';
 
 export async function createEditor(container) {
   const concatComponent = new ConcatComponent();
-  const uploadComponent = new UploadComponent();
   const jsonComponent = new JsonComponent();
   const transformComponent = new TransformComponent();
   const transformEvalComponent = new TransformEvalComponent();
@@ -41,6 +40,7 @@ export async function createEditor(container) {
   const mapLayerComponent = new MapLayerComponent();
   const authComponent = new AuthComponent();
   const turfLineStringComponent = new TurfLineStringComponent();
+  const uploadComponent = new UploadComponent();
 
   const editor = new Rete.NodeEditor('demo@0.1.0', container);
   editor.use(ConnectionPlugin);
