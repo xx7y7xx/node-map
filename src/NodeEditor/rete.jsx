@@ -6,31 +6,31 @@ import ConnectionPlugin from 'rete-connection-plugin';
 import AreaPlugin from 'rete-area-plugin';
 // import ContextMenuPlugin, { Menu, Item, Search } from 'rete-context-menu-plugin';
 import ContextMenuPlugin from 'rete-context-menu-plugin';
-import { LS_KEY_NODE_EDITOR_DATA } from '../constants';
 
+import { LS_KEY_NODE_EDITOR_DATA } from '../constants';
+import AuthComponent from './AuthComponent';
+import ConcatComponent from './ConcatComponent';
+import CsvToJsonComponent from './CsvToJsonComponent';
 import JsonComponent from './JsonComponent';
 import TransformComponent from './TransformComponent';
 import TransformEvalComponent from './TransformEvalComponent';
 import PreviewComponent from './PreviewComponent';
 import UploadComponent from './UploadComponent';
-import ConcatComponent from './ConcatComponent';
-import CsvToJsonComponent from './CsvToJsonComponent';
 import UploadCsvComponent from './UploadCsvComponent';
 import RemoteDataComponent from './RemoteDataComponent';
 import MapComponent from './MapComponent';
 import MapMarkersComponent from './MapMarkersComponent';
 import MapGeoJsonComponent from './MapGeoJsonComponent';
 import MapLayerComponent from './MapLayerComponent';
-import AuthComponent from './AuthComponent';
 import TurfLineStringComponent from './TurfLineStringComponent';
 import { createSampleNodes } from './helpers';
 
 export async function createEditor(container) {
+  const concatComponent = new ConcatComponent();
   const uploadComponent = new UploadComponent();
   const jsonComponent = new JsonComponent();
   const transformComponent = new TransformComponent();
   const transformEvalComponent = new TransformEvalComponent();
-  const concatComponent = new ConcatComponent();
   const previewComponent = new PreviewComponent();
   const csvToJsonComponent = new CsvToJsonComponent();
   const uploadCsvComponent = new UploadCsvComponent();
