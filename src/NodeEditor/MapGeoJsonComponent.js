@@ -3,38 +3,30 @@
 import Rete from 'rete';
 import * as turf from '@turf/turf';
 
-import TextControl from './TextControl';
+// import TextControl from './TextControl';
 import { objectSocket } from './JsonComponent';
 import { stringSocket } from './UploadCsvComponent';
 import ButtonControl from './ButtonControl';
+import InputControl from './InputControl';
 
+const CONTROL_KEY_SOURCE_ID = 'controlKeySourceId';
 const CONTROL_KEY = 'mapGeoJsonControl';
-const SOURCE_ID = 'nm-line-string-source';
+// const SOURCE_ID = 'nm-line-string-source';
 const OUTPUT_KEY = 'sourceId';
 
 export default class MapGeoJsonComponent extends Rete.Component {
   constructor() {
     super('Map GeoJSON Node');
 
-    const map = window.mapbox;
-
     window.mapbox.on('load', () => {
       this.mapReady = true;
-    });
-
-    window.mapbox.on('sourcedata', (e) => {
-      if (e.sourceId !== SOURCE_ID || !e.isSourceLoaded) return;
-      const f = map.querySourceFeatures(SOURCE_ID);
-      if (f.length === 0) return;
-      const bbox = turf.bbox({
-        type: 'FeatureCollection',
-        features: f,
-      });
-      map.fitBounds(bbox, { padding: 20 });
     });
   }
 
   builder(node) {
+    if (!this.nodeIdMap) this.nodeIdMap = {};
+    this.nodeIdMap[node.id] = node;
+
     let index = 0;
 
     const input = new Rete.Input('json', 'GeoJSON', objectSocket);
@@ -52,13 +44,19 @@ export default class MapGeoJsonComponent extends Rete.Component {
     node
       .addInput(input)
       .addOutput(output)
-      .addControl(new TextControl(this.editor, CONTROL_KEY, node, true))
+      .addControl(new InputControl(this.editor, CONTROL_KEY_SOURCE_ID, node, { label: 'sourceId' }))
+      // .addControl(new TextControl(this.editor, CONTROL_KEY, node, true))
       .addControl(
         new ButtonControl(this.editor, 'addOutputSocket', {
           text: 'Add Output Socket',
           onClick,
         }),
       );
+
+    // Initial the source ID input box with value
+    if (this.getSourceId(node) === null || this.getSourceId(node) === undefined) {
+      this.setSourceId(node, `sourceId${Math.round(Math.random() * 1000)}`);
+    }
 
     if (node.data.outputCount > 0) {
       for (let i = 0; i < node.data.outputCount; i += 1) {
@@ -69,7 +67,26 @@ export default class MapGeoJsonComponent extends Rete.Component {
       }
     }
 
+    window.mapbox.on('sourcedata', (e) => {
+      if (e.sourceId !== this.getSourceId(node) || !e.isSourceLoaded) return;
+      const f = window.mapbox.querySourceFeatures(this.getSourceId(node));
+      if (f.length === 0) return;
+      const bbox = turf.bbox({
+        type: 'FeatureCollection',
+        features: f,
+      });
+      window.mapbox.fitBounds(bbox, { padding: 20 });
+    });
+
     return node;
+  }
+
+  getSourceId(node) {
+    return this.nodeIdMap[node.id].data[CONTROL_KEY_SOURCE_ID];
+  }
+
+  setSourceId(node, val) {
+    this.nodeIdMap[node.id].data[CONTROL_KEY_SOURCE_ID] = val;
   }
 
   worker(node, inputs, outputs) {
@@ -83,9 +100,9 @@ export default class MapGeoJsonComponent extends Rete.Component {
       return;
     }
 
-    outputs[OUTPUT_KEY] = SOURCE_ID;
+    outputs[OUTPUT_KEY] = this.getSourceId(node);
     for (let i = 0; i < node.data.outputCount; i += 1) {
-      outputs[`${OUTPUT_KEY}${i}`] = SOURCE_ID;
+      outputs[`${OUTPUT_KEY}${i}`] = this.getSourceId(node);
     }
 
     if (this.mapReady) {
@@ -103,7 +120,7 @@ export default class MapGeoJsonComponent extends Rete.Component {
       .find((n) => n.id === node.id)
       .controls
       .get(CONTROL_KEY)
-      .setValue(text);
+      ?.setValue(text);
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -117,13 +134,13 @@ export default class MapGeoJsonComponent extends Rete.Component {
 
     this.updateText(node, `${JSON.stringify(sourceData)}`);
 
-    const mpSource = map.getSource(SOURCE_ID);
+    const mpSource = map.getSource(this.getSourceId(node));
     if (mpSource) {
       // some layers may use this source now
-      // map.removeSource(SOURCE_ID);
-      map.getSource(SOURCE_ID).setData(sourceData.data);
+      // map.removeSource(this.getSourceId(node));
+      map.getSource(this.getSourceId(node)).setData(sourceData.data);
     } else {
-      window.mapbox.addSource(SOURCE_ID, sourceData);
+      window.mapbox.addSource(this.getSourceId(node), sourceData);
     }
   }
 }

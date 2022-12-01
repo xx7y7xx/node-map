@@ -66,7 +66,8 @@ export default class MapLayerComponent extends Rete.Component {
       map.setPaintProperty(LAYER_ID_POINT, 'circle-radius', node.data[CONTROL_KEY_LINE_WIDTH]);
     } else {
       window.mapbox.addLayer({
-        id: LAYER_ID,
+        // id: LAYER_ID,
+        id: `${sourceId}layerId`,
         type: 'line',
         source: sourceId,
         layout: {
@@ -80,7 +81,8 @@ export default class MapLayerComponent extends Rete.Component {
       });
 
       window.mapbox.addLayer({
-        id: LAYER_ID_POINT,
+        // id: LAYER_ID_POINT,
+        id: `${sourceId}layerIdPoint`,
         type: 'circle',
         source: sourceId,
         paint: {

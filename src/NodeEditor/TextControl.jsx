@@ -5,6 +5,7 @@ export default class TextControl extends Rete.Control {
   static component = ({ value, onChange }) => (
     <textarea
       rows={4}
+      cols={30}
       value={value}
       onChange={(e) => onChange(e.target.value)}
       onPointerDown={(e) => {
