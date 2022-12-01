@@ -4,8 +4,8 @@ import { stringSocket } from './UploadCsvComponent';
 import ColorPickerControl from './ColorPickerControl';
 import SliderControl from './SliderControl';
 
-const LAYER_ID = 'nm-line-string-layer';
-const LAYER_ID_POINT = 'nm-point-layer';
+// const LAYER_ID = 'nm-line-string-layer';
+// const LAYER_ID_POINT = 'nm-point-layer';
 const INPUT_KEY = 'sourceId';
 const CONTROL_KEY = 'colorControl';
 const CONTROL_KEY_LINE_WIDTH = 'lineWidthWidth';
@@ -32,16 +32,18 @@ export default class MapLayerComponent extends Rete.Component {
   // eslint-disable-next-line no-unused-vars
   worker(node, inputs) {
     const sourceId = inputs[INPUT_KEY][0];
+    const layerId = `${sourceId}layerId`;
+    const layerIdPoint = `${sourceId}layerIdPoint`;
 
     if (!sourceId) {
       // no data input, maybe link disconnect
       const map = window.mapbox;
 
-      if (map.getLayer(LAYER_ID)) {
-        map.removeLayer(LAYER_ID);
+      if (map.getLayer(layerId)) {
+        map.removeLayer(layerId);
       }
-      if (map.getLayer(LAYER_ID_POINT)) {
-        map.removeLayer(LAYER_ID_POINT);
+      if (map.getLayer(layerIdPoint)) {
+        map.removeLayer(layerIdPoint);
       }
       return;
     }
@@ -58,16 +60,18 @@ export default class MapLayerComponent extends Rete.Component {
   // eslint-disable-next-line class-methods-use-this
   addOrUpdateLayer(sourceId, node) {
     const map = window.mapbox;
+    const layerId = `${sourceId}layerId`;
+    const layerIdPoint = `${sourceId}layerIdPoint`;
 
-    if (map.getLayer(LAYER_ID)) {
-      map.setPaintProperty(LAYER_ID, 'line-color', node.data[CONTROL_KEY]);
-      map.setPaintProperty(LAYER_ID, 'line-width', node.data[CONTROL_KEY_LINE_WIDTH]);
-      map.setPaintProperty(LAYER_ID_POINT, 'circle-color', node.data[CONTROL_KEY]);
-      map.setPaintProperty(LAYER_ID_POINT, 'circle-radius', node.data[CONTROL_KEY_LINE_WIDTH]);
+    if (map.getLayer(layerId)) {
+      map.setPaintProperty(layerId, 'line-color', node.data[CONTROL_KEY]);
+      map.setPaintProperty(layerId, 'line-width', node.data[CONTROL_KEY_LINE_WIDTH]);
+      map.setPaintProperty(layerIdPoint, 'circle-color', node.data[CONTROL_KEY]);
+      map.setPaintProperty(layerIdPoint, 'circle-radius', node.data[CONTROL_KEY_LINE_WIDTH]);
     } else {
       window.mapbox.addLayer({
         // id: LAYER_ID,
-        id: `${sourceId}layerId`,
+        id: layerId,
         type: 'line',
         source: sourceId,
         layout: {
@@ -82,7 +86,7 @@ export default class MapLayerComponent extends Rete.Component {
 
       window.mapbox.addLayer({
         // id: LAYER_ID_POINT,
-        id: `${sourceId}layerIdPoint`,
+        id: layerIdPoint,
         type: 'circle',
         source: sourceId,
         paint: {

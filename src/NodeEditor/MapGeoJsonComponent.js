@@ -69,11 +69,12 @@ export default class MapGeoJsonComponent extends Rete.Component {
 
     window.mapbox.on('sourcedata', (e) => {
       if (e.sourceId !== this.getSourceId(node) || !e.isSourceLoaded) return;
-      const f = window.mapbox.querySourceFeatures(this.getSourceId(node));
-      if (f.length === 0) return;
+      const fs = window.mapbox.querySourceFeatures(this.getSourceId(node));
+      if (fs.length === 0) return;
+      console.debug('zoom to features', fs);
       const bbox = turf.bbox({
         type: 'FeatureCollection',
-        features: f,
+        features: fs,
       });
       window.mapbox.fitBounds(bbox, { padding: 20 });
     });
