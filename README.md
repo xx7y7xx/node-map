@@ -19,7 +19,7 @@ $ npm run build-localhost
 
 ## Examples
 
-* Simple - https://xx7y7xx.github.io/node-map/examples/simple.json
+* Simple - https://xx7y7xx.github.io/node-map/?load=https://xx7y7xx.github.io/node-map/examples/simple.json
 
 ## Docs
 
