@@ -1,4 +1,4 @@
-/* eslint-disable import/prefer-default-export */
+/* eslint-disable import/prefer-default-export, no-underscore-dangle */
 
 import mockJsonData from './mockData.json';
 
@@ -6,18 +6,17 @@ const defaultFnStr = `return input.data.map((item) => (
   [item.point.Lng, item.point.Lat]
 ))`;
 
-export const createSampleNodes = async (editor, {
-  uploadComponent, jsonComponent, transformComponent, transformEvalComponent,
-  concatComponent, previewComponent,
-}) => {
-  const uploadNode = await uploadComponent.createNode({ upload: {} });
-  const jsonNode = await jsonComponent.createNode({
+export const createSampleNodes = async () => {
+  const { editor, allComponents } = window.___nodeMap;
+
+  const uploadNode = await allComponents.uploadComponent.createNode({ upload: {} });
+  const jsonNode = await allComponents.jsonComponent.createNode({
     json: mockJsonData,
   });
-  const transformNode = await transformComponent.createNode();
-  const transformEvalNode = await transformEvalComponent.createNode({ fnStr: defaultFnStr });
-  const concatNode = await concatComponent.createNode({ inputCount: 2 });
-  const previewNode = await previewComponent.createNode();
+  const transformNode = await allComponents.transformComponent.createNode();
+  const transformEvalNode = await allComponents.transformEvalComponent.createNode({ fnStr: defaultFnStr }); // eslint-disable-line max-len
+  const concatNode = await allComponents.concatComponent.createNode({ inputCount: 2 });
+  const previewNode = await allComponents.previewComponent.createNode();
 
   uploadNode.position = [0, 500];
   jsonNode.position = [0, 0];
@@ -53,4 +52,15 @@ export const createSampleNodes = async (editor, {
     concatNode.outputs.get('json'),
     previewNode.inputs.get('json'),
   );
+};
+
+export const getUrlParams = () => new Proxy(new URLSearchParams(window.location.search), {
+  get: (searchParams, prop) => searchParams.get(prop),
+});
+
+export const deleteUrlParam = (paramName) => {
+  // Delete ?load= param in URL
+  const searchParams = new URLSearchParams(window.location.search);
+  searchParams.delete(paramName);
+  window.location.search = searchParams.toString();
 };

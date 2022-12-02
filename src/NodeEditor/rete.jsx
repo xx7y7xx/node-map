@@ -1,3 +1,5 @@
+/* eslint-disable no-underscore-dangle */
+
 import { useState, useEffect, useRef } from 'react';
 import { createRoot } from 'react-dom/client';
 import Rete from 'rete';
@@ -6,6 +8,8 @@ import ConnectionPlugin from 'rete-connection-plugin';
 import AreaPlugin from 'rete-area-plugin';
 // import ContextMenuPlugin, { Menu, Item, Search } from 'rete-context-menu-plugin';
 import ContextMenuPlugin from 'rete-context-menu-plugin';
+import axios from 'axios';
+import { message } from 'antd';
 
 import { LS_KEY_NODE_EDITOR_DATA } from '../constants';
 import AuthComponent from './AuthComponent';
@@ -24,7 +28,33 @@ import MapGeoJsonComponent from './MapGeoJsonComponent';
 import MapLayerComponent from './MapLayerComponent';
 import MapLayerV2Component from './MapLayerV2Component';
 import TurfLineStringComponent from './TurfLineStringComponent';
-import { createSampleNodes } from './helpers';
+import { deleteUrlParam, getUrlParams } from './helpers';
+
+const loadConfig = async (editor) => {
+  const params = getUrlParams();
+  if (params.load) {
+    await axios({
+      method: 'get',
+      url: params.load,
+    }).then((response) => {
+      message.success('Config data loaded.');
+
+      // Delete ?load= param in URL
+      deleteUrlParam('load');
+
+      return editor.fromJSON(response.data);
+    }).catch((err) => {
+      console.error('[Rete] Failed to get remote data!', err);
+      message.warn(`Failed to get remote data: ${err.message}`);
+    });
+  } else {
+    const localData = localStorage.getItem(LS_KEY_NODE_EDITOR_DATA);
+    if (localData) {
+      console.debug('Load data from local', JSON.parse(localData));
+      await editor.fromJSON(JSON.parse(localData));
+    }
+  }
+};
 
 export async function createEditor(container) {
   const concatComponent = new ConcatComponent();
@@ -45,6 +75,8 @@ export async function createEditor(container) {
   const uploadComponent = new UploadComponent();
 
   const editor = new Rete.NodeEditor('demo@0.1.0', container);
+  if (!window.___nodeMap) window.___nodeMap = {};
+  window.___nodeMap.editor = editor;
   editor.use(ConnectionPlugin);
   editor.use(ReactRenderPlugin, { createRoot });
   editor.use(ContextMenuPlugin, {
@@ -72,29 +104,31 @@ export async function createEditor(container) {
 
   const engine = new Rete.Engine('demo@0.1.0');
 
-  [uploadComponent, jsonComponent, transformComponent, transformEvalComponent,
-    concatComponent, previewComponent, csvToJsonComponent, uploadCsvComponent,
-    remoteDataComponent, mapComponent, mapMarkersComponent, mapGeoJsonComponent,
-    mapLayerComponent, mapLayerV2Component, authComponent, turfLineStringComponent,
-  ].forEach((c) => {
-    editor.register(c);
-    engine.register(c);
+  const allComponents = ({
+    uploadComponent,
+    jsonComponent,
+    transformComponent,
+    transformEvalComponent,
+    concatComponent,
+    previewComponent,
+    csvToJsonComponent,
+    uploadCsvComponent,
+    remoteDataComponent,
+    mapComponent,
+    mapMarkersComponent,
+    mapGeoJsonComponent,
+    mapLayerComponent,
+    mapLayerV2Component,
+    authComponent,
+    turfLineStringComponent,
+  });
+  window.___nodeMap.allComponents = allComponents;
+  Object.keys(allComponents).forEach((key) => {
+    editor.register(allComponents[key]);
+    engine.register(allComponents[key]);
   });
 
-  const localData = localStorage.getItem(LS_KEY_NODE_EDITOR_DATA);
-  if (localData) {
-    console.debug('Load data from local', JSON.parse(localData));
-    await editor.fromJSON(JSON.parse(localData));
-  } else {
-    createSampleNodes(editor, {
-      uploadComponent,
-      jsonComponent,
-      transformComponent,
-      transformEvalComponent,
-      concatComponent,
-      previewComponent,
-    });
-  }
+  await loadConfig(editor);
 
   editor.on(
     'process nodecreated noderemoved connectioncreated connectionremoved',

@@ -36,7 +36,7 @@ function Faq() {
       <Drawer
         title="FAQ"
         placement="right"
-        visible={visible}
+        open={visible}
         onClose={() => {
           setVisible(false);
         }}
