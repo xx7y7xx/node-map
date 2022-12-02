@@ -16,7 +16,7 @@ function downloadObjectAsJson(exportJsonString, exportName) {
 export default function NodeEditor() {
   const [setContainer] = useRete();
   const handleClick = () => {
-    downloadObjectAsJson(localStorage.getItem(LS_KEY_NODE_EDITOR_DATA), 'node-map-export-data.json');
+    downloadObjectAsJson(JSON.stringify(JSON.parse(localStorage.getItem(LS_KEY_NODE_EDITOR_DATA)), null, '  '), 'node-map-export-data.json');
   };
   return (
     <div className="node-editor">

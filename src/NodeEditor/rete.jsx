@@ -22,6 +22,7 @@ import MapComponent from './MapComponent';
 import MapMarkersComponent from './MapMarkersComponent';
 import MapGeoJsonComponent from './MapGeoJsonComponent';
 import MapLayerComponent from './MapLayerComponent';
+import MapLayerV2Component from './MapLayerV2Component';
 import TurfLineStringComponent from './TurfLineStringComponent';
 import { createSampleNodes } from './helpers';
 
@@ -38,6 +39,7 @@ export async function createEditor(container) {
   const mapMarkersComponent = new MapMarkersComponent();
   const mapGeoJsonComponent = new MapGeoJsonComponent();
   const mapLayerComponent = new MapLayerComponent();
+  const mapLayerV2Component = new MapLayerV2Component();
   const authComponent = new AuthComponent();
   const turfLineStringComponent = new TurfLineStringComponent();
   const uploadComponent = new UploadComponent();
@@ -72,8 +74,8 @@ export async function createEditor(container) {
 
   [uploadComponent, jsonComponent, transformComponent, transformEvalComponent,
     concatComponent, previewComponent, csvToJsonComponent, uploadCsvComponent,
-    remoteDataComponent, mapComponent, mapMarkersComponent, mapGeoJsonComponent, mapLayerComponent,
-    authComponent, turfLineStringComponent,
+    remoteDataComponent, mapComponent, mapMarkersComponent, mapGeoJsonComponent,
+    mapLayerComponent, mapLayerV2Component, authComponent, turfLineStringComponent,
   ].forEach((c) => {
     editor.register(c);
     engine.register(c);
