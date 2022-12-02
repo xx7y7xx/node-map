@@ -90,7 +90,7 @@ export default class RemoteDataComponent extends Rete.Component {
       this.editor.trigger('process');
     }).catch((err) => {
       console.error('[RemoteDataComponent] Failed to get remote data!', err);
-      message.warn(`Failed to get remote data: ${err.message}`);
+      message.warning(`Failed to get remote data: ${err.message}`);
       this.setControlValue(CONTROL_KEY, '');
       this.setControlValue(CONTROL_KEY_ERROR_MESSAGE, `Error: ${err.message}`);
     });

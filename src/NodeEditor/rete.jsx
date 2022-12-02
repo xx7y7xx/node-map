@@ -37,6 +37,7 @@ const loadConfig = async (editor) => {
       method: 'get',
       url: params.load,
     }).then((response) => {
+      console.debug('[loadConfig] response', response);
       message.success('Config data loaded.');
 
       // Delete ?load= param in URL
@@ -44,8 +45,8 @@ const loadConfig = async (editor) => {
 
       return editor.fromJSON(response.data);
     }).catch((err) => {
-      console.error('[Rete] Failed to get remote data!', err);
-      message.warn(`Failed to get remote data: ${err.message}`);
+      console.error('[loadConfig] Failed to get remote data!', err);
+      message.warning(`Failed to get remote data: ${err.message}`);
     });
   } else {
     const localData = localStorage.getItem(LS_KEY_NODE_EDITOR_DATA);
