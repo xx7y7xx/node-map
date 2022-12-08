@@ -15,6 +15,9 @@ export default function Map() {
       zoom: 9,
     });
     // console.log('map', window.mapbox);
+    window.mapbox.on('load', () => {
+      window.mapboxReady = true;
+    });
   }, []);
 
   return (
