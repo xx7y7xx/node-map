@@ -12,3 +12,4 @@
 * Use JSON format in header part in Remote Data node
 * Customize tile layer of Mapbox
 * Geojson point with tooltip to show point info
+* A plain text node with only information, no input and no output
