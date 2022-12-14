@@ -10,5 +10,5 @@
 * A dialog to show cached data in Remote Data node
 * Customize geojson point color in Map Layer V2 node
 * Use JSON format in header part in Remote Data node
-* Customize title layer of Mapbox
+* Customize tile layer of Mapbox
 * Geojson point with tooltip to show point info
