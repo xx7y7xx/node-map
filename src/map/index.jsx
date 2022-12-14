@@ -10,7 +10,8 @@ export default function Map() {
   useEffect(() => {
     window.mapbox = new mapboxgl.Map({
       container: mapboxElRef.current,
-      style: 'mapbox://styles/mapbox/light-v10',
+      // style: 'mapbox://styles/mapbox/light-v10',
+      style: 'mapbox://styles/mapbox/dark-v10', // dark theme
       center: [103.7041631, 1.3139961],
       zoom: 9,
     });
