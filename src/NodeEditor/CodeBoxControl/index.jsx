@@ -1,34 +1,22 @@
 import React from 'react';
 import Rete from 'rete';
-import { Input } from 'antd';
 import axios from 'axios';
 
-const { TextArea } = Input;
+// import AntdTextArea from './AntdTextArea';
+import ReactSimpleCodeEditor from './ReactSimpleCodeEditor';
+
 const isAsync = true;
 
 export default class CodeBoxControl extends Rete.Control {
   static component = (props) => {
     const {
-      cols, rows = 4, code, onChange, errMsg,
+      code, onChange, errMsg,
     } = props;
     console.debug('CodeBoxControl.component', props);
     return (
       <div>
-        <TextArea
-          style={{ fontFamily: 'monospace' }}
-          rows={rows}
-          cols={cols}
-          value={code}
-          onChange={(e) => onChange(e.target.value)}
-          onPointerDown={(e) => {
-          // When selecting in this text box, the node should not move
-            e.stopPropagation();
-          }}
-          onDoubleClick={(e) => {
-          // When double clicking in this text box, the node should not move
-            e.stopPropagation();
-          }}
-        />
+        {/* <AntdTextArea code={code} onChange={onChange} errMsg={errMsg} /> */}
+        <ReactSimpleCodeEditor code={code} onChange={onChange} errMsg={errMsg} />
         <br />
         {errMsg}
       </div>

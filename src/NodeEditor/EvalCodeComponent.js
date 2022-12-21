@@ -33,7 +33,6 @@ export default class EvalCodeComponent extends Rete.Component {
         this.editor,
         CONTROL_KEY_CODE_BOX,
         node,
-        { rows: 6, cols: 80 },
       ));
   }
 
