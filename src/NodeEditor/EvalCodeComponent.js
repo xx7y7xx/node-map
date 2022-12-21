@@ -45,17 +45,17 @@ export default class EvalCodeComponent extends Rete.Component {
   async worker(nodeData, inputData, outputData) {
     log('worker', nodeData);
 
-    let jsonNodeValue;
+    let inputJson;
     if (inputData.json.length === 0) {
       // there is no input
-      jsonNodeValue = undefined;
+      inputJson = undefined;
       // return;
     } else {
-      [jsonNodeValue] = inputData.json;
+      [inputJson] = inputData.json;
     }
 
     const { controls } = this.editor.nodes.find((n) => n.id === nodeData.id);
-    const result = await controls.get(CONTROL_KEY_CODE_BOX).run(jsonNodeValue);
+    const result = await controls.get(CONTROL_KEY_CODE_BOX).run(inputJson);
 
     // eslint-disable-next-line no-param-reassign
     outputData.json = result;

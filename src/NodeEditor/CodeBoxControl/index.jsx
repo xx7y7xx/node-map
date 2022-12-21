@@ -12,7 +12,7 @@ export default class CodeBoxControl extends Rete.Control {
     const {
       code, onChange, errMsg,
     } = props;
-    console.debug('CodeBoxControl.component', props);
+    // console.debug('CodeBoxControl.component', props);
     return (
       <div>
         {/* <AntdTextArea code={code} onChange={onChange} errMsg={errMsg} /> */}
@@ -34,7 +34,6 @@ export default class CodeBoxControl extends Rete.Control {
     if (node.data[key] && node.data[key].code) {
       initialCode = node.data[key].code;
     } else {
-      // eslint-disable-next-line no-param-reassign
       node.data[key] = {
         code: '',
         errMsg: '',
@@ -51,6 +50,7 @@ export default class CodeBoxControl extends Rete.Control {
     };
   }
 
+  // Rerender this component, react re-render
   rerender() {
     if (this.update) {
       this.update();
@@ -65,7 +65,7 @@ export default class CodeBoxControl extends Rete.Control {
       ...this.getData(this.key),
       [key]: val,
     });
-    this.rerender(); // re-render
+    this.rerender();
   }
 
   async run(fnInput) {
@@ -110,11 +110,11 @@ export default class CodeBoxControl extends Rete.Control {
 
   showError(err) {
     this.setKeyVal('errMsg', `Failed to eval: ${err.message}`);
-    this.rerender(); // Rerender this component
+    this.rerender();
   }
 
   hideError() {
     this.setKeyVal('errMsg', '');
-    this.rerender(); // Rerender this component
+    this.rerender();
   }
 }
