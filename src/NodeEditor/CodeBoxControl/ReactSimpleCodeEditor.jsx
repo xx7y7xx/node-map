@@ -18,8 +18,6 @@ export default function ReactSimpleCodeEditor({
         width: '80em',
         backgroundColor: 'white',
       }}
-          // rows={rows}
-          // cols={cols}
       value={code}
       highlight={(c) => highlight(c, languages.js)}
       padding={10}

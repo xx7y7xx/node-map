@@ -15,8 +15,8 @@ export default class CodeBoxControl extends Rete.Control {
     // console.debug('CodeBoxControl.component', props);
     return (
       <div>
-        {/* <AntdTextArea code={code} onChange={onChange} errMsg={errMsg} /> */}
-        <ReactSimpleCodeEditor code={code} onChange={onChange} errMsg={errMsg} />
+        {/* <AntdTextArea code={code} onChange={onChange} /> */}
+        <ReactSimpleCodeEditor code={code} onChange={onChange} />
         <br />
         {errMsg}
       </div>
