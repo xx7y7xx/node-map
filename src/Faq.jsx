@@ -3,11 +3,11 @@ import { Drawer } from 'antd';
 import PubSub from 'pubsub-js';
 import Markdown from 'markdown-to-jsx';
 
-const TransformEvalFaq = require('./NodeEditor/TransformEvalFaq.md');
+const EvalCodeFaq = require('./NodeEditor/EvalCodeFaq.md');
 const PreviewFaq = require('./NodeEditor/PreviewFaq.md');
 
 const markdownStringMap = {
-  TransformEvalFaq,
+  EvalCodeFaq,
   PreviewFaq,
 };
 

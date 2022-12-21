@@ -17,7 +17,7 @@ import ConcatComponent from './ConcatComponent';
 import CsvToJsonComponent from './CsvToJsonComponent';
 import JsonComponent from './JsonComponent';
 import TransformComponent from './TransformComponent';
-import TransformEvalComponent from './TransformEvalComponent';
+import EvalCodeComponent from './EvalCodeComponent';
 import PreviewComponent from './PreviewComponent';
 import UploadComponent from './UploadComponent';
 import UploadCsvComponent from './UploadCsvComponent';
@@ -61,7 +61,7 @@ export async function createEditor(container) {
   const concatComponent = new ConcatComponent();
   const jsonComponent = new JsonComponent();
   const transformComponent = new TransformComponent();
-  const transformEvalComponent = new TransformEvalComponent();
+  const evalCodeComponent = new EvalCodeComponent();
   const previewComponent = new PreviewComponent();
   const csvToJsonComponent = new CsvToJsonComponent();
   const uploadCsvComponent = new UploadCsvComponent();
@@ -109,7 +109,7 @@ export async function createEditor(container) {
     uploadComponent,
     jsonComponent,
     transformComponent,
-    transformEvalComponent,
+    evalCodeComponent,
     concatComponent,
     previewComponent,
     csvToJsonComponent,

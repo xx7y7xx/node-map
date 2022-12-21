@@ -1,0 +1,86 @@
+{
+  "id": "demo@0.1.0",
+  "nodes": {
+    "3": {
+      "id": 3,
+      "data": {
+        "inputControlJwt": "",
+        "inputControlXAuthMethod": ""
+      },
+      "inputs": {
+
+      },
+      "outputs": {
+
+      },
+      "position": [
+        1061.550861620685,
+        249.34858874992534
+      ],
+      "name": "Auth Node"
+    },
+    "6": {
+      "id": 6,
+      "data": {
+        "controlKeyCodeBox": {
+          "code": "const res = await deps.axios({\n  method: 'get',\n  url: '/node-map/examples/data/geojson-point.json'\n});\nreturn res.data;",
+          "errMsg": "Failed to eval: a is not defined"
+        }
+      },
+      "inputs": {
+        "json": {
+          "connections": [
+
+          ]
+        }
+      },
+      "outputs": {
+        "json": {
+          "connections": [
+            {
+              "node": 7,
+              "input": "geojson",
+              "data": {
+
+              }
+            }
+          ]
+        }
+      },
+      "position": [
+        -121.14987740918465,
+        -130.50643453375338
+      ],
+      "name": "EvalCode Node"
+    },
+    "7": {
+      "id": 7,
+      "data": {
+        "controlKeyLineColor": "#ff0000",
+        "controlKeyLineWidth": 20,
+        "controlKeySourceId": "foo"
+      },
+      "inputs": {
+        "geojson": {
+          "connections": [
+            {
+              "node": 6,
+              "output": "json",
+              "data": {
+
+              }
+            }
+          ]
+        }
+      },
+      "outputs": {
+
+      },
+      "position": [
+        759.4111068550783,
+        -113.35294117173315
+      ],
+      "name": "Map Layer V2 Node"
+    }
+  }
+}
