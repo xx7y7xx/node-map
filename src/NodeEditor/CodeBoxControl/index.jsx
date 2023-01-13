@@ -1,11 +1,17 @@
 import React from 'react';
 import Rete from 'rete';
 import axios from 'axios';
+import * as turf from '@turf/turf';
+import lodash from 'lodash';
+import papaparse from 'papaparse';
 
 // import AntdTextArea from './AntdTextArea';
 import ReactSimpleCodeEditor from './ReactSimpleCodeEditor';
 
 const isAsync = true;
+const deps = {
+  axios, lodash, papaparse, turf,
+};
 
 export default class CodeBoxControl extends Rete.Control {
   static component = (props) => {
@@ -82,7 +88,7 @@ export default class CodeBoxControl extends Rete.Control {
       const aFn = new AsyncFunction('input', 'deps', fnStr);
 
       try {
-        fnOut = await aFn(fnInput, { axios });
+        fnOut = await aFn(fnInput, deps);
       } catch (err) {
         console.log('[ERROR] Failed to eval function!', err);
         this.showError(err);
@@ -95,9 +101,7 @@ export default class CodeBoxControl extends Rete.Control {
         // eslint-disable-next-line no-new-func
         const fn = Function('input', 'deps', fnStr);
 
-        fnOut = fn(fnInput, {
-          axios,
-        });
+        fnOut = fn(fnInput, deps);
       } catch (err) {
         console.log('[ERROR] Failed to eval function!');
 
