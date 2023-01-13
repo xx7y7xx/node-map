@@ -2,6 +2,8 @@ import Rete from 'rete';
 import mapboxgl from 'mapbox-gl';
 import * as turf from '@turf/turf';
 
+const ARROW_URL = '/node-map/img/arrow.png';
+
 /**
  * MapControl hold mapbox's layer and data source
  */
@@ -114,6 +116,28 @@ export default class MapControl extends Rete.Control {
           'circle-radius': lineWidth,
           'circle-color': lineColor,
         },
+      });
+
+      map.loadImage(ARROW_URL, (err, image) => {
+        if (err) {
+          console.error('err image', err);
+          return;
+        }
+        map.addImage('arrow', image);
+        map.addLayer({
+          id: 'arrow-layer',
+          type: 'symbol',
+          source: this.sourceId,
+          layout: {
+            'symbol-placement': 'line',
+            'symbol-spacing': 1,
+            'icon-allow-overlap': true,
+            // 'icon-ignore-placement': true,
+            'icon-image': 'arrow',
+            'icon-size': 0.045,
+            visibility: 'visible',
+          },
+        });
       });
 
       // Create a popup, but don't add it to the map yet.
