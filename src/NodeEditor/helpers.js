@@ -14,21 +14,21 @@ export const createSampleNodes = async () => {
     json: mockJsonData,
   });
   const transformNode = await allComponents.transformComponent.createNode();
-  const transformEvalNode = await allComponents.transformEvalComponent.createNode({ fnStr: defaultFnStr }); // eslint-disable-line max-len
+  const evalCodeNode = await allComponents.evalCodeComponent.createNode({ fnStr: defaultFnStr }); // eslint-disable-line max-len
   const concatNode = await allComponents.concatComponent.createNode({ inputCount: 2 });
   const previewNode = await allComponents.previewComponent.createNode();
 
   uploadNode.position = [0, 500];
   jsonNode.position = [0, 0];
   transformNode.position = [500, 0];
-  transformEvalNode.position = [500, 500];
+  evalCodeNode.position = [500, 500];
   concatNode.position = [1000, 0];
   previewNode.position = [1500, 0];
 
   editor.addNode(uploadNode);
   editor.addNode(jsonNode);
   editor.addNode(transformNode);
-  editor.addNode(transformEvalNode);
+  editor.addNode(evalCodeNode);
   editor.addNode(concatNode);
   editor.addNode(previewNode);
 
@@ -38,14 +38,14 @@ export const createSampleNodes = async () => {
   );
   editor.connect(
     uploadNode.outputs.get('json'),
-    transformEvalNode.inputs.get('json'),
+    evalCodeNode.inputs.get('json'),
   );
   editor.connect(
     transformNode.outputs.get('json'),
     concatNode.inputs.get('json0'),
   );
   editor.connect(
-    transformEvalNode.outputs.get('json'),
+    evalCodeNode.outputs.get('json'),
     concatNode.inputs.get('json1'),
   );
   editor.connect(
