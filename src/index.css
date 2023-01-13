@@ -5,7 +5,12 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: #202124; /* google search dark theme color code */
+}
+
+/* google search dark theme color code */
+body.nm-dark-mode {
+  background: #202124;
+  color: #969ba1;
 }
 
 code {

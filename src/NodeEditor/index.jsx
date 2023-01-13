@@ -30,6 +30,10 @@ export default function NodeEditor() {
     createSampleNodes();
   };
 
+  const handleSwitchLightDark = () => {
+    document.body.classList.toggle('nm-dark-mode');
+  };
+
   const items = [
     {
       key: 'export',
@@ -45,6 +49,14 @@ export default function NodeEditor() {
       label: (
         <a onClick={handleLoadExample}>
           Load Example
+        </a>
+      ),
+      icon: <FolderOpenOutlined />,
+    }, {
+      key: 'switch-light-dark',
+      label: (
+        <a onClick={handleSwitchLightDark}>
+          Switch Light Dark
         </a>
       ),
       icon: <FolderOpenOutlined />,
