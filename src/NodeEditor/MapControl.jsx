@@ -95,7 +95,6 @@ export default class MapControl extends Rete.Control {
     } else {
       console.debug('addLayer', this.layerId);
       window.mapbox.addLayer({
-        // id: LAYER_ID,
         id: this.layerId,
         type: 'line',
         source: this.sourceId,
@@ -111,7 +110,6 @@ export default class MapControl extends Rete.Control {
 
       console.debug('addLayer', this.layerIdPoint);
       window.mapbox.addLayer({
-        // id: LAYER_ID_POINT,
         id: this.layerIdPoint,
         type: 'circle',
         source: this.sourceId,
