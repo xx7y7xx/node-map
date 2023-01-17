@@ -58,10 +58,11 @@ export default class CodeBoxControl extends Rete.Control {
 
   // Rerender this component, react re-render
   rerender() {
+    // When this Control first init, the update() function is not defined. No idea why.
     if (this.update) {
       this.update();
     } else {
-      console.debug('update function not defined!');
+      console.debug('update() function not defined at this Control! Will not re-render the UI.');
     }
   }
 
@@ -74,7 +75,7 @@ export default class CodeBoxControl extends Rete.Control {
     this.rerender();
   }
 
-  async run(fnInput) {
+  async runCode(fnInput) {
     const fnStr = this.props.code;
 
     this.hideError();
