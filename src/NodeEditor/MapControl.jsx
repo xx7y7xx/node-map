@@ -45,12 +45,44 @@ export default class MapControl extends Rete.Control {
 
   setSourceAndLayer(geojson, lineCfg) {
     if (window.mapboxReady) {
-      this._addOrUpdateSource(geojson);
-      this._addOrUpdateLayer(lineCfg);
+      this._addOrUpdateAll(geojson, lineCfg);
     } else {
       window.mapbox.on('load', () => {
-        this._addOrUpdateSource(geojson);
-        this._addOrUpdateLayer(lineCfg);
+        this._addOrUpdateAll(geojson, lineCfg);
+      });
+    }
+  }
+
+  _addOrUpdateAll(geojson, lineCfg) {
+    this._addOrUpdateSource(geojson);
+    this._addOrUpdateLayer(lineCfg, geojson);
+    this._addOrUpdateImage(geojson);
+  }
+
+  _addOrUpdateImage(geojson) {
+    const map = window.mapbox;
+    if (geojson.features[0].geometry.type === 'LineString') {
+      // console.log('image exists?', map.hasImage(this.imageIdArrow));
+      map.loadImage(ARROW_URL, (err, image) => {
+        if (err) {
+          console.error('Failed to map.loadImage()', err);
+          return;
+        }
+        map.addImage(this.imageIdArrow, image);
+        map.addLayer({
+          id: this.layerIdArrow,
+          type: 'symbol',
+          source: this.sourceId,
+          layout: {
+            'symbol-placement': 'line',
+            'symbol-spacing': 1,
+            'icon-allow-overlap': true,
+            // 'icon-ignore-placement': true,
+            'icon-image': this.imageIdArrow,
+            'icon-size': 0.045,
+            visibility: 'visible',
+          },
+        });
       });
     }
   }
@@ -117,29 +149,6 @@ export default class MapControl extends Rete.Control {
           'circle-radius': lineWidth,
           'circle-color': lineColor,
         },
-      });
-
-      // console.log('image exists?', map.hasImage(this.imageIdArrow));
-      map.loadImage(ARROW_URL, (err, image) => {
-        if (err) {
-          console.error('err image', err);
-          return;
-        }
-        map.addImage(this.imageIdArrow, image);
-        map.addLayer({
-          id: this.layerIdArrow,
-          type: 'symbol',
-          source: this.sourceId,
-          layout: {
-            'symbol-placement': 'line',
-            'symbol-spacing': 1,
-            'icon-allow-overlap': true,
-            // 'icon-ignore-placement': true,
-            'icon-image': this.imageIdArrow,
-            'icon-size': 0.045,
-            visibility: 'visible',
-          },
-        });
       });
 
       // Create a popup, but don't add it to the map yet.
