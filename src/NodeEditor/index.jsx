@@ -23,7 +23,8 @@ export default function NodeEditor() {
   const [setContainer] = useRete();
 
   const handleClick = () => {
-    downloadObjectAsJson(JSON.stringify(JSON.parse(localStorage.getItem(LS_KEY_NODE_EDITOR_DATA)), null, '  '), 'node-map-export-data.json');
+    const date = new Date().toISOString().slice(0, 10);
+    downloadObjectAsJson(JSON.stringify(JSON.parse(localStorage.getItem(LS_KEY_NODE_EDITOR_DATA)), null, '  '), `node-map-export-data-${date}.json`);
   };
 
   const handleLoadExample = () => {
