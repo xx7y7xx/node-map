@@ -17,12 +17,18 @@ export default class MapControl extends Rete.Control {
     this.component = MapControl.component;
 
     this.sourceId = props.sourceId;
-    this.layerId = props.layerId;
-    this.layerIdPoint = props.layerIdPoint;
+    this.layerId = `${this.sourceId}LayerId`;
+    this.layerIdPoint = `${this.sourceId}LayerIdPoint`;
+    this.layerIdArrow = `${this.sourceId}LayerIdArrow`;
+    this.imageIdArrow = `${this.sourceId}ImageIdArrow`;
 
-    this.mmaapp();
+    // this.mmaapp();
   }
 
+  /**
+   * When new data loaded, fly to the data.
+   * Not work since querySourceFeatures() only returns features in the viewport
+   */
   mmaapp() {
     window.mapbox.on('sourcedata', (e) => {
       if (e.sourceId !== this.sourceId || !e.isSourceLoaded) return;
@@ -37,19 +43,26 @@ export default class MapControl extends Rete.Control {
     });
   }
 
-  addOrUpdateSource(geojson) {
+  setSourceAndLayer(geojson, lineCfg) {
     if (window.mapboxReady) {
-      this.addOrUpdateSource2(geojson);
+      this._addOrUpdateSource(geojson);
+      this._addOrUpdateLayer(lineCfg);
     } else {
       window.mapbox.on('load', () => {
-        this.addOrUpdateSource2(geojson);
+        this._addOrUpdateSource(geojson);
+        this._addOrUpdateLayer(lineCfg);
       });
     }
   }
 
   // eslint-disable-next-line class-methods-use-this
-  addOrUpdateSource2(geojson) {
+  _addOrUpdateSource(geojson) {
     const map = window.mapbox;
+
+    // Fly map to data
+    window.mapbox.fitBounds(turf.bbox(
+      geojson,
+    ), { padding: 200 });
 
     const sourceData = {
       type: 'geojson',
@@ -70,18 +83,8 @@ export default class MapControl extends Rete.Control {
     }
   }
 
-  addOrUpdateLayer(lineCfg) {
-    if (window.mapboxReady) {
-      this.addOrUpdateLayer2(lineCfg);
-    } else {
-      window.mapbox.on('load', () => {
-        this.addOrUpdateLayer2(lineCfg);
-      });
-    }
-  }
-
   // eslint-disable-next-line class-methods-use-this
-  addOrUpdateLayer2({ lineColor, lineWidth }) {
+  _addOrUpdateLayer({ lineColor, lineWidth }) {
     const map = window.mapbox;
 
     if (map.getLayer(this.layerId)) {
@@ -118,14 +121,15 @@ export default class MapControl extends Rete.Control {
         },
       });
 
+      // console.log('image exists?', map.hasImage(this.imageIdArrow));
       map.loadImage(ARROW_URL, (err, image) => {
         if (err) {
           console.error('err image', err);
           return;
         }
-        map.addImage('arrow', image);
+        map.addImage(this.imageIdArrow, image);
         map.addLayer({
-          id: 'arrow-layer',
+          id: this.layerIdArrow,
           type: 'symbol',
           source: this.sourceId,
           layout: {
@@ -133,7 +137,7 @@ export default class MapControl extends Rete.Control {
             'symbol-spacing': 1,
             'icon-allow-overlap': true,
             // 'icon-ignore-placement': true,
-            'icon-image': 'arrow',
+            'icon-image': this.imageIdArrow,
             'icon-size': 0.045,
             visibility: 'visible',
           },

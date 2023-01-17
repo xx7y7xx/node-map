@@ -35,11 +35,7 @@ export default class MapLayerV2Component extends Rete.Component {
       .addControl(new SliderControl(this.editor, CONTROL_KEY_LINE_WIDTH, node, { label: 'line-width' }))
       // .addControl(new TextControl(this.editor, CONTROL_KEY_GEOJSON, node, true))
       .addControl(new InputControl(this.editor, CONTROL_KEY_SOURCE_ID, node, { label: 'sourceId' }))
-      .addControl(new MapControl(this.editor, CONTROL_KEY_MAP, {
-        sourceId,
-        layerId: `${sourceId}layerId`,
-        layerIdPoint: `${sourceId}layerIdPoint`,
-      }));
+      .addControl(new MapControl(this.editor, CONTROL_KEY_MAP, { sourceId }));
 
     // Initial the source ID input box with value
     if (!node.data[CONTROL_KEY_SOURCE_ID]) {
@@ -67,12 +63,11 @@ export default class MapLayerV2Component extends Rete.Component {
       return;
     }
 
-    mapCtrl.addOrUpdateSource(geojson);
-
     const lineCfg = {
       lineColor: node.data[CONTROL_KEY_LINE_COLOR],
       lineWidth: node.data[CONTROL_KEY_LINE_WIDTH],
     };
-    mapCtrl.addOrUpdateLayer(lineCfg);
+
+    mapCtrl.setSourceAndLayer(geojson, lineCfg);
   }
 }

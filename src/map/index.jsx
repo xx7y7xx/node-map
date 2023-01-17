@@ -17,7 +17,11 @@ export default function Map() {
     });
     // console.log('map', window.mapbox);
     window.mapbox.on('load', () => {
+      console.debug('mapbox load event');
       window.mapboxReady = true;
+    });
+    window.mapbox.on('idle', () => {
+      console.debug('mapbox idle event');
     });
   }, []);
 

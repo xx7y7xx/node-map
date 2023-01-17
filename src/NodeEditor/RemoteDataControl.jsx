@@ -5,7 +5,7 @@ import { Button } from 'antd';
 export default class RemoteDataControl extends Rete.Control {
   static component = ({ onClick, onReset }) => (
     <div>
-      <Button onClick={onClick}>Send Request</Button>
+      <Button type="primary" onClick={onClick}>Send Request</Button>
       {' '}
       <Button type="danger" onClick={onReset}>Reset</Button>
     </div>

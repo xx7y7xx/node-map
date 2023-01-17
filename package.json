@@ -70,7 +70,8 @@
     "rules": {
       "no-console": "off",
       "no-param-reassign": "off",
-      "max-len": "off"
+      "max-len": "off",
+      "no-underscore-dangle": "off"
     }
   },
   "browserslist": {
