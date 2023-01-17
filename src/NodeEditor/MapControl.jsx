@@ -63,30 +63,34 @@ export default class MapControl extends Rete.Control {
   // https://stackoverflow.com/questions/61918545/how-can-i-create-a-style-with-directional-lines-in-mapbox-studio
   _addOrUpdateImage(geojson) {
     const map = window.mapbox;
-    if (geojson.features[0].geometry.type === 'LineString') {
-      // console.log('image exists?', map.hasImage(this.imageIdArrow));
-      map.loadImage(ARROW_URL, (err, image) => {
-        if (err) {
-          console.error('Failed to map.loadImage()', err);
-          return;
-        }
-        map.addImage(this.imageIdArrow, image);
-        map.addLayer({
-          id: this.layerIdArrow,
-          type: 'symbol',
-          source: this.sourceId,
-          layout: {
-            'symbol-placement': 'line',
-            'symbol-spacing': 100,
-            'icon-allow-overlap': true,
-            // 'icon-ignore-placement': true,
-            'icon-image': this.imageIdArrow,
-            'icon-size': 1,
-            visibility: 'visible',
-          },
-        });
-      });
+    if (geojson.features[0].geometry.type !== 'LineString') {
+      return;
     }
+    // console.log('image exists?', map.hasImage(this.imageIdArrow));
+    if (map.getLayer(this.layerIdArrow)) {
+      return;
+    }
+    map.loadImage(ARROW_URL, (err, image) => {
+      if (err) {
+        console.error('Failed to map.loadImage()', err);
+        return;
+      }
+      map.addImage(this.imageIdArrow, image);
+      map.addLayer({
+        id: this.layerIdArrow,
+        type: 'symbol',
+        source: this.sourceId,
+        layout: {
+          'symbol-placement': 'line',
+          'symbol-spacing': 100,
+          'icon-allow-overlap': true,
+          // 'icon-ignore-placement': true,
+          'icon-image': this.imageIdArrow,
+          'icon-size': 1,
+          visibility: 'visible',
+        },
+      });
+    });
   }
 
   // eslint-disable-next-line class-methods-use-this
