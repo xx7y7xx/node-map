@@ -59,6 +59,8 @@ export default class MapControl extends Rete.Control {
     this._addOrUpdateImage(geojson);
   }
 
+  // Another simple solution is just using icon from mapbox
+  // https://stackoverflow.com/questions/61918545/how-can-i-create-a-style-with-directional-lines-in-mapbox-studio
   _addOrUpdateImage(geojson) {
     const map = window.mapbox;
     if (geojson.features[0].geometry.type === 'LineString') {
@@ -75,11 +77,11 @@ export default class MapControl extends Rete.Control {
           source: this.sourceId,
           layout: {
             'symbol-placement': 'line',
-            'symbol-spacing': 1,
+            'symbol-spacing': 100,
             'icon-allow-overlap': true,
             // 'icon-ignore-placement': true,
             'icon-image': this.imageIdArrow,
-            'icon-size': 0.045,
+            'icon-size': 1,
             visibility: 'visible',
           },
         });
