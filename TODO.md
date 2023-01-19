@@ -1,6 +1,5 @@
 # TODO
 
-* Import and export settings
 * Syntax highlighting in Transform Eval node
 * Animation node support
 * Convert JSON with lat/lng to GeoJSON automatically
