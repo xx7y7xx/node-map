@@ -2,6 +2,6 @@
 
 ## Syntax Highlighting
 
-![](/docs/feature_snapshots/syntax-highlighting-js.png)
+![](feature_snapshots/syntax-highlighting-js.png)
 
-![](/docs/feature_snapshots/syntax-highlighting-json.png)
+![](feature_snapshots/syntax-highlighting-json.png)
