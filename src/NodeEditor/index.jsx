@@ -3,7 +3,9 @@
 
 import React from 'react';
 import { Dropdown, Space } from 'antd';
-import { DownOutlined, ExportOutlined, FolderOpenOutlined } from '@ant-design/icons';
+import {
+  DownOutlined, ExportOutlined, ImportOutlined, FolderOpenOutlined,
+} from '@ant-design/icons';
 
 import { useRete } from './rete';
 import { LS_KEY_NODE_EDITOR_DATA } from '../constants';
@@ -44,6 +46,30 @@ export default function NodeEditor() {
         </a>
       ),
       icon: <ExportOutlined />,
+    },
+    {
+      key: 'import',
+      label: (
+        <label htmlFor="import-config-file">
+          Import
+          <input
+            type="file"
+            id="import-config-file"
+            style={{
+              visibility: 'hidden',
+            }}
+            onChange={() => {
+              const fr = new FileReader();
+              fr.onload = (e) => {
+                localStorage.setItem(LS_KEY_NODE_EDITOR_DATA, JSON.stringify(JSON.parse(e.target.result)));
+                window.location.reload();
+              };
+              fr.readAsText(document.getElementById('import-config-file').files[0]);
+            }}
+          />
+        </label>
+      ),
+      icon: <ImportOutlined />,
     },
     {
       key: 'load-example',
