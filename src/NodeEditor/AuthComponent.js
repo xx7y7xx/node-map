@@ -1,8 +1,7 @@
 import Rete from 'rete';
-import InputControl from './InputControl';
+import RequestHeadersControl from './RequestHeadersControl';
 
-const CONTROL_KEY_JWT = 'inputControlJwt';
-const CONTROL_KEY_X_AUTH_METHOD = 'inputControlXAuthMethod';
+const CONTROL_KEY_REQUEST_HEADERS = 'headers';
 
 export default class AuthComponent extends Rete.Component {
   constructor() {
@@ -11,15 +10,11 @@ export default class AuthComponent extends Rete.Component {
 
   builder(node) {
     return node
-      .addControl(new InputControl(this.editor, CONTROL_KEY_JWT, node, { label: 'jwt' }))
-      .addControl(new InputControl(this.editor, CONTROL_KEY_X_AUTH_METHOD, node, { label: 'x-auth-method' }));
+      .addControl(new RequestHeadersControl(this.editor, CONTROL_KEY_REQUEST_HEADERS, node));
   }
 
   // eslint-disable-next-line class-methods-use-this, no-unused-vars
   worker(node, inputs, outputs) {
-    // eslint-disable-next-line no-param-reassign
-    // outputs[OUTPUT_KEY] = node.data[CONTROL_KEY];
-    window.NM_JWT = node.data[CONTROL_KEY_JWT];
-    window.NM_X_AUTH_METHOD = node.data[CONTROL_KEY_X_AUTH_METHOD];
+    window.NM_REQUEST_HEADERS = node.data[CONTROL_KEY_REQUEST_HEADERS];
   }
 }

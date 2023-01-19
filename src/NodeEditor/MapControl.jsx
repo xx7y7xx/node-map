@@ -63,9 +63,19 @@ export default class MapControl extends Rete.Control {
   // https://stackoverflow.com/questions/61918545/how-can-i-create-a-style-with-directional-lines-in-mapbox-studio
   _addOrUpdateImage(geojson) {
     const map = window.mapbox;
-    if (geojson.features[0].geometry.type !== 'LineString') {
-      return;
+
+    // * When first feature in collection is not line string, then no show arrow image
+    // * When the feature is not line string, then no show arrow image
+    if (geojson.type === 'FeatureCollection') {
+      if (geojson.features[0].geometry.type !== 'LineString') {
+        return;
+      }
+    } else if (geojson.type === 'Feature') {
+      if (geojson.geometry.type !== 'LineString') {
+        return;
+      }
     }
+
     // console.log('image exists?', map.hasImage(this.imageIdArrow));
     if (map.getLayer(this.layerIdArrow)) {
       return;

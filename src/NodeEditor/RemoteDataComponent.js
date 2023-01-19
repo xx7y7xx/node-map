@@ -5,13 +5,13 @@ import { message } from 'antd';
 
 import RemoteDataControl from './RemoteDataControl';
 import InputControl from './InputControl';
+import RequestHeadersControl from './RequestHeadersControl';
 import DivControl from './DivControl';
 import { objectSocket } from './JsonComponent';
 
 const CONTROL_KEY_URL = 'inputControlUrl';
 const CONTROL_KEY = 'remoteDataControl';
-const CONTROL_KEY_JWT = 'inputControlJwt';
-const CONTROL_KEY_X_AUTH_METHOD = 'inputControlXAuthMethod';
+const CONTROL_KEY_REQUEST_HEADERS = 'headers';
 const CONTROL_KEY_ERROR_MESSAGE = 'errorMessage';
 const OUTPUT_KEY = 'csv';
 
@@ -24,8 +24,7 @@ export default class RemoteDataComponent extends Rete.Component {
     this.node = node;
     node
       .addControl(new InputControl(this.editor, CONTROL_KEY_URL, node, { label: 'url' }))
-      .addControl(new InputControl(this.editor, CONTROL_KEY_JWT, node, { label: 'headers.authorization' }))
-      .addControl(new InputControl(this.editor, CONTROL_KEY_X_AUTH_METHOD, node, { label: 'headers.x-auth-method' }))
+      .addControl(new RequestHeadersControl(this.editor, CONTROL_KEY_REQUEST_HEADERS, node))
       .addControl(new RemoteDataControl(this.editor, CONTROL_KEY, {
         onClick: this.handleClick.bind(this),
       }))
@@ -52,21 +51,16 @@ export default class RemoteDataComponent extends Rete.Component {
   }
 
   handleClick() {
-    let xAuthMethod = window.NM_X_AUTH_METHOD;
-    let jwt = window.NM_JWT;
+    // Get from Auth Node
+    let headersJSON = window.NM_REQUEST_HEADERS;
 
-    if (this.node.data.inputControlXAuthMethod) {
-      xAuthMethod = this.node.data.inputControlXAuthMethod;
-    }
-    if (this.node.data.inputControlJwt) {
-      jwt = this.node.data.inputControlJwt;
+    if (this.node.data[CONTROL_KEY_REQUEST_HEADERS]) {
+      headersJSON = this.node.data[CONTROL_KEY_REQUEST_HEADERS];
     }
 
-    const headers = {
-      'x-auth-method': xAuthMethod,
-    };
-    if (jwt) {
-      headers.authorization = jwt;
+    let headers = {};
+    if (headersJSON) {
+      headers = JSON.parse(headersJSON);
     }
 
     axios({
