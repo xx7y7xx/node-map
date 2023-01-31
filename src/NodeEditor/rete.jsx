@@ -31,6 +31,8 @@ import MapLayerV2Component from './MapLayerV2Component';
 import TurfLineStringComponent from './TurfLineStringComponent';
 import { deleteUrlParam, getUrlParams } from './helpers';
 
+const ID = 'node-map@0.1.0';
+
 const loadConfig = async (editor) => {
   const params = getUrlParams();
   if (params.load) {
@@ -77,7 +79,7 @@ export async function createEditor(container) {
   const turfLineStringComponent = new TurfLineStringComponent();
   const uploadComponent = new UploadComponent();
 
-  const editor = new Rete.NodeEditor('demo@0.1.0', container);
+  const editor = new Rete.NodeEditor(ID, container);
   if (!window.___nodeMap) window.___nodeMap = {};
   window.___nodeMap.editor = editor;
   editor.use(ConnectionPlugin);
@@ -105,7 +107,7 @@ export async function createEditor(container) {
     },
   });
 
-  const engine = new Rete.Engine('demo@0.1.0');
+  const engine = new Rete.Engine(ID);
 
   const allComponents = ({
     uploadComponent,
