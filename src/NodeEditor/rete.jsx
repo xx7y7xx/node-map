@@ -8,8 +8,6 @@ import ConnectionPlugin from 'rete-connection-plugin';
 import AreaPlugin from 'rete-area-plugin';
 // import ContextMenuPlugin, { Menu, Item, Search } from 'rete-context-menu-plugin';
 import ContextMenuPlugin from 'rete-context-menu-plugin';
-import axios from 'axios';
-import { message } from 'antd';
 
 import { LS_KEY_NODE_EDITOR_DATA } from '../constants';
 import AuthComponent from './AuthComponent';
@@ -29,36 +27,9 @@ import MapGeoJsonComponent from './MapGeoJsonComponent';
 import MapLayerComponent from './MapLayerComponent';
 import MapLayerV2Component from './MapLayerV2Component';
 import TurfLineStringComponent from './TurfLineStringComponent';
-import { deleteUrlParam, getUrlParams } from './helpers';
+import { loadConfig, reteContextMenuOptions } from './helpers';
 
 const ID = 'node-map@0.1.0';
-
-const loadConfig = async (editor) => {
-  const params = getUrlParams();
-  if (params.load) {
-    await axios({
-      method: 'get',
-      url: params.load,
-    }).then((response) => {
-      console.debug('[loadConfig] response', response);
-      message.success('Config data loaded.');
-
-      // Delete ?load= param in URL
-      deleteUrlParam('load');
-
-      return editor.fromJSON(response.data);
-    }).catch((err) => {
-      console.error('[loadConfig] Failed to get remote data!', err);
-      message.warning(`Failed to get remote data: ${err.message}`);
-    });
-  } else {
-    const localData = localStorage.getItem(LS_KEY_NODE_EDITOR_DATA);
-    if (localData) {
-      console.debug('Load data from local', JSON.parse(localData));
-      await editor.fromJSON(JSON.parse(localData));
-    }
-  }
-};
 
 export async function createEditor(container) {
   const concatComponent = new ConcatComponent();
@@ -84,28 +55,7 @@ export async function createEditor(container) {
   window.___nodeMap.editor = editor;
   editor.use(ConnectionPlugin);
   editor.use(ReactRenderPlugin, { createRoot });
-  editor.use(ContextMenuPlugin, {
-    searchBar: false, // true by default
-    // leave item when searching, optional. For example, title => ['Refresh'].includes(title)
-    // searchKeep: (title) => true,
-    searchKeep: () => true,
-    delay: 100,
-    allocate(component) { // eslint-disable-line no-unused-vars
-      // console.log('allocate(component)', component);
-      return ['Submenu'];
-    },
-    rename(component) {
-      return component.name;
-    },
-    items: {
-      // 'Click me': () => { console.log('Works!'); },
-    },
-    nodeItems: {
-      // 'Click me': () => { console.log('Works for node!'); },
-      Delete: true, // delete this node
-      Clone: true, // clone this node
-    },
-  });
+  editor.use(ContextMenuPlugin, reteContextMenuOptions);
 
   const engine = new Rete.Engine(ID);
 
