@@ -88,18 +88,18 @@ export async function createEditor(container) {
     // searchKeep: (title) => true,
     searchKeep: () => true,
     delay: 100,
-    allocate(component) {
-      console.log('allocate(component)', component);
+    allocate(component) { // eslint-disable-line no-unused-vars
+      // console.log('allocate(component)', component);
       return ['Submenu'];
     },
     rename(component) {
       return component.name;
     },
     items: {
-      'Click me': () => { console.log('Works!'); },
+      // 'Click me': () => { console.log('Works!'); },
     },
     nodeItems: {
-      'Click me': () => { console.log('Works for node!'); },
+      // 'Click me': () => { console.log('Works for node!'); },
       Delete: true, // delete this node
       Clone: true, // clone this node
     },
