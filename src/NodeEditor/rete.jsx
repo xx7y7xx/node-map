@@ -18,6 +18,7 @@ import CsvToJsonComponent from './CsvToJsonComponent';
 import JsonComponent from './JsonComponent';
 import TransformComponent from './TransformComponent';
 import EvalCodeComponent from './EvalCodeComponent';
+import GlobalComponent from './GlobalComponent';
 import PreviewComponent from './PreviewComponent';
 import UploadComponent from './UploadComponent';
 import UploadCsvComponent from './UploadCsvComponent';
@@ -62,6 +63,7 @@ export async function createEditor(container) {
   const jsonComponent = new JsonComponent();
   const transformComponent = new TransformComponent();
   const evalCodeComponent = new EvalCodeComponent();
+  const globalComponent = new GlobalComponent();
   const previewComponent = new PreviewComponent();
   const csvToJsonComponent = new CsvToJsonComponent();
   const uploadCsvComponent = new UploadCsvComponent();
@@ -110,6 +112,7 @@ export async function createEditor(container) {
     jsonComponent,
     transformComponent,
     evalCodeComponent,
+    globalComponent,
     concatComponent,
     previewComponent,
     csvToJsonComponent,

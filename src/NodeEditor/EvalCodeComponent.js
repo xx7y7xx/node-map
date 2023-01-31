@@ -4,13 +4,12 @@ import { objectSocket } from './JsonComponent';
 import CodeBoxControl from './CodeBoxControl';
 import DivControl from './DivControl';
 import FaqControl from './FaqControl';
+import logger from './logger';
 
 const CONTROL_KEY_FAQ = 'controlKeyFaq';
 const CONTROL_KEY_CODE_BOX = 'controlKeyCodeBox';
+const log = logger('EvalCodeComponent');
 
-const log = (...args) => {
-  console.debug('EvalCodeComponent', ...args);
-};
 export default class EvalCodeComponent extends Rete.Component {
   constructor() {
     super('EvalCode Node');
@@ -53,6 +52,12 @@ export default class EvalCodeComponent extends Rete.Component {
     } else {
       [inputJson] = inputData.json;
     }
+
+    // Run codes with global functions and vars
+    // Because the "Global Node" may run after other nodes since in Rete.js nodes run follow the node ID.
+    // So run the code in "Global Node" before running the code in current node.
+    const globalControl = this.editor.nodes.find((n) => n.name === 'Global Node').controls.get(CONTROL_KEY_CODE_BOX);
+    await globalControl.runCode(inputJson);
 
     const { controls } = this.editor.nodes.find((n) => n.id === nodeData.id);
     const result = await controls.get(CONTROL_KEY_CODE_BOX).runCode(inputJson);
