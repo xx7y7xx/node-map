@@ -9,22 +9,12 @@ import {
 
 import { useRete } from './rete';
 import { LS_KEY_NODE_EDITOR_DATA } from '../constants';
-import { createSampleNodes } from './helpers';
-
-function downloadObjectAsJson(exportJsonString, exportName) {
-  const dataStr = `data:text/json;charset=utf-8,${encodeURIComponent(exportJsonString)}`;
-  const downloadAnchorNode = document.createElement('a');
-  downloadAnchorNode.setAttribute('href', dataStr);
-  downloadAnchorNode.setAttribute('download', exportName);
-  document.body.appendChild(downloadAnchorNode); // required for firefox
-  downloadAnchorNode.click();
-  downloadAnchorNode.remove();
-}
+import { createSampleNodes, downloadObjectAsJson } from './helpers';
 
 export default function NodeEditor() {
   const [setContainer] = useRete();
 
-  const handleClick = () => {
+  const handleExportConfigFile = () => {
     const date = new Date().toISOString().slice(0, 10);
     downloadObjectAsJson(JSON.stringify(JSON.parse(localStorage.getItem(LS_KEY_NODE_EDITOR_DATA)), null, '  '), `node-map-export-data-${date}.json`);
   };
@@ -37,11 +27,20 @@ export default function NodeEditor() {
     document.body.classList.toggle('nm-dark-mode');
   };
 
+  const handleImportConfigFile = () => {
+    const fr = new FileReader();
+    fr.onload = (e) => {
+      localStorage.setItem(LS_KEY_NODE_EDITOR_DATA, JSON.stringify(JSON.parse(e.target.result)));
+      window.location.reload();
+    };
+    fr.readAsText(document.getElementById('import-config-file').files[0]);
+  };
+
   const items = [
     {
       key: 'export',
       label: (
-        <a onClick={handleClick}>
+        <a onClick={handleExportConfigFile}>
           Export
         </a>
       ),
@@ -58,14 +57,7 @@ export default function NodeEditor() {
             style={{
               visibility: 'hidden',
             }}
-            onChange={() => {
-              const fr = new FileReader();
-              fr.onload = (e) => {
-                localStorage.setItem(LS_KEY_NODE_EDITOR_DATA, JSON.stringify(JSON.parse(e.target.result)));
-                window.location.reload();
-              };
-              fr.readAsText(document.getElementById('import-config-file').files[0]);
-            }}
+            onChange={handleImportConfigFile}
           />
         </label>
       ),
@@ -95,7 +87,6 @@ export default function NodeEditor() {
       <div
         ref={(ref) => ref && setContainer(ref)}
       />
-
       <div className="nm-export-btn">
         <Dropdown
           menu={{ items }}
