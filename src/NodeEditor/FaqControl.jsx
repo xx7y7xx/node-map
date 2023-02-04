@@ -4,11 +4,11 @@ import { QuestionCircleOutlined } from '@ant-design/icons';
 import PubSub from 'pubsub-js';
 
 export default class FaqControl extends Rete.Control {
-  static component = ({ path }) => (
+  static component = ({ content }) => (
     <QuestionCircleOutlined
       onClick={() => {
         PubSub.publish('OPEN_FAQ', true);
-        PubSub.publish('SET_FAQ_PATH', path);
+        PubSub.publish('SET_FAQ_PATH', { content });
       }}
     />
   );
@@ -19,7 +19,7 @@ export default class FaqControl extends Rete.Control {
    * @param {string} key
    * @param {*} node
    * @param {Object} props
-   * @param {string} props.path
+   * @param {string} props.content
    */
   constructor(emitter, key, node, props) {
     super(key);

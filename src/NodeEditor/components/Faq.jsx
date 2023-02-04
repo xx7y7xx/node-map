@@ -3,14 +3,6 @@ import { Drawer } from 'antd';
 import PubSub from 'pubsub-js';
 import Markdown from 'markdown-to-jsx';
 
-const EvalCodeFaq = require('./NodeEditor/EvalCodeFaq.md');
-const PreviewFaq = require('./NodeEditor/PreviewFaq.md');
-
-const markdownStringMap = {
-  EvalCodeFaq,
-  PreviewFaq,
-};
-
 function Faq() {
   const [visible, setVisible] = useState(false);
   const [content, setContent] = useState('');
@@ -19,7 +11,8 @@ function Faq() {
       setVisible(data);
     });
     PubSub.subscribe('SET_FAQ_PATH', (msg, data) => {
-      const file = markdownStringMap[data];
+      const file = data.content;
+      console.log('file', file);
       if (!file) {
         setContent(`FAQ markdown not found, ${data}.md needed`);
         return;

@@ -4,6 +4,7 @@ import CodeBoxControl from './CodeBoxControl';
 import DivControl from './DivControl';
 import FaqControl from './FaqControl';
 import logger from './logger';
+import faq from './EvalCodeFaq.md';
 
 const CONTROL_KEY_FAQ = 'controlKeyFaq';
 const CONTROL_KEY_CODE_BOX = 'controlKeyCodeBox';
@@ -15,11 +16,9 @@ export default class GlobalComponent extends Rete.Component {
   }
 
   builder(node) {
-    log('build', node.id);
-
     return node
       .addControl(new FaqControl(this.editor, CONTROL_KEY_FAQ, node, {
-        path: 'GlobalFaq',
+        content: faq,
       }))
       .addControl(new DivControl(`evalScriptLabel[node${node.id}]`, `Eval Script(node:${node.id}).`))
       .addControl(new CodeBoxControl(

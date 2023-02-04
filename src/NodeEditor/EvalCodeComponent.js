@@ -5,6 +5,7 @@ import CodeBoxControl from './CodeBoxControl';
 import DivControl from './DivControl';
 import FaqControl from './FaqControl';
 import logger from './logger';
+import faq from './EvalCodeFaq.md';
 
 const CONTROL_KEY_FAQ = 'controlKeyFaq';
 const CONTROL_KEY_CODE_BOX = 'controlKeyCodeBox';
@@ -16,8 +17,6 @@ export default class EvalCodeComponent extends Rete.Component {
   }
 
   builder(node) {
-    log('build', node.id);
-
     const input = new Rete.Input('json', 'Json', objectSocket);
     const output = new Rete.Output('json', 'Json', objectSocket);
 
@@ -25,7 +24,7 @@ export default class EvalCodeComponent extends Rete.Component {
       .addInput(input)
       .addOutput(output)
       .addControl(new FaqControl(this.editor, CONTROL_KEY_FAQ, node, {
-        path: 'EvalCodeFaq',
+        content: faq,
       }))
       .addControl(new DivControl(`evalScriptLabel[node${node.id}]`, `Eval Script(node:${node.id}): Please use variable "input".`))
       .addControl(new CodeBoxControl(
@@ -56,8 +55,10 @@ export default class EvalCodeComponent extends Rete.Component {
     // Run codes with global functions and vars
     // Because the "Global Node" may run after other nodes since in Rete.js nodes run follow the node ID.
     // So run the code in "Global Node" before running the code in current node.
-    const globalControl = this.editor.nodes.find((n) => n.name === 'Global Node').controls.get(CONTROL_KEY_CODE_BOX);
-    await globalControl.runCode(inputJson);
+    const globalControl = this.editor.nodes.find((n) => n.name === 'Global Node')?.controls.get(CONTROL_KEY_CODE_BOX);
+    if (globalControl) {
+      await globalControl.runCode(inputJson);
+    }
 
     const { controls } = this.editor.nodes.find((n) => n.id === nodeData.id);
     const result = await controls.get(CONTROL_KEY_CODE_BOX).runCode(inputJson);

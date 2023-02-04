@@ -7,11 +7,13 @@ import {
   DownOutlined, ExportOutlined, ImportOutlined, FolderOpenOutlined,
 } from '@ant-design/icons';
 
+import Faq from './components/Faq';
 import { useRete } from './rete';
 import { LS_KEY_NODE_EDITOR_DATA } from '../constants';
 import { createSampleNodes, downloadObjectAsJson } from './helpers';
 
-export default function NodeEditor() {
+// eslint-disable-next-line react/prop-types
+export default function NodeEditor({ style }) {
   const [setContainer] = useRete();
 
   const handleExportConfigFile = () => {
@@ -83,9 +85,12 @@ export default function NodeEditor() {
   ];
 
   return (
-    <div className="node-editor">
+    <div className="nm-node-editor" style={style}>
       <div
         ref={(ref) => ref && setContainer(ref)}
+        style={{
+          width: style.width, // eslint-disable-line react/prop-types
+        }}
       />
       <div className="nm-export-btn">
         <Dropdown
@@ -99,6 +104,7 @@ export default function NodeEditor() {
           </a>
         </Dropdown>
       </div>
+      <Faq />
     </div>
   );
 }
