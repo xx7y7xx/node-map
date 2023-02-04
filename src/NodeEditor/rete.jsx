@@ -9,7 +9,7 @@ import AreaPlugin from 'rete-area-plugin';
 // import ContextMenuPlugin, { Menu, Item, Search } from 'rete-context-menu-plugin';
 import ContextMenuPlugin from 'rete-context-menu-plugin';
 
-import { LS_KEY_NODE_EDITOR_DATA } from '../constants';
+import { LS_KEY_NODE_EDITOR_DATA, NODE_EDITOR_ID } from '../constants';
 import AuthComponent from './AuthComponent';
 import ConcatComponent from './ConcatComponent';
 import CsvToJsonComponent from './CsvToJsonComponent';
@@ -28,8 +28,6 @@ import MapLayerComponent from './MapLayerComponent';
 import MapLayerV2Component from './MapLayerV2Component';
 import TurfLineStringComponent from './TurfLineStringComponent';
 import { loadConfig, reteContextMenuOptions } from './helpers';
-
-const ID = 'node-map@0.1.0';
 
 export async function createEditor(container) {
   const concatComponent = new ConcatComponent();
@@ -50,14 +48,14 @@ export async function createEditor(container) {
   const turfLineStringComponent = new TurfLineStringComponent();
   const uploadComponent = new UploadComponent();
 
-  const editor = new Rete.NodeEditor(ID, container);
+  const editor = new Rete.NodeEditor(NODE_EDITOR_ID, container);
   if (!window.___nodeMap) window.___nodeMap = {};
   window.___nodeMap.editor = editor;
   editor.use(ConnectionPlugin);
   editor.use(ReactRenderPlugin, { createRoot });
   editor.use(ContextMenuPlugin, reteContextMenuOptions);
 
-  const engine = new Rete.Engine(ID);
+  const engine = new Rete.Engine(NODE_EDITOR_ID);
 
   const allComponents = ({
     uploadComponent,
