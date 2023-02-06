@@ -6,7 +6,7 @@
   * Can install extension node / plugin node
 * A dialog to show cached data in Remote Data node
 * Customize geojson point color in Map Layer V2 node
-* Customize tile layer of Mapbox
+* [v] Customize tile layer of Mapbox
 * [v] Geojson point with tooltip to show point info
 * A plain text node with only information, no input and no output
 * Syntax highlighting in FAQ markdown
