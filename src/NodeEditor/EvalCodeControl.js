@@ -1,39 +1,27 @@
-import React from 'react';
+// import React from 'react';
 import Rete from 'rete';
 import axios from 'axios';
 import * as turf from '@turf/turf';
 import lodash from 'lodash';
 import papaparse from 'papaparse';
 
-// import AntdTextArea from './AntdTextArea';
-import ReactSimpleCodeEditor from './ReactSimpleCodeEditor';
+// import AntdTextArea from 'NodeEditor/components/AntdTextArea';
+import CodeEditor from 'NodeEditor/components/CodeEditor';
+// import ReactSimpleCodeEditor from './ReactSimpleCodeEditor';
 
 const isAsync = true;
 const deps = {
   axios, lodash, papaparse, turf,
 };
 
-export default class CodeBoxControl extends Rete.Control {
-  static component = (props) => {
-    const {
-      code, onChange, errMsg,
-    } = props;
-    // console.debug('CodeBoxControl.component', props);
-    return (
-      <div>
-        {/* <AntdTextArea code={code} onChange={onChange} /> */}
-        <ReactSimpleCodeEditor code={code} onChange={onChange} />
-        <br />
-        {errMsg}
-      </div>
-    );
-  };
+export default class EvalCodeControl extends Rete.Control {
+  static component = CodeEditor;
 
   constructor(emitter, key, node, textAreaProps) {
     super(key);
     this.emitter = emitter;
     this.key = key;
-    this.component = CodeBoxControl.component;
+    this.component = EvalCodeControl.component;
     this.node = node;
 
     let initialCode = '';

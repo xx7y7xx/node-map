@@ -1,23 +1,8 @@
-import React from 'react';
 import Rete from 'rete';
-import ReactSimpleCodeEditor from './CodeBoxControl/ReactSimpleCodeEditor';
+import JsonEditor from './components/JsonEditor';
 
 export default class JsonControl extends Rete.Control {
-  static component = ({ value = '', onChange }) => (
-    <>
-      {/* <textarea
-        rows={5}
-        cols={40}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        onPointerDown={(e) => {
-          // When drag slider, the node should not move
-          e.stopPropagation();
-        }}
-      /> */}
-      <ReactSimpleCodeEditor code={value} onChange={onChange} />
-    </>
-  );
+  static component = JsonEditor;
 
   constructor(emitter, key, node) {
     super(key);

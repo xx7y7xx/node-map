@@ -71,7 +71,8 @@
       "no-console": "off",
       "no-param-reassign": "off",
       "max-len": "off",
-      "no-underscore-dangle": "off"
+      "no-underscore-dangle": "off",
+      "react/prop-types": "off"
     }
   },
   "browserslist": {

@@ -1,6 +1,6 @@
 import Rete from 'rete';
 
-import CodeBoxControl from './CodeBoxControl';
+import EvalCodeControl from './EvalCodeControl';
 import DivControl from './DivControl';
 import FaqControl from './FaqControl';
 import logger from './logger';
@@ -21,7 +21,7 @@ export default class GlobalComponent extends Rete.Component {
         content: faq,
       }))
       .addControl(new DivControl(`evalScriptLabel[node${node.id}]`, `Eval Script(node:${node.id}).`))
-      .addControl(new CodeBoxControl(
+      .addControl(new EvalCodeControl(
         this.editor,
         CONTROL_KEY_CODE_BOX,
         node,
