@@ -14,7 +14,7 @@ export default function ReactSimpleCodeEditor({
       style={{
         fontFamily: '"Fira code", "Fira Mono", monospace',
         fontSize: '12px',
-        height: '30em',
+        height: '50em',
         width: '60em',
         backgroundColor: 'white',
       }}

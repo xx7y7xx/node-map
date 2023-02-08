@@ -141,7 +141,7 @@ export default class MapControl extends Rete.Control {
       map.setPaintProperty(this.layerId, 'line-width', lineWidth);
       map.setPaintProperty(this.layerIdPoint, 'circle-color', lineColor);
       map.setPaintProperty(this.layerIdPoint, 'circle-radius', lineWidth);
-      map.setPaintProperty(this.layerIdFill, 'fill-color', lineColor);
+      // map.setPaintProperty(this.layerIdFill, 'fill-color', lineColor);
     } else {
       console.debug('addLayer', this.layerId);
       window.mapbox.addLayer({
@@ -175,8 +175,25 @@ export default class MapControl extends Rete.Control {
         type: 'fill',
         source: this.sourceId,
         paint: {
-          'fill-color': lineColor,
           'fill-opacity': 0.5,
+          // 'fill-color': lineColor,
+          // 'fill-color': ['interpolate', ['linear'], ['get', 'value'], 0, 'red', 10, 'yellow'],
+          // 'fill-color': [
+          //   'interpolate', ['linear'], ['get', 'value'],
+          //   // value ≤ 0 时，半径为 5
+          //   0, 'red',
+          //   // value ≥ 100 时，半径为 15
+          //   3, 'green',
+          // ],
+          // 'fill-color': [
+          //   'step',
+          //   ['get', 'value'],
+          //   '#EFFF85',
+          //   1, '#98F300',
+          //   2, '#37C508',
+          //   3, '#00CA8D',
+          //   4, '#0098A3',
+          // ],
         },
       });
 
