@@ -19,6 +19,7 @@ export default class MapControl extends Rete.Control {
     this.sourceId = props.sourceId;
     this.layerId = `${this.sourceId}LayerId`;
     this.layerIdPoint = `${this.sourceId}LayerIdPoint`;
+    this.layerIdFill = `${this.sourceId}LayerIdFill`;
     this.layerIdArrow = `${this.sourceId}LayerIdArrow`;
     this.imageIdArrow = `${this.sourceId}ImageIdArrow`;
 
@@ -140,6 +141,7 @@ export default class MapControl extends Rete.Control {
       map.setPaintProperty(this.layerId, 'line-width', lineWidth);
       map.setPaintProperty(this.layerIdPoint, 'circle-color', lineColor);
       map.setPaintProperty(this.layerIdPoint, 'circle-radius', lineWidth);
+      map.setPaintProperty(this.layerIdFill, 'fill-color', lineColor);
     } else {
       console.debug('addLayer', this.layerId);
       window.mapbox.addLayer({
@@ -167,12 +169,24 @@ export default class MapControl extends Rete.Control {
         },
       });
 
+      console.debug('addLayer', this.layerIdFill);
+      window.mapbox.addLayer({
+        id: this.layerIdFill,
+        type: 'fill',
+        source: this.sourceId,
+        paint: {
+          'fill-color': lineColor,
+          'fill-opacity': 0.5,
+        },
+      });
+
       // Create a popup, but don't add it to the map yet.
       const popup = new mapboxgl.Popup({
         closeButton: false,
         closeOnClick: false,
       });
 
+      // Show popup when mouse on a circle
       map.on('mouseenter', this.layerIdPoint, (e) => {
         // Change the cursor style as a UI indicator.
         map.getCanvas().style.cursor = 'pointer';
