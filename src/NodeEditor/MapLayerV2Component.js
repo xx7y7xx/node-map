@@ -13,6 +13,7 @@ import MapControl from './MapControl';
 const INPUT_KEY = 'geojson';
 const CONTROL_KEY_LINE_COLOR = 'controlKeyLineColor';
 const CONTROL_KEY_LINE_WIDTH = 'controlKeyLineWidth';
+const CONTROL_KEY_COLOR_BASE_ON_FIELD = 'controlKeyColorBaseOnField';
 // const CONTROL_KEY_GEOJSON = 'controlKeyGeojson';
 const CONTROL_KEY_SOURCE_ID = 'controlKeySourceId';
 const CONTROL_KEY_MAP = 'controlKeyMap';
@@ -33,6 +34,7 @@ export default class MapLayerV2Component extends Rete.Component {
       .addInput(input)
       .addControl(new ColorPickerControl(this.editor, CONTROL_KEY_LINE_COLOR, node, { label: 'color' }))
       .addControl(new SliderControl(this.editor, CONTROL_KEY_LINE_WIDTH, node, { label: 'line-width' }))
+      .addControl(new InputControl(this.editor, CONTROL_KEY_COLOR_BASE_ON_FIELD, node, { label: 'Color base on field' }))
       // .addControl(new TextControl(this.editor, CONTROL_KEY_GEOJSON, node, true))
       .addControl(new InputControl(this.editor, CONTROL_KEY_SOURCE_ID, node, { label: 'sourceId' }))
       .addControl(new MapControl(this.editor, CONTROL_KEY_MAP, { sourceId }));
@@ -66,6 +68,7 @@ export default class MapLayerV2Component extends Rete.Component {
     const lineCfg = {
       lineColor: node.data[CONTROL_KEY_LINE_COLOR],
       lineWidth: node.data[CONTROL_KEY_LINE_WIDTH],
+      colorBaseOnField: node.data[CONTROL_KEY_COLOR_BASE_ON_FIELD],
     };
 
     mapCtrl.setSourceAndLayer(geojson, lineCfg);

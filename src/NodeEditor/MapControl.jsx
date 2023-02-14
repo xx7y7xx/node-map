@@ -22,6 +22,9 @@ export default class MapControl extends Rete.Control {
     this.layerIdFill = `${this.sourceId}LayerIdFill`;
     this.layerIdArrow = `${this.sourceId}LayerIdArrow`;
     this.imageIdArrow = `${this.sourceId}ImageIdArrow`;
+    this.hoveredStateId = null; // The id when mouse hover on
+    // layer id list
+    this.layerIdList = [this.layerId, this.layerIdPoint, this.layerIdFill, this.layerIdArrow];
 
     // this.mmaapp();
   }
@@ -56,7 +59,7 @@ export default class MapControl extends Rete.Control {
 
   _addOrUpdateAll(geojson, lineCfg) {
     this._addOrUpdateSource(geojson);
-    this._addOrUpdateLayer(lineCfg, geojson);
+    this._addOrUpdateLayer(lineCfg);
     this._addOrUpdateImage(geojson);
   }
 
@@ -113,9 +116,13 @@ export default class MapControl extends Rete.Control {
       geojson,
     ), { padding: 200 });
 
+    // TODO this var should call `sourceObject` or just `source`
     const sourceData = {
       type: 'geojson',
       data: geojson,
+      // A property to use as a feature id (for feature state)
+      // TODO Maybe could let user change this field name from 'id' to other
+      promoteId: 'id',
     };
 
     // this.updateText(node, `${JSON.stringify(sourceData)}`);
@@ -133,7 +140,7 @@ export default class MapControl extends Rete.Control {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  _addOrUpdateLayer({ lineColor, lineWidth }) {
+  _addOrUpdateLayer({ lineColor, lineWidth, colorBaseOnField }) {
     const map = window.mapbox;
 
     if (map.getLayer(this.layerId)) {
@@ -175,7 +182,13 @@ export default class MapControl extends Rete.Control {
         type: 'fill',
         source: this.sourceId,
         paint: {
-          'fill-opacity': 0.5,
+          // 'fill-opacity': 0.5,
+          'fill-opacity': [
+            'case',
+            ['boolean', ['feature-state', 'hover'], false],
+            1,
+            0.5,
+          ],
           // 'fill-color': lineColor,
           // 'fill-color': ['interpolate', ['linear'], ['get', 'value'], 0, 'red', 10, 'yellow'],
           // 'fill-color': [
@@ -185,15 +198,15 @@ export default class MapControl extends Rete.Control {
           //   // value ≥ 100 时，半径为 15
           //   3, 'green',
           // ],
-          // 'fill-color': [
-          //   'step',
-          //   ['get', 'value'],
-          //   '#EFFF85',
-          //   1, '#98F300',
-          //   2, '#37C508',
-          //   3, '#00CA8D',
-          //   4, '#0098A3',
-          // ],
+          'fill-color': [
+            'step',
+            ['get', colorBaseOnField],
+            '#EFFF85',
+            1, '#98F300',
+            2, '#37C508',
+            3, '#00CA8D',
+            4, '#0098A3',
+          ],
         },
       });
 
@@ -202,6 +215,8 @@ export default class MapControl extends Rete.Control {
         closeButton: false,
         closeOnClick: false,
       });
+
+      this.mouseEventHover(this.layerIdFill);
 
       // Show popup when mouse on a circle
       map.on('mouseenter', this.layerIdPoint, (e) => {
@@ -240,14 +255,12 @@ export default class MapControl extends Rete.Control {
     // no data input, maybe link disconnect
     const map = window.mapbox;
 
-    if (map.getLayer(this.layerId)) {
-      console.debug('removeLayer', this.layerId);
-      map.removeLayer(this.layerId);
-    }
-    if (map.getLayer(this.layerIdPoint)) {
-      console.debug('removeLayer', this.layerIdPoint);
-      map.removeLayer(this.layerIdPoint);
-    }
+    this.layerIdList.forEach((lId) => {
+      if (map.getLayer(lId)) {
+        console.debug('removeLayer', lId);
+        map.removeLayer(lId);
+      }
+    });
   }
 
   // // update text in preview control
@@ -258,4 +271,45 @@ export default class MapControl extends Rete.Control {
   //     .get(CONTROL_KEY_GEOJSON)
   //     ?.setValue(text);
   // }
+
+  mouseEventHover(layerId) {
+    const map = window.mapbox;
+    // When the user moves their mouse over the state-fill layer, we'll update the
+    // feature state for the feature under the mouse.
+    map.on('mousemove', layerId, (e) => {
+      if (!(e.features.length > 0)) {
+        return;
+      }
+      // `features[0].id` is defined in `promoteId` when `addSource`
+      // TODO maybe could be customized by users in the future
+      const featureId = e.features[0].id;
+      if (featureId === undefined) {
+        console.warn('Cannot find feature[0].properties.id in source data. Will not show hover effect.', e.features);
+        return;
+      }
+      if (this.hoveredStateId !== null) {
+        map.setFeatureState(
+          { source: this.sourceId, id: this.hoveredStateId },
+          { hover: false },
+        );
+      }
+      this.hoveredStateId = featureId;
+      map.setFeatureState(
+        { source: this.sourceId, id: this.hoveredStateId },
+        { hover: true },
+      );
+    });
+
+    // When the mouse leaves the state-fill layer, update the feature state of the
+    // previously hovered feature.
+    map.on('mouseleave', layerId, () => {
+      if (this.hoveredStateId !== null) {
+        map.setFeatureState(
+          { source: this.sourceId, id: this.hoveredStateId },
+          { hover: false },
+        );
+      }
+      this.hoveredStateId = null;
+    });
+  }
 }
