@@ -10,7 +10,7 @@ import {
 import Faq from './components/Faq';
 import { useRete } from './rete';
 import { LS_KEY_NODE_EDITOR_DATA } from '../constants';
-import { createSampleNodes, downloadObjectAsJson } from './helpers';
+import { createSampleNodesV2, downloadObjectAsJson } from './helpers';
 
 // eslint-disable-next-line react/prop-types
 export default function NodeEditor({ style }) {
@@ -22,7 +22,7 @@ export default function NodeEditor({ style }) {
   };
 
   const handleLoadExample = () => {
-    createSampleNodes();
+    createSampleNodesV2();
   };
 
   const handleSwitchLightDark = () => {

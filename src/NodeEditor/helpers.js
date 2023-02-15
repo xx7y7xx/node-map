@@ -3,6 +3,7 @@
 import { message } from 'antd';
 import axios from 'axios';
 import { LS_KEY_NODE_EDITOR_DATA } from 'constants';
+import jsonNodeExample from './examples/jsonNode';
 import mockJsonData from './mockData.json';
 
 const defaultFnStr = `return input.data.map((item) => (
@@ -55,6 +56,10 @@ export const createSampleNodes = async () => {
     concatNode.outputs.get('json'),
     previewNode.inputs.get('json'),
   );
+};
+
+export const createSampleNodesV2 = async () => {
+  jsonNodeExample();
 };
 
 export const getUrlParams = () => new Proxy(new URLSearchParams(window.location.search), {

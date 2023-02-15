@@ -4,6 +4,26 @@ import * as turf from '@turf/turf';
 
 const ARROW_URL = '/node-map/img/arrow.png';
 
+const fillColor = (colorBaseOnField = '') => (
+  [
+    'step',
+    ['get', colorBaseOnField],
+    '#EFFF85',
+    1, '#98F300',
+    2, '#37C508',
+    3, '#00CA8D',
+    4, '#0098A3',
+  ]
+);
+
+const isEmpty = (geojson) => {
+  if (geojson.type === 'FeatureCollection') {
+    return geojson.features.length === 0;
+  }
+  // if (geojson.type === 'Feature') { }
+  return false;
+};
+
 /**
  * MapControl hold mapbox's layer and data source
  */
@@ -27,6 +47,89 @@ export default class MapControl extends Rete.Control {
     this.layerIdList = [this.layerId, this.layerIdPoint, this.layerIdFill, this.layerIdArrow];
 
     // this.mmaapp();
+    this.initMap();
+  }
+
+  initMap() {
+    const map = window.mapbox;
+
+    const loadSourceAndLayers = () => {
+      console.debug('addSource', this.sourceId);
+      map.addSource(this.sourceId, {
+        type: 'geojson',
+        data: turf.featureCollection([]),
+        // A property to use as a feature id (for feature state)
+        // TODO Maybe could let user change this field name from 'id' to other
+        promoteId: 'id',
+      });
+
+      console.debug('addLayer', this.layerId);
+      window.mapbox.addLayer({
+        id: this.layerId,
+        type: 'line',
+        source: this.sourceId,
+        layout: {
+          'line-join': 'round',
+          'line-cap': 'round',
+        },
+        paint: {
+          // 'line-color': lineColor,
+          // 'line-width': lineWidth,
+        },
+      });
+
+      console.debug('addLayer', this.layerIdPoint);
+      window.mapbox.addLayer({
+        id: this.layerIdPoint,
+        type: 'circle',
+        source: this.sourceId,
+        paint: {
+          // 'circle-radius': lineWidth,
+          // 'circle-color': lineColor,
+        },
+      });
+
+      console.debug('addLayer', this.layerIdFill);
+      window.mapbox.addLayer({
+        id: this.layerIdFill,
+        type: 'fill',
+        source: this.sourceId,
+        paint: {
+          // 'fill-opacity': 0.5,
+          'fill-opacity': [
+            'case',
+            ['boolean', ['feature-state', 'hover'], false],
+            1,
+            0.5,
+          ],
+          // 'fill-color': lineColor,
+          // 'fill-color': ['interpolate', ['linear'], ['get', 'value'], 0, 'red', 10, 'yellow'],
+          // 'fill-color': [
+          //   'interpolate', ['linear'], ['get', 'value'],
+          //   // value ≤ 0 时，半径为 5
+          //   0, 'red',
+          //   // value ≥ 100 时，半径为 15
+          //   3, 'green',
+          // ],
+          // 'fill-color': [
+          //   'step',
+          //   ['get', ''],
+          //   '#EFFF85',
+          //   1, '#98F300',
+          //   2, '#37C508',
+          //   3, '#00CA8D',
+          //   4, '#0098A3',
+          // ],
+          'fill-color': fillColor(),
+        },
+      });
+    };
+
+    if (!window.mapboxReady) {
+      map.on('load', loadSourceAndLayers);
+    } else {
+      loadSourceAndLayers();
+    }
   }
 
   /**
@@ -55,6 +158,10 @@ export default class MapControl extends Rete.Control {
         this._addOrUpdateAll(geojson, lineCfg);
       });
     }
+  }
+
+  removeData() {
+    this._addOrUpdateSource(turf.featureCollection([]));
   }
 
   _addOrUpdateAll(geojson, lineCfg) {
@@ -112,30 +219,22 @@ export default class MapControl extends Rete.Control {
     const map = window.mapbox;
 
     // Fly map to data
-    window.mapbox.fitBounds(turf.bbox(
-      geojson,
-    ), { padding: 200 });
-
-    // TODO this var should call `sourceObject` or just `source`
-    const sourceData = {
-      type: 'geojson',
-      data: geojson,
-      // A property to use as a feature id (for feature state)
-      // TODO Maybe could let user change this field name from 'id' to other
-      promoteId: 'id',
-    };
+    if (!isEmpty(geojson)) {
+      window.mapbox.fitBounds(turf.bbox(
+        geojson,
+      ), { padding: 200 });
+    }
 
     // this.updateText(node, `${JSON.stringify(sourceData)}`);
 
     const { sourceId } = this;
     const mpSource = map.getSource(sourceId);
-    if (mpSource) {
+    if (!mpSource) {
+      console.warn('MapControl cannot find map source');
+    } else {
       // some layers may use this source now
       // map.removeSource(sourceId);
-      map.getSource(sourceId).setData(sourceData.data);
-    } else {
-      console.debug('addSource', sourceId);
-      window.mapbox.addSource(sourceId, sourceData);
+      map.getSource(sourceId).setData(geojson);
     }
   }
 
@@ -148,68 +247,8 @@ export default class MapControl extends Rete.Control {
       map.setPaintProperty(this.layerId, 'line-width', lineWidth);
       map.setPaintProperty(this.layerIdPoint, 'circle-color', lineColor);
       map.setPaintProperty(this.layerIdPoint, 'circle-radius', lineWidth);
-      // map.setPaintProperty(this.layerIdFill, 'fill-color', lineColor);
+      map.setPaintProperty(this.layerIdFill, 'fill-color', fillColor(colorBaseOnField));
     } else {
-      console.debug('addLayer', this.layerId);
-      window.mapbox.addLayer({
-        id: this.layerId,
-        type: 'line',
-        source: this.sourceId,
-        layout: {
-          'line-join': 'round',
-          'line-cap': 'round',
-        },
-        paint: {
-          'line-color': lineColor,
-          'line-width': lineWidth,
-        },
-      });
-
-      console.debug('addLayer', this.layerIdPoint);
-      window.mapbox.addLayer({
-        id: this.layerIdPoint,
-        type: 'circle',
-        source: this.sourceId,
-        paint: {
-          'circle-radius': lineWidth,
-          'circle-color': lineColor,
-        },
-      });
-
-      console.debug('addLayer', this.layerIdFill);
-      window.mapbox.addLayer({
-        id: this.layerIdFill,
-        type: 'fill',
-        source: this.sourceId,
-        paint: {
-          // 'fill-opacity': 0.5,
-          'fill-opacity': [
-            'case',
-            ['boolean', ['feature-state', 'hover'], false],
-            1,
-            0.5,
-          ],
-          // 'fill-color': lineColor,
-          // 'fill-color': ['interpolate', ['linear'], ['get', 'value'], 0, 'red', 10, 'yellow'],
-          // 'fill-color': [
-          //   'interpolate', ['linear'], ['get', 'value'],
-          //   // value ≤ 0 时，半径为 5
-          //   0, 'red',
-          //   // value ≥ 100 时，半径为 15
-          //   3, 'green',
-          // ],
-          'fill-color': [
-            'step',
-            ['get', colorBaseOnField],
-            '#EFFF85',
-            1, '#98F300',
-            2, '#37C508',
-            3, '#00CA8D',
-            4, '#0098A3',
-          ],
-        },
-      });
-
       // Create a popup, but don't add it to the map yet.
       const popup = new mapboxgl.Popup({
         closeButton: false,

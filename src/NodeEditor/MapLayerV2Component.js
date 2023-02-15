@@ -10,7 +10,7 @@ import MapControl from './MapControl';
 
 // const LAYER_ID = 'nm-line-string-layer';
 // const LAYER_ID_POINT = 'nm-point-layer';
-const INPUT_KEY = 'geojson';
+export const INPUT_KEY = 'geojson';
 const CONTROL_KEY_LINE_COLOR = 'controlKeyLineColor';
 const CONTROL_KEY_LINE_WIDTH = 'controlKeyLineWidth';
 const CONTROL_KEY_COLOR_BASE_ON_FIELD = 'controlKeyColorBaseOnField';
@@ -28,7 +28,10 @@ export default class MapLayerV2Component extends Rete.Component {
   builder(node) {
     const input = new Rete.Input(INPUT_KEY, 'GeoJSON', objectSocket);
 
-    const sourceId = node.data[CONTROL_KEY_SOURCE_ID];
+    // Initial the source ID input box with value
+    if (!node.data[CONTROL_KEY_SOURCE_ID]) {
+      node.data[CONTROL_KEY_SOURCE_ID] = (`sourceId${Math.round(Math.random() * 1000)}`);
+    }
 
     node
       .addInput(input)
@@ -37,12 +40,7 @@ export default class MapLayerV2Component extends Rete.Component {
       .addControl(new InputControl(this.editor, CONTROL_KEY_COLOR_BASE_ON_FIELD, node, { label: 'Color base on field' }))
       // .addControl(new TextControl(this.editor, CONTROL_KEY_GEOJSON, node, true))
       .addControl(new InputControl(this.editor, CONTROL_KEY_SOURCE_ID, node, { label: 'sourceId' }))
-      .addControl(new MapControl(this.editor, CONTROL_KEY_MAP, { sourceId }));
-
-    // Initial the source ID input box with value
-    if (!node.data[CONTROL_KEY_SOURCE_ID]) {
-      node.data[CONTROL_KEY_SOURCE_ID] = (`sourceId${Math.round(Math.random() * 1000)}`);
-    }
+      .addControl(new MapControl(this.editor, CONTROL_KEY_MAP, { sourceId: node.data[CONTROL_KEY_SOURCE_ID] }));
   }
 
   // eslint-disable-next-line no-unused-vars
@@ -56,20 +54,21 @@ export default class MapLayerV2Component extends Rete.Component {
       .controls
       .get(CONTROL_KEY_MAP);
 
-    if (!geojson) {
-      // no data input, maybe link disconnect
-      // this.updateText(node, '');
-
-      // Remove layers
-      mapCtrl.removeLayers();
-      return;
-    }
-
     const lineCfg = {
       lineColor: node.data[CONTROL_KEY_LINE_COLOR],
       lineWidth: node.data[CONTROL_KEY_LINE_WIDTH],
       colorBaseOnField: node.data[CONTROL_KEY_COLOR_BASE_ON_FIELD],
     };
+
+    if (!geojson) {
+      // no data input, maybe link disconnect
+      // this.updateText(node, '');
+
+      // Remove layers
+      // mapCtrl.removeLayers();
+      mapCtrl.removeData();
+      return;
+    }
 
     mapCtrl.setSourceAndLayer(geojson, lineCfg);
   }
