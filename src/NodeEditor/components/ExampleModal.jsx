@@ -5,6 +5,7 @@ import React from 'react';
 function ExampleModal({ open, onOk, onCancel }) {
   const handleClick = () => {
     jsonNodeExample();
+    onOk();
   };
   return (
     <Modal title="Example Modal" open={open} onOk={onOk} onCancel={onCancel}>

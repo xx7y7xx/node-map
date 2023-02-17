@@ -38,7 +38,7 @@ export default class MapLayerV2Component extends Rete.Component {
       .addControl(new InputControl(this.editor, CONTROL_KEY_COLOR_BASE_ON_FIELD, node, { label: 'Color base on field' }))
       // .addControl(new TextControl(this.editor, CONTROL_KEY_GEOJSON, node, true))
       .addControl(new InputControl(this.editor, CONTROL_KEY_SOURCE_ID, node, { label: 'sourceId' }))
-      .addControl(new MapControl(this.editor, CONTROL_KEY_MAP, { sourceId: node.data[CONTROL_KEY_SOURCE_ID] }));
+      .addControl(new MapControl(this.editor, CONTROL_KEY_MAP, { sourceId: node.data[CONTROL_KEY_SOURCE_ID], defaultValue: node.data[CONTROL_KEY_MAP] }));
   }
 
   worker(node, inputs) {

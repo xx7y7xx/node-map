@@ -1,3 +1,5 @@
+import React from 'react';
+
 import Rete from 'rete';
 import mapboxgl from 'mapbox-gl';
 import * as turf from '@turf/turf';
@@ -29,8 +31,18 @@ const isEmpty = (geojson) => {
  * MapControl hold mapbox's layer and data source
  */
 export default class MapControl extends Rete.Control {
+  // @type {Node|null} In constructor this.parent is null
+  // parent
+
   static component = MapLayerConfigDrawer;
 
+  /**
+   *
+   * @param {*} emitter
+   * @param {*} key Control key, one component may have two controls, each control has its own control key
+   * @param {Object} props
+   * @param {string} props.sourceId
+   */
   constructor(emitter, key, props) {
     super(key);
     this.emitter = emitter;
@@ -47,11 +59,47 @@ export default class MapControl extends Rete.Control {
     // layer id list
     this.layerIdList = [this.layerId, this.layerIdPoint, this.layerIdFill, this.layerIdArrow];
 
+    /**
+     * IMPORTANT!
+     * NOT call getNode or putData, because these function will check control.parent first
+     * but when executing in this control constructor, the control.parent is null (not ready)
+     */
+    // console.log('this.parent node', this.getNode());
+    // // if no data loaded from cache, then init with new data
+    // if (!this.parent.data[key]) {
+    //   // the save data of this control is like {lineColor:"#ccc",lineWidth:1}
+    //   this.putData(this.key, {});
+    // }
+
+    const defaultValue = props.defaultValue || {
+      lineColor: '#000',
+    };
+
+    // pass props to component
+    this.props = {
+      defaultValue,
+      onChange: this.handleChange.bind(this),
+    };
+
     // this.mmaapp();
-    this.initMap();
+    this.initMap(defaultValue);
   }
 
-  initMap() {
+  handleChange(field, val) {
+    this.putData(this.key, {
+      ...(this.getData(this.key) || {}),
+      [field]: val,
+    });
+    this.emitter.trigger('process'); // trigger process to save new val to local cache
+
+    if (field === 'lineColor') {
+      const map = window.mapbox;
+      map.setPaintProperty(this.layerId, 'line-color', val);
+      map.setPaintProperty(this.layerIdPoint, 'circle-color', val);
+    }
+  }
+
+  initMap(defaultValue) {
     const map = window.mapbox;
 
     const loadSourceAndLayers = () => {
@@ -74,7 +122,7 @@ export default class MapControl extends Rete.Control {
           'line-cap': 'round',
         },
         paint: {
-          // 'line-color': lineColor,
+          'line-color': defaultValue.lineColor,
           // 'line-width': lineWidth,
         },
       });
@@ -86,7 +134,7 @@ export default class MapControl extends Rete.Control {
         source: this.sourceId,
         paint: {
           // 'circle-radius': lineWidth,
-          // 'circle-color': lineColor,
+          'circle-color': defaultValue.lineColor,
         },
       });
 
@@ -242,9 +290,9 @@ export default class MapControl extends Rete.Control {
     const map = window.mapbox;
 
     if (map.getLayer(this.layerId)) {
-      map.setPaintProperty(this.layerId, 'line-color', lineColor);
+      // map.setPaintProperty(this.layerId, 'line-color', lineColor);
       map.setPaintProperty(this.layerId, 'line-width', lineWidth);
-      map.setPaintProperty(this.layerIdPoint, 'circle-color', lineColor);
+      // map.setPaintProperty(this.layerIdPoint, 'circle-color', lineColor);
       map.setPaintProperty(this.layerIdPoint, 'circle-radius', lineWidth);
       map.setPaintProperty(this.layerIdFill, 'fill-color', fillColor(colorBaseOnField));
     } else {
