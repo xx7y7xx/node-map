@@ -36,7 +36,7 @@ export default class MapControl extends Rete.Control {
     this.key = key;
     this.component = MapControl.component;
 
-    this.sourceId = props.sourceId;
+    this.sourceId = props.sourceId; // "nmSourceId123"
     this.layerId = `${this.sourceId}LayerId`;
     this.layerIdPoint = `${this.sourceId}LayerIdPoint`;
     this.layerIdFill = `${this.sourceId}LayerIdFill`;

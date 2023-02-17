@@ -10,7 +10,6 @@ import { downloadObjectAsJson } from 'NodeEditor/helpers';
 import { LS_KEY_NODE_EDITOR_DATA } from 'constants';
 import ExampleModal from './ExampleModal';
 
-// eslint-disable-next-line react/prop-types
 export default function MenuDropdown() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -42,6 +41,27 @@ export default function MenuDropdown() {
       window.location.reload();
     };
     fr.readAsText(document.getElementById('import-config-file').files[0]);
+  };
+
+  const handleClearEditorAndMap = () => {
+    const { editor } = window.___nodeMap;
+    const map = window.mapbox;
+
+    editor.clear();
+
+    map.getStyle().layers.forEach((layer) => {
+      if (layer.id.startsWith('nmSourceId')) {
+        console.debug('Clear layer:', layer.id);
+        map.removeLayer(layer.id);
+      }
+    });
+
+    Object.keys(map.getStyle().sources).forEach((sourceId) => {
+      if (sourceId.startsWith('nmSourceId')) {
+        console.log('Clear source:', sourceId);
+        map.removeSource(sourceId);
+      }
+    });
   };
 
   const items = [
@@ -79,11 +99,21 @@ export default function MenuDropdown() {
         </a>
       ),
       icon: <FolderOpenOutlined />,
-    }, {
+    },
+    {
       key: 'switch-light-dark',
       label: (
         <a onClick={handleSwitchLightDark}>
           Switch Light Dark
+        </a>
+      ),
+      icon: <FolderOpenOutlined />,
+    },
+    {
+      key: 'clear-editor',
+      label: (
+        <a onClick={handleClearEditorAndMap}>
+          Clear Node Map
         </a>
       ),
       icon: <FolderOpenOutlined />,

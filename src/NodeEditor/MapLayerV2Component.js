@@ -30,7 +30,7 @@ export default class MapLayerV2Component extends Rete.Component {
 
     // Initial the source ID input box with value
     if (!node.data[CONTROL_KEY_SOURCE_ID]) {
-      node.data[CONTROL_KEY_SOURCE_ID] = (`sourceId${Math.round(Math.random() * 1000)}`);
+      node.data[CONTROL_KEY_SOURCE_ID] = (`nmSourceId${Math.round(Math.random() * 1000)}`);
     }
 
     node
