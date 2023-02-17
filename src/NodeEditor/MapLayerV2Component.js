@@ -2,12 +2,12 @@
 
 import Rete from 'rete';
 
-import { mapboxSourceLayerIdPrefix } from 'constants';
 import { objectSocket } from './JsonComponent';
 import ColorPickerControl from './ColorPickerControl';
 import SliderControl from './SliderControl';
 import InputControl from './InputControl';
 import MapControl from './MapControl';
+import { genSourceId } from './helpers';
 
 // const LAYER_ID = 'nm-line-string-layer';
 // const LAYER_ID_POINT = 'nm-point-layer';
@@ -31,7 +31,7 @@ export default class MapLayerV2Component extends Rete.Component {
 
     // Initial the source ID input box with value
     if (!node.data[CONTROL_KEY_SOURCE_ID]) {
-      node.data[CONTROL_KEY_SOURCE_ID] = (`${mapboxSourceLayerIdPrefix}${Math.round(Math.random() * 1000)}`);
+      node.data[CONTROL_KEY_SOURCE_ID] = genSourceId();
     }
 
     node

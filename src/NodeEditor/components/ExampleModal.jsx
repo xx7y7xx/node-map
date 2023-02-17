@@ -1,11 +1,10 @@
 import { Col, Modal, Row } from 'antd';
+import jsonNodeExample from 'NodeEditor/examples/jsonNode';
 import React from 'react';
-
-import { createSampleNodesV2 } from '../helpers';
 
 function ExampleModal({ open, onOk, onCancel }) {
   const handleClick = () => {
-    createSampleNodesV2();
+    jsonNodeExample();
   };
   return (
     <Modal title="Example Modal" open={open} onOk={onOk} onCancel={onCancel}>
