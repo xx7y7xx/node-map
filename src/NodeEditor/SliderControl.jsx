@@ -1,29 +1,8 @@
-import React from 'react';
 import Rete from 'rete';
-import { Slider, InputNumber } from 'antd';
+import NumberSlider from './components/NumberSlider';
 
 export default class SliderControl extends Rete.Control {
-  static component = ({ label, value, onChange }) => (
-    <div onPointerDown={(e) => {
-      // When drag slider, the node should not move
-      e.stopPropagation();
-    }}
-    >
-      <span>{label}</span>
-      <Slider
-        min={1}
-        max={20}
-        defaultValue={1}
-        value={value}
-        onChange={(val) => onChange(val)}
-      />
-      <InputNumber
-        value={value}
-        onChange={(val) => onChange(val)}
-      />
-    </div>
-
-  );
+  static component = NumberSlider;
 
   constructor(emitter, key, node, props = {}) {
     super(key);

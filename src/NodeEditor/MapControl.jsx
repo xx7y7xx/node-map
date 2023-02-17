@@ -1,6 +1,7 @@
 import Rete from 'rete';
 import mapboxgl from 'mapbox-gl';
 import * as turf from '@turf/turf';
+import MapLayerConfigDrawer from './components/MapLayerConfigDrawer';
 
 const ARROW_URL = '/node-map/img/arrow.png';
 
@@ -28,7 +29,7 @@ const isEmpty = (geojson) => {
  * MapControl hold mapbox's layer and data source
  */
 export default class MapControl extends Rete.Control {
-  static component = () => null;
+  static component = MapLayerConfigDrawer;
 
   constructor(emitter, key, props) {
     super(key);

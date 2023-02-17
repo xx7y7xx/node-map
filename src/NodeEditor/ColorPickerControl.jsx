@@ -1,15 +1,8 @@
-import React from 'react';
 import Rete from 'rete';
-import { Input } from 'antd';
+import ColorPicker from './components/ColorPicker';
 
 export default class ColorPickerControl extends Rete.Control {
-  static component = ({ label, value, onChange }) => (
-    <div>
-      <span>{label}</span>
-      <Input type="color" value={value} onChange={(e) => onChange(e.target.value)} />
-    </div>
-
-  );
+  static component = ColorPicker;
 
   constructor(emitter, key, node, props = {}) {
     super(key);
