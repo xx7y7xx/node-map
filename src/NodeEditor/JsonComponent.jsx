@@ -17,12 +17,10 @@ export default class JsonComponent extends Rete.Component {
       .addOutput(new Rete.Output(OUTPUT_KEY, 'JSON', objectSocket));
   }
 
-  // eslint-disable-next-line class-methods-use-this
   worker(node, inputs, outputs) {
     // `node.data` is `{}` (empty object) when node just created on board
     if (!node.data[CONTROL_KEY]) return;
 
-    // eslint-disable-next-line no-param-reassign
     outputs[OUTPUT_KEY] = node.data[CONTROL_KEY].obj; // obj could be null
   }
 }

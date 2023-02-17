@@ -13,7 +13,7 @@ export default class AuthComponent extends Rete.Component {
       .addControl(new RequestHeadersControl(this.editor, CONTROL_KEY_REQUEST_HEADERS, node));
   }
 
-  // eslint-disable-next-line class-methods-use-this, no-unused-vars
+  // eslint-disable-next-line no-unused-vars
   worker(node, inputs, outputs) {
     window.NM_REQUEST_HEADERS = node.data[CONTROL_KEY_REQUEST_HEADERS];
   }

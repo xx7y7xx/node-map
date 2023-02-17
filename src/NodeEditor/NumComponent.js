@@ -15,7 +15,7 @@ export default class NumComponent extends Rete.Component {
     return node.addControl(ctrl).addOutput(out1);
   }
 
-  worker(node, inputs, outputs) { // eslint-disable-line class-methods-use-this
-    outputs.num = node.data.num; // eslint-disable-line no-param-reassign
+  worker(node, inputs, outputs) {
+    outputs.num = node.data.num;
   }
 }

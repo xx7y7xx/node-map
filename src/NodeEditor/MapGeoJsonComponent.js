@@ -1,5 +1,3 @@
-/* eslint-disable no-param-reassign */
-
 import Rete from 'rete';
 import * as turf from '@turf/turf';
 
@@ -125,7 +123,6 @@ export default class MapGeoJsonComponent extends Rete.Component {
       ?.setValue(text);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   addOrUpdateSource(geojson, node) {
     const map = window.mapbox;
 

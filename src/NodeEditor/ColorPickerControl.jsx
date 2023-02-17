@@ -19,7 +19,7 @@ export default class ColorPickerControl extends Rete.Control {
 
     const initial = node.data[key] || '#000';
 
-    node.data[key] = initial; // eslint-disable-line no-param-reassign
+    node.data[key] = initial;
     this.props = {
       ...props,
       value: initial,

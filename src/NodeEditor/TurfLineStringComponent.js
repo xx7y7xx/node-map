@@ -11,7 +11,6 @@ export default class TurfLineStringComponent extends Rete.Component {
     super('Turf LineString Node');
   }
 
-  // eslint-disable-next-line class-methods-use-this
   builder(node) {
     const input = new Rete.Input(INPUT_KEY, 'coordinatesArray', objectSocket);
     const output = new Rete.Output(OUTPUT_KEY, 'GeoJSON', objectSocket);
@@ -33,7 +32,6 @@ export default class TurfLineStringComponent extends Rete.Component {
       return;
     }
 
-    // eslint-disable-next-line no-param-reassign
     outputs[OUTPUT_KEY] = turf.lineString(coordinatesArray);
   }
 }

@@ -102,7 +102,6 @@ export default class PreviewComponent extends Rete.Component {
     this.markers = [];
   }
 
-  // eslint-disable-next-line class-methods-use-this
   renderLineString(feature) {
     const map = window.mapbox;
 

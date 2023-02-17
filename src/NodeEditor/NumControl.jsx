@@ -21,7 +21,7 @@ export default class NumControl extends Rete.Control {
 
     const initial = node.data[key] || 0;
 
-    node.data[key] = initial; // eslint-disable-line no-param-reassign
+    node.data[key] = initial;
     this.props = {
       readonly,
       value: initial,

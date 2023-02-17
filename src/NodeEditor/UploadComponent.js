@@ -13,12 +13,11 @@ export default class UploadComponent extends Rete.Component {
       .addOutput(new Rete.Output('json', 'JSON Socket', objectSocket));
   }
 
-  // eslint-disable-next-line class-methods-use-this
   worker(node, inputs, outputs) {
     if (typeof node.data.upload === 'string') {
-      outputs.json = JSON.parse(node.data.upload); // eslint-disable-line no-param-reassign
+      outputs.json = JSON.parse(node.data.upload);
     } else {
-      outputs.json = node.data.upload; // eslint-disable-line no-param-reassign
+      outputs.json = node.data.upload;
     }
   }
 }

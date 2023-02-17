@@ -34,7 +34,6 @@ export default class TransformComponent extends Rete.Component {
     const latKey = controls.get('latKey').getValue();
     const lngKey = controls.get('lngKey').getValue();
 
-    // eslint-disable-next-line no-param-reassign
     outputs.json = jsonNodeValue.data
       .filter((item) => _.get(item, `point.${lngKey}`) && _.get(item, `point.${latKey}`))
       .map((item) => (

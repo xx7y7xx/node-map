@@ -37,9 +37,7 @@ export default class RemoteDataComponent extends Rete.Component {
     return node;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   worker(node, inputs, outputs) {
-    // eslint-disable-next-line no-param-reassign
     outputs[OUTPUT_KEY] = node.data[CONTROL_KEY];
   }
 

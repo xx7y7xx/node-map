@@ -15,9 +15,7 @@ export default class UploadCsvComponent extends Rete.Component {
       .addOutput(new Rete.Output(OUTPUT_KEY, 'CSV Socket', stringSocket));
   }
 
-  // eslint-disable-next-line class-methods-use-this
   worker(node, inputs, outputs) {
-    // eslint-disable-next-line no-param-reassign
     outputs[OUTPUT_KEY] = node.data.upload;
   }
 }

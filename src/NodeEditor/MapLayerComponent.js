@@ -19,7 +19,6 @@ export default class MapLayerComponent extends Rete.Component {
     });
   }
 
-  // eslint-disable-next-line class-methods-use-this
   builder(node) {
     const input = new Rete.Input(INPUT_KEY, 'sourceId', stringSocket);
 
@@ -57,7 +56,6 @@ export default class MapLayerComponent extends Rete.Component {
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
   addOrUpdateLayer(sourceId, node) {
     const map = window.mapbox;
     const layerId = `${sourceId}layerId`;

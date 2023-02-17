@@ -33,7 +33,7 @@ export default class SliderControl extends Rete.Control {
 
     const initial = node.data[key] || 1;
 
-    node.data[key] = initial; // eslint-disable-line no-param-reassign
+    node.data[key] = initial;
     this.props = {
       ...props,
       value: initial,

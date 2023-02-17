@@ -15,8 +15,7 @@ export default class TextComponent extends Rete.Component {
     return node.addControl(ctrl).addOutput(out1);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   worker(node, inputs, outputs) {
-    outputs.text = node.data.text; // eslint-disable-line no-param-reassign
+    outputs.text = node.data.text;
   }
 }

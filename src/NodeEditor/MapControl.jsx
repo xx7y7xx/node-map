@@ -214,7 +214,6 @@ export default class MapControl extends Rete.Control {
     });
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _addOrUpdateSource(geojson) {
     const map = window.mapbox;
 
@@ -238,7 +237,6 @@ export default class MapControl extends Rete.Control {
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _addOrUpdateLayer({ lineColor, lineWidth, colorBaseOnField }) {
     const map = window.mapbox;
 

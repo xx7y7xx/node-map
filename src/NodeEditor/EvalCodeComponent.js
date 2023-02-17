@@ -63,7 +63,6 @@ export default class EvalCodeComponent extends Rete.Component {
     const { controls } = this.editor.nodes.find((n) => n.id === nodeData.id);
     const result = await controls.get(CONTROL_KEY_CODE_BOX).runCode(inputJson);
 
-    // eslint-disable-next-line no-param-reassign
     outputData.json = result;
   }
 }

@@ -31,7 +31,7 @@ export default function Map({ width }) {
     window.mapbox = new mapboxgl.Map(options);
     // console.log('map', window.mapbox);
     window.mapbox.on('load', () => {
-      // console.debug('mapbox load event');
+      console.debug('mapbox load event');
       window.mapboxReady = true;
     });
     window.mapbox.on('idle', () => {

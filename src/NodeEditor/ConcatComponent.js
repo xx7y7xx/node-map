@@ -10,7 +10,6 @@ export default class ConcatComponent extends Rete.Component {
   builder(node) {
     let index = 0;
     const initCount = node.data.inputCount;
-    // eslint-disable-next-line no-param-reassign
     node.data.inputCount = 0;
 
     const onClick = () => {
@@ -18,7 +17,6 @@ export default class ConcatComponent extends Rete.Component {
         new Rete.Input(`json${index}`, `JSON ${index}`, objectSocket),
       );
       index += 1;
-      // eslint-disable-next-line no-param-reassign
       node.data.inputCount += 1;
       node.update(); // Rerender ConcatComponent
     };
@@ -27,7 +25,6 @@ export default class ConcatComponent extends Rete.Component {
     [...Array(initCount).keys()].forEach(() => {
       node.addInput(new Rete.Input(`json${index}`, `JSON ${index}`, objectSocket));
       index += 1;
-      // eslint-disable-next-line no-param-reassign
       node.data.inputCount += 1;
     });
 
@@ -41,7 +38,6 @@ export default class ConcatComponent extends Rete.Component {
       );
   }
 
-  // eslint-disable-next-line class-methods-use-this
   worker(node, inputs, outputs) {
     let out = [];
 
@@ -53,7 +49,6 @@ export default class ConcatComponent extends Rete.Component {
         out = [...out, ...inputValue];
       });
 
-    // eslint-disable-next-line no-param-reassign
     outputs.json = out;
   }
 }

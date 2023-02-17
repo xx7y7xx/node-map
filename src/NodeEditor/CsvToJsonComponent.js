@@ -1,5 +1,3 @@
-/* eslint-disable class-methods-use-this */
-
 import Rete from 'rete';
 import Papa from 'papaparse';
 
@@ -33,7 +31,6 @@ export default class CsvToJsonComponent extends Rete.Component {
     const csvStr = inputs[INPUT_KEY][0];
 
     if (!csvStr) {
-      // eslint-disable-next-line no-param-reassign
       outputs.json = [];
       return;
     }
@@ -43,7 +40,6 @@ export default class CsvToJsonComponent extends Rete.Component {
       dynamicTyping: true,
     });
 
-    // eslint-disable-next-line no-param-reassign
     outputs.json = result.data;
   }
 }

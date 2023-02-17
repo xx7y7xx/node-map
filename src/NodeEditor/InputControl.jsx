@@ -30,7 +30,7 @@ export default class InputControl extends Rete.Control {
 
     const initial = node.data[key] || '';
 
-    node.data[key] = initial; // eslint-disable-line no-param-reassign
+    node.data[key] = initial;
     this.props = {
       ...props,
       value: initial,

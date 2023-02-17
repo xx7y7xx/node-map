@@ -45,6 +45,6 @@ export default class AddComponent extends Rete.Component {
       .find((n) => n.id === node.id)
       .controls.get('preview')
       .setValue(`${sum}|${n3}|${n4}`);
-    outputs.num = sum; // eslint-disable-line no-param-reassign
+    outputs.num = sum;
   }
 }

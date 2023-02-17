@@ -1,5 +1,3 @@
-/* eslint-disable no-param-reassign */
-
 import Rete from 'rete';
 
 import { objectSocket } from './JsonComponent';
@@ -25,7 +23,6 @@ export default class MapLayerV2Component extends Rete.Component {
     super('Map Layer V2 Node');
   }
 
-  // eslint-disable-next-line class-methods-use-this
   builder(node) {
     const input = new Rete.Input(INPUT_KEY, 'GeoJSON', objectSocket);
 
