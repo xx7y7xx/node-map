@@ -7,7 +7,7 @@ import {
   DownOutlined, ExportOutlined, ImportOutlined, FolderOpenOutlined,
 } from '@ant-design/icons';
 import { downloadObjectAsJson } from 'NodeEditor/helpers';
-import { LS_KEY_NODE_EDITOR_DATA } from 'constants';
+import { LS_KEY_NODE_EDITOR_DATA, mapboxSourceLayerIdPrefix } from 'constants';
 import ExampleModal from './ExampleModal';
 
 export default function MenuDropdown() {
@@ -50,14 +50,14 @@ export default function MenuDropdown() {
     editor.clear();
 
     map.getStyle().layers.forEach((layer) => {
-      if (layer.id.startsWith('nmSourceId')) {
+      if (layer.id.startsWith(mapboxSourceLayerIdPrefix)) {
         console.debug('Clear layer:', layer.id);
         map.removeLayer(layer.id);
       }
     });
 
     Object.keys(map.getStyle().sources).forEach((sourceId) => {
-      if (sourceId.startsWith('nmSourceId')) {
+      if (sourceId.startsWith(mapboxSourceLayerIdPrefix)) {
         console.log('Clear source:', sourceId);
         map.removeSource(sourceId);
       }

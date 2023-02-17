@@ -4,6 +4,7 @@ import Rete from 'rete';
 import * as turf from '@turf/turf';
 
 // import TextControl from './TextControl';
+import { mapboxSourceLayerIdPrefix } from 'constants';
 import { objectSocket } from './JsonComponent';
 import { stringSocket } from './UploadCsvComponent';
 import ButtonControl from './ButtonControl';
@@ -55,7 +56,7 @@ export default class MapGeoJsonComponent extends Rete.Component {
 
     // Initial the source ID input box with value
     if (this.getSourceId(node) === null || this.getSourceId(node) === undefined) {
-      this.setSourceId(node, `nmSourceId${Math.round(Math.random() * 1000)}`);
+      this.setSourceId(node, `${mapboxSourceLayerIdPrefix}${Math.round(Math.random() * 1000)}`);
     }
 
     if (node.data.outputCount > 0) {
