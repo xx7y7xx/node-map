@@ -25,7 +25,6 @@ export default class MapMarkersComponent extends Rete.Component {
       .addControl(new TextControl(this.editor, CONTROL_KEY, node, true));
   }
 
-  // eslint-disable-next-line no-unused-vars
   worker(node, inputs) {
     console.debug('MapMarkersComponent.worker:', inputs);
     // inputs.json=[] // no data

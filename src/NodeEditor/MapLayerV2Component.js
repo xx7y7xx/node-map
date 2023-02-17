@@ -41,7 +41,6 @@ export default class MapLayerV2Component extends Rete.Component {
       .addControl(new MapControl(this.editor, CONTROL_KEY_MAP, { sourceId: node.data[CONTROL_KEY_SOURCE_ID] }));
   }
 
-  // eslint-disable-next-line no-unused-vars
   worker(node, inputs) {
     // inputs[INPUT_KEY]=[] // no data
     // inputs[INPUT_KEY]=[[[103.8254528,1.2655414]]]

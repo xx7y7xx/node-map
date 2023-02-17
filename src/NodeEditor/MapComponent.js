@@ -32,7 +32,6 @@ export default class MapComponent extends Rete.Component {
       .addControl(new SliderControl(this.editor, CONTROL_KEY_ZOOM, node, { label: 'zoom' }));
   }
 
-  // eslint-disable-next-line no-unused-vars
   worker(node, inputs, outputs) {
     // outputs[OUTPUT_KEY] = node.data[CONTROL_KEY];
 

@@ -101,7 +101,7 @@ export const reteContextMenuOptions = ({
   // searchKeep: (title) => true,
   searchKeep: () => true,
   delay: 100,
-  allocate(component) { // eslint-disable-line no-unused-vars
+  allocate(component) {
     // console.log('allocate(component)', component);
     return ['Submenu'];
   },

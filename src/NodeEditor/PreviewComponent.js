@@ -43,7 +43,6 @@ export default class PreviewComponent extends Rete.Component {
       .addControl(new TextControl(this.editor, 'preview', node, true));
   }
 
-  // eslint-disable-next-line no-unused-vars
   worker(node, inputs) {
     console.debug('PreviewComponent.worker:', inputs);
     // inputs.json=[] // no data

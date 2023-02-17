@@ -20,7 +20,6 @@ export default class TurfLineStringComponent extends Rete.Component {
       .addOutput(output);
   }
 
-  // eslint-disable-next-line no-unused-vars
   worker(node, inputs, outputs) {
     // inputs.json=[] // no data
     // inputs.json=[[[103.8254528,1.2655414]]]

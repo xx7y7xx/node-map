@@ -28,7 +28,6 @@ export default class MapLayerComponent extends Rete.Component {
       .addControl(new SliderControl(this.editor, CONTROL_KEY_LINE_WIDTH, node, { label: 'line-width' }));
   }
 
-  // eslint-disable-next-line no-unused-vars
   worker(node, inputs) {
     const sourceId = inputs[INPUT_KEY][0];
     const layerId = `${sourceId}layerId`;

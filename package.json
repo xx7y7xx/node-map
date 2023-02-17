@@ -73,7 +73,8 @@
       "max-len": "off",
       "no-underscore-dangle": "off",
       "react/prop-types": "off",
-      "class-methods-use-this": "off"
+      "class-methods-use-this": "off",
+      "no-unused-vars": "off"
     }
   },
   "browserslist": {
