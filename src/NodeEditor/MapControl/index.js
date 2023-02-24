@@ -69,6 +69,7 @@ export default class MapControl extends Rete.Control {
 
     // pass props to react component MapLayerConfigDrawer
     this.props = {
+      visible: props.visible,
       sourceId: this.sourceId,
       defaultValue,
       onChange: this.handleChange.bind(this),
@@ -214,14 +215,34 @@ export default class MapControl extends Rete.Control {
 
   setAllData(geojson) {
     this._mapSetSource(geojson);
-    this._mapSetImgData(geojson);
+    this._mapHideOrShowImgLayerAccordingToData(geojson);
+  }
+
+  setAllDataWithStyle(geojson, lineCfg) {
+    this._mapSetSource(geojson);
+    this._mapSetLayerStyle(lineCfg);
+    this._mapHideOrShowImgLayerAccordingToData(geojson);
   }
 
   setEmptyData() {
     this._mapSetSource(turf.featureCollection([]));
   }
 
-  _mapSetImgData(geojson) {
+  _mapSetLayerStyle({ lineColor, lineWidth, colorBaseOnField }) {
+    const map = window.mapbox;
+
+    if (!map.getLayer(this.layerId)) {
+      console.warn('_mapSetLayerStyle layer not ready', this.layerId);
+      return;
+    }
+    map.setPaintProperty(this.layerId, 'line-color', lineColor);
+    map.setPaintProperty(this.layerId, 'line-width', lineWidth);
+    map.setPaintProperty(this.layerIdPoint, 'circle-color', lineColor);
+    map.setPaintProperty(this.layerIdPoint, 'circle-radius', lineWidth);
+    map.setPaintProperty(this.layerIdFill, 'fill-color', fillColor(colorBaseOnField));
+  }
+
+  _mapHideOrShowImgLayerAccordingToData(geojson) {
     const map = window.mapbox;
 
     if (!map.getLayer(this.layerIdArrow)) {

@@ -2,7 +2,7 @@ import React from 'react';
 import { Input } from 'antd';
 
 export default function InputField({
-  label, value, onChange, visible,
+  label, value, onChange, visible, disabled,
 }) {
   if (!visible) {
     return null;
@@ -11,6 +11,7 @@ export default function InputField({
     <div>
       <span>{label}</span>
       <Input
+        disabled={disabled}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         onPointerDown={(e) => {
@@ -28,4 +29,5 @@ export default function InputField({
 
 InputField.defaultProps = {
   visible: true,
+  disabled: false,
 };

@@ -10,7 +10,9 @@ import InputField from './InputField';
  * @param {string} props.sourceId This is readonly, generated from MapLayerV3Component
  * @returns
  */
-export default function MapLayerConfigDrawer({ sourceId, defaultValue, onChange }) {
+export default function MapLayerConfigDrawer({
+  visible, sourceId, defaultValue, onChange,
+}) {
   const [open, setOpen] = useState(false);
   const [lineColor, setLineColor] = useState(/* #000 */defaultValue.lineColor);
   const [lineWidth, setLineWidth] = useState(/* 1 */defaultValue.lineWidth);
@@ -35,6 +37,8 @@ export default function MapLayerConfigDrawer({ sourceId, defaultValue, onChange 
     }
   };
 
+  if (!visible) return null;
+
   return (
     <>
       <Button type="primary" onClick={showDrawer}>
@@ -58,3 +62,7 @@ export default function MapLayerConfigDrawer({ sourceId, defaultValue, onChange 
     </>
   );
 }
+
+MapLayerConfigDrawer.defaultProps = {
+  visible: true,
+};
