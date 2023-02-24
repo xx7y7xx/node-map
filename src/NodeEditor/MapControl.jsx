@@ -102,7 +102,6 @@ export default class MapControl extends Rete.Control {
       map.setPaintProperty(this.layerIdPoint, 'circle-color', val);
     }
     if (field === 'lineWidth') {
-      console.log('xxxx', val);
       map.setPaintProperty(this.layerId, 'line-width', val);
       map.setPaintProperty(this.layerIdPoint, 'circle-radius', val);
     }
