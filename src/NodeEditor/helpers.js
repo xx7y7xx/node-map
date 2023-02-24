@@ -129,3 +129,28 @@ export const downloadObjectAsJson = (exportJsonString, exportName) => {
 };
 
 export const genSourceId = () => (`${mapboxSourceLayerIdPrefix}${Math.round(Math.random() * 1000)}`);
+
+export const clearEditorAndMap = () => {
+  if (window.confirm('Are you sure to clear all data?') !== true) { // eslint-disable-line no-alert
+    return;
+  }
+
+  const { editor } = window.___nodeMap;
+  const map = window.mapbox;
+
+  editor.clear();
+
+  map.getStyle().layers.forEach((layer) => {
+    if (layer.id.startsWith(mapboxSourceLayerIdPrefix)) {
+      console.debug('Clear layer:', layer.id);
+      map.removeLayer(layer.id);
+    }
+  });
+
+  Object.keys(map.getStyle().sources).forEach((sourceId) => {
+    if (sourceId.startsWith(mapboxSourceLayerIdPrefix)) {
+      console.log('Clear source:', sourceId);
+      map.removeSource(sourceId);
+    }
+  });
+};

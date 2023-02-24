@@ -5,8 +5,6 @@ import geojson from './data.json';
 const jsonNodeExample = async () => {
   const { editor, allComponents } = window.___nodeMap;
 
-  editor.clear();
-
   const jsonNode = await allComponents.jsonComponent.createNode({ [CONTROL_KEY]: { text: JSON.stringify(geojson, null, 2), obj: geojson } });
   const mapLayerV2Node = await allComponents.mapLayerV2Component.createNode();
 

@@ -1,14 +1,18 @@
 import React, { useRef, useState } from 'react';
 
+import { Spin } from 'antd';
+
 import { handlerWidth } from './constants';
 import NodeEditor from './NodeEditor';
 import Map from './map';
+
 import './App.css';
 
 function App() {
   const layoutRef = useRef();
   const [leftWidth, setLeftWidth] = useState(0);
   const [isMouseDown, setIsMouseDown] = useState(false);
+  const [mapboxReady, setMapboxReady] = useState(false);
 
   const mouseMoveHandler = (e) => {
     if (!isMouseDown) return;
@@ -41,14 +45,14 @@ function App() {
       onMouseMove={mouseMoveHandler}
       onMouseUp={mouseUpHandler}
     >
-      <Map width={leftWidth} />
+      <Map width={leftWidth} onMapboxReady={setMapboxReady} />
       <div
         aria-hidden
         className="nm-layout-resizer"
         style={{ width: handlerWidth }}
         onMouseDown={mouseDownHandler}
       />
-      <NodeEditor style={{ width: rightWidth }} />
+      {mapboxReady ? <NodeEditor style={{ width: rightWidth }} /> : <Spin />}
     </div>
   );
 }
