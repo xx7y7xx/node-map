@@ -6,9 +6,9 @@ import InputField from './InputField';
 
 export default function MapLayerConfigDrawer({ defaultValue, onChange }) {
   const [open, setOpen] = useState(false);
-  const [lineColor, setLineColor] = useState(defaultValue.lineColor);
-  const [lineWidth, setLineWidth] = useState(1);
-  const [colorBaseOnField, setColorBaseOnField] = useState('');
+  const [lineColor, setLineColor] = useState(/* #000 */defaultValue.lineColor);
+  const [lineWidth, setLineWidth] = useState(/* 1 */defaultValue.lineWidth);
+  const [colorBaseOnField, setColorBaseOnField] = useState(/* '' */defaultValue.colorBaseOnField);
   const [sourceId, setSourceId] = useState('');
 
   const showDrawer = () => {
@@ -17,6 +17,17 @@ export default function MapLayerConfigDrawer({ defaultValue, onChange }) {
 
   const onClose = () => {
     setOpen(false);
+  };
+
+  const handleChange = (key) => (val) => {
+    onChange(key, val);
+
+    switch (key) {
+      case 'lineColor': setLineColor(val); break;
+      case 'lineWidth': setLineWidth(val); break;
+      case 'colorBaseOnField': setColorBaseOnField(val); break;
+      default:
+    }
   };
 
   return (
@@ -28,13 +39,10 @@ export default function MapLayerConfigDrawer({ defaultValue, onChange }) {
         <ColorPicker
           label="Color"
           value={lineColor}
-          onChange={(val) => {
-            setLineColor(val);
-            onChange('lineColor', val);
-          }}
+          onChange={handleChange('lineColor')}
         />
-        <NumberSlider label="Line Width" value={lineWidth} onChange={setLineWidth} />
-        <InputField label="Color Base On Field" value={colorBaseOnField} onChange={setColorBaseOnField} />
+        <NumberSlider label="Line Width" value={lineWidth} onChange={handleChange('lineWidth')} />
+        <InputField label="Color Base On Field" value={colorBaseOnField} onChange={handleChange('colorBaseOnField')} />
         <InputField label="Source ID" value={sourceId} onChange={setSourceId} />
       </Drawer>
     </>

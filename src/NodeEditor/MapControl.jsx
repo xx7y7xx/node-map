@@ -4,6 +4,7 @@ import Rete from 'rete';
 import mapboxgl from 'mapbox-gl';
 import * as turf from '@turf/turf';
 import MapLayerConfigDrawer from './components/MapLayerConfigDrawer';
+import { DEFAULT_LINE_COLOR, DEFAULT_LINE_WIDTH } from './mapConfig';
 
 const ARROW_URL = '/node-map/img/arrow.png';
 
@@ -71,8 +72,11 @@ export default class MapControl extends Rete.Control {
     //   this.putData(this.key, {});
     // }
 
-    const defaultValue = props.defaultValue || {
-      lineColor: '#000',
+    const defaultValue = {
+      lineColor: DEFAULT_LINE_COLOR,
+      lineWidth: DEFAULT_LINE_WIDTH,
+      colorBaseOnField: '',
+      ...(props.defaultValue || {}),
     };
 
     // pass props to component
@@ -92,10 +96,18 @@ export default class MapControl extends Rete.Control {
     });
     this.emitter.trigger('process'); // trigger process to save new val to local cache
 
+    const map = window.mapbox;
     if (field === 'lineColor') {
-      const map = window.mapbox;
       map.setPaintProperty(this.layerId, 'line-color', val);
       map.setPaintProperty(this.layerIdPoint, 'circle-color', val);
+    }
+    if (field === 'lineWidth') {
+      console.log('xxxx', val);
+      map.setPaintProperty(this.layerId, 'line-width', val);
+      map.setPaintProperty(this.layerIdPoint, 'circle-radius', val);
+    }
+    if (field === 'colorBaseOnField') {
+      map.setPaintProperty(this.layerIdFill, 'fill-color', fillColor(val));
     }
   }
 
@@ -123,7 +135,7 @@ export default class MapControl extends Rete.Control {
         },
         paint: {
           'line-color': defaultValue.lineColor,
-          // 'line-width': lineWidth,
+          'line-width': defaultValue.lineWidth,
         },
       });
 
@@ -133,7 +145,7 @@ export default class MapControl extends Rete.Control {
         type: 'circle',
         source: this.sourceId,
         paint: {
-          // 'circle-radius': lineWidth,
+          'circle-radius': defaultValue.lineWidth,
           'circle-color': defaultValue.lineColor,
         },
       });
@@ -291,10 +303,10 @@ export default class MapControl extends Rete.Control {
 
     if (map.getLayer(this.layerId)) {
       // map.setPaintProperty(this.layerId, 'line-color', lineColor);
-      map.setPaintProperty(this.layerId, 'line-width', lineWidth);
+      // map.setPaintProperty(this.layerId, 'line-width', lineWidth);
       // map.setPaintProperty(this.layerIdPoint, 'circle-color', lineColor);
-      map.setPaintProperty(this.layerIdPoint, 'circle-radius', lineWidth);
-      map.setPaintProperty(this.layerIdFill, 'fill-color', fillColor(colorBaseOnField));
+      // map.setPaintProperty(this.layerIdPoint, 'circle-radius', lineWidth);
+      // map.setPaintProperty(this.layerIdFill, 'fill-color', fillColor(colorBaseOnField));
     } else {
       // Create a popup, but don't add it to the map yet.
       const popup = new mapboxgl.Popup({
