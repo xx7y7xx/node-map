@@ -7,7 +7,7 @@ import InputField from './InputField';
 /**
  *
  * @param {*} props
- * @param {string} props.sourceId This is readonly, generated from MapLayerV2Component
+ * @param {string} props.sourceId This is readonly, generated from MapLayerV3Component
  * @returns
  */
 export default function MapLayerConfigDrawer({ sourceId, defaultValue, onChange }) {

@@ -18,7 +18,7 @@ const CONTROL_KEY_SOURCE_ID = 'controlKeySourceId';
 const CONTROL_KEY_MAP = 'controlKeyMap';
 
 /**
- * MapLayerV2Component = MapGeoJsonComponent + MapLayerComponent
+ * MapLayerV3Component = MapGeoJsonComponent + MapLayerComponent
  * The data stored in this node:
  * ```json
  * {
@@ -30,9 +30,9 @@ const CONTROL_KEY_MAP = 'controlKeyMap';
  * }
  * ```
  */
-export default class MapLayerV2Component extends Rete.Component {
+export default class MapLayerV3Component extends Rete.Component {
   constructor() {
-    super('Map Layer V2 Node');
+    super('Map Layer V3 Node');
   }
 
   builder(node) {
@@ -54,7 +54,7 @@ export default class MapLayerV2Component extends Rete.Component {
   }
 
   worker(node, inputs) {
-    console.debug('MapLayerV2Component worker', node, inputs);
+    console.debug('MapLayerV3Component worker', node, inputs);
     // inputs[INPUT_KEY]=[] // no data
     // inputs[INPUT_KEY]=[[[103.8254528,1.2655414]]]
     const geojson = inputs[INPUT_KEY][0];
