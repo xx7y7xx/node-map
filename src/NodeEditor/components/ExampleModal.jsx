@@ -1,16 +1,20 @@
-import { Col, Modal, Row } from 'antd';
-import jsonNodeExample from 'NodeEditor/examples/jsonNode';
 import React from 'react';
 
+import { Col, Modal, Row } from 'antd';
+import examples from 'NodeEditor/examples';
+import { clearEditorAndMap } from 'NodeEditor/helpers';
+
 function ExampleModal({ open, onOk, onCancel }) {
-  const handleClick = () => {
-    jsonNodeExample();
-    onOk();
+  const handleExample = (example) => () => {
+    clearEditorAndMap(); // clear all content on map and editor
+    examples[example](); // load the data from example to map and editor
+    onOk(); // hide modal
   };
   return (
     <Modal title="Example Modal" open={open} onOk={onOk} onCancel={onCancel}>
       <Row>
-        <Col span={6}><button type="button" onClick={handleClick}>Example 1</button></Col>
+        <Col span={6}><button type="button" onClick={handleExample('simple')}>Example 1</button></Col>
+        <Col span={6}><button type="button" onClick={handleExample('lineString')}>Line String</button></Col>
       </Row>
     </Modal>
 

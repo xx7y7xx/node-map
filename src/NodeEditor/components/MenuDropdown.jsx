@@ -6,8 +6,8 @@ import { Dropdown, Space } from 'antd';
 import {
   DownOutlined, ExportOutlined, ImportOutlined, FolderOpenOutlined,
 } from '@ant-design/icons';
-import { downloadObjectAsJson } from 'NodeEditor/helpers';
-import { LS_KEY_NODE_EDITOR_DATA, mapboxSourceLayerIdPrefix } from 'constants';
+import { clearEditorAndMap, downloadObjectAsJson } from 'NodeEditor/helpers';
+import { LS_KEY_NODE_EDITOR_DATA } from 'constants';
 import ExampleModal from './ExampleModal';
 
 export default function MenuDropdown() {
@@ -41,27 +41,6 @@ export default function MenuDropdown() {
       window.location.reload();
     };
     fr.readAsText(document.getElementById('import-config-file').files[0]);
-  };
-
-  const handleClearEditorAndMap = () => {
-    const { editor } = window.___nodeMap;
-    const map = window.mapbox;
-
-    editor.clear();
-
-    map.getStyle().layers.forEach((layer) => {
-      if (layer.id.startsWith(mapboxSourceLayerIdPrefix)) {
-        console.debug('Clear layer:', layer.id);
-        map.removeLayer(layer.id);
-      }
-    });
-
-    Object.keys(map.getStyle().sources).forEach((sourceId) => {
-      if (sourceId.startsWith(mapboxSourceLayerIdPrefix)) {
-        console.log('Clear source:', sourceId);
-        map.removeSource(sourceId);
-      }
-    });
   };
 
   const items = [
@@ -112,7 +91,7 @@ export default function MenuDropdown() {
     {
       key: 'clear-editor',
       label: (
-        <a onClick={handleClearEditorAndMap}>
+        <a onClick={clearEditorAndMap}>
           Clear Node Map
         </a>
       ),

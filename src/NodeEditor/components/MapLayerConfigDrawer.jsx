@@ -4,12 +4,17 @@ import ColorPicker from './ColorPicker';
 import NumberSlider from './NumberSlider';
 import InputField from './InputField';
 
-export default function MapLayerConfigDrawer({ defaultValue, onChange }) {
+/**
+ *
+ * @param {*} props
+ * @param {string} props.sourceId This is readonly, generated from MapLayerV2Component
+ * @returns
+ */
+export default function MapLayerConfigDrawer({ sourceId, defaultValue, onChange }) {
   const [open, setOpen] = useState(false);
   const [lineColor, setLineColor] = useState(/* #000 */defaultValue.lineColor);
   const [lineWidth, setLineWidth] = useState(/* 1 */defaultValue.lineWidth);
   const [colorBaseOnField, setColorBaseOnField] = useState(/* '' */defaultValue.colorBaseOnField);
-  const [sourceId, setSourceId] = useState('');
 
   const showDrawer = () => {
     setOpen(true);
@@ -36,6 +41,11 @@ export default function MapLayerConfigDrawer({ defaultValue, onChange }) {
         Layer Config
       </Button>
       <Drawer title="Layer Config Drawer" placement="right" onClose={onClose} open={open}>
+        <span>
+          <b>sourceId:</b>
+          {' '}
+          {sourceId}
+        </span>
         <ColorPicker
           label="Color"
           value={lineColor}
@@ -43,7 +53,7 @@ export default function MapLayerConfigDrawer({ defaultValue, onChange }) {
         />
         <NumberSlider label="Line Width" value={lineWidth} onChange={handleChange('lineWidth')} />
         <InputField label="Color Base On Field" value={colorBaseOnField} onChange={handleChange('colorBaseOnField')} />
-        <InputField label="Source ID" value={sourceId} onChange={setSourceId} />
+
       </Drawer>
     </>
   );
