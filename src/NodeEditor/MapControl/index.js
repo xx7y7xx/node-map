@@ -2,8 +2,9 @@ import Rete from 'rete';
 import mapboxgl from 'mapbox-gl';
 import * as turf from '@turf/turf';
 
+import { imageIdArrow } from 'constants';
 import MapLayerConfigDrawer from '../components/MapLayerConfigDrawer';
-import { ARROW_URL, DEFAULT_LINE_COLOR, DEFAULT_LINE_WIDTH } from './constants';
+import { DEFAULT_LINE_COLOR, DEFAULT_LINE_WIDTH } from './constants';
 import { fillColor, isEmpty } from './helpers';
 
 /**
@@ -42,7 +43,6 @@ export default class MapControl extends Rete.Control {
     this.layerIdPoint = `${this.sourceId}LayerIdPoint`;
     this.layerIdFill = `${this.sourceId}LayerIdFill`;
     this.layerIdArrow = `${this.sourceId}LayerIdArrow`;
-    this.imageIdArrow = `${this.sourceId}ImageIdArrow`;
     this.hoveredStateId = null; // The id when mouse hover on
     // layer id list (used to remove all layers one by one)
     // this.layerIdList = [this.layerId, this.layerIdPoint, this.layerIdFill, this.layerIdArrow];
@@ -117,8 +117,8 @@ export default class MapControl extends Rete.Control {
         promoteId: 'id',
       });
 
-      console.debug('addLayer', this.layerId);
-      window.mapbox.addLayer({
+      console.debug('map.addLayer', this.layerId);
+      map.addLayer({
         id: this.layerId,
         type: 'line',
         source: this.sourceId,
@@ -132,8 +132,8 @@ export default class MapControl extends Rete.Control {
         },
       });
 
-      console.debug('addLayer', this.layerIdPoint);
-      window.mapbox.addLayer({
+      console.debug('map.addLayer', this.layerIdPoint);
+      map.addLayer({
         id: this.layerIdPoint,
         type: 'circle',
         source: this.sourceId,
@@ -143,8 +143,8 @@ export default class MapControl extends Rete.Control {
         },
       });
 
-      console.debug('addLayer', this.layerIdFill);
-      window.mapbox.addLayer({
+      console.debug('map.addLayer', this.layerIdFill);
+      map.addLayer({
         id: this.layerIdFill,
         type: 'fill',
         source: this.sourceId,
@@ -181,11 +181,7 @@ export default class MapControl extends Rete.Control {
       this.initImgLayer();
     };
 
-    if (!window.mapboxReady) {
-      map.on('load', loadSourceAndLayers);
-    } else {
-      loadSourceAndLayers();
-    }
+    loadSourceAndLayers();
   }
 
   initImgLayer() {
@@ -193,47 +189,32 @@ export default class MapControl extends Rete.Control {
 
     const map = window.mapbox;
 
-    // console.log('image exists?', map.hasImage(this.imageIdArrow));
+    // console.log('image exists?', map.hasImage(imageIdArrow));
     if (map.getLayer(this.layerIdArrow)) {
       console.warn('img layer already exists');
       return;
     }
 
-    // Another simple solution is just using icon from mapbox
-    // https://stackoverflow.com/questions/61918545/how-can-i-create-a-style-with-directional-lines-in-mapbox-studio
-    map.loadImage(ARROW_URL, (err, image) => {
-      if (err) {
-        console.error('Failed to map.loadImage()', err);
-        return;
-      }
-      map.addImage(this.imageIdArrow, image);
-      map.addLayer({
-        id: this.layerIdArrow,
-        type: 'symbol',
-        source: this.sourceId,
-        layout: {
-          'symbol-placement': 'line',
-          'symbol-spacing': 100,
-          'icon-allow-overlap': true,
-          // 'icon-ignore-placement': true,
-          'icon-image': this.imageIdArrow,
-          'icon-size': 1,
-          visibility: 'none', // 'visible' or 'none'
-        },
-      });
+    console.debug('map.addLayer', this.layerIdArrow);
+    map.addLayer({
+      id: this.layerIdArrow,
+      type: 'symbol',
+      source: this.sourceId,
+      layout: {
+        'symbol-placement': 'line',
+        'symbol-spacing': 100,
+        'icon-allow-overlap': true,
+        // 'icon-ignore-placement': true,
+        'icon-image': imageIdArrow,
+        'icon-size': 1,
+        visibility: 'none', // 'visible' or 'none'
+      },
     });
   }
 
   setAllData(geojson) {
-    if (window.mapboxReady) {
-      this._mapSetSource(geojson);
-      this._mapSetImgData(geojson);
-    } else {
-      window.mapbox.on('load', () => {
-        this._mapSetSource(geojson);
-        this._mapSetImgData(geojson);
-      });
-    }
+    this._mapSetSource(geojson);
+    this._mapSetImgData(geojson);
   }
 
   setEmptyData() {

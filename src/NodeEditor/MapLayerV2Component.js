@@ -54,7 +54,7 @@ export default class MapLayerV2Component extends Rete.Component {
   }
 
   worker(node, inputs) {
-    console.log('xxxx', inputs);
+    console.debug('MapLayerV2Component worker', node, inputs);
     // inputs[INPUT_KEY]=[] // no data
     // inputs[INPUT_KEY]=[[[103.8254528,1.2655414]]]
     const geojson = inputs[INPUT_KEY][0];
