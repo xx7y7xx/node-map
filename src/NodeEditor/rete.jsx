@@ -105,6 +105,13 @@ export async function createEditor(container) {
     },
   );
 
+  editor.on(
+    'noderemoved',
+    async (node/* Node */) => {
+      console.debug('noderemoved', node, node.id);
+    },
+  );
+
   editor.view.resize();
   editor.trigger('process');
   AreaPlugin.zoomAt(editor, editor.nodes);
