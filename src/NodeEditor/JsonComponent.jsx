@@ -6,6 +6,18 @@ export const objectSocket = new Rete.Socket('Object value');
 export const OUTPUT_KEY = 'json1';
 export const CONTROL_KEY = 'json2';
 
+/**
+ * Write JSON in textbox, then output to be used in next node
+ * Store data:
+ * ```json
+ * {
+ *   "json2": {
+ *     "obj": {"foo":"bar"}
+ *     "text": "{\"foo\":\"bar\"}"
+ *   }
+ * }
+ * ```
+ */
 export default class JsonComponent extends Rete.Component {
   constructor() {
     super('JSON'); // node title

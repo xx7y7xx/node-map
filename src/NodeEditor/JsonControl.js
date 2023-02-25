@@ -1,6 +1,17 @@
 import Rete from 'rete';
 import JsonEditor from './components/JsonEditor';
 
+/**
+ * Write JSON in textbox, store both thex original JSON text, and also the object parsed from JSON text
+ * Note that the text and object may not the same when text failed to parse to a valid object, e.g. text="{"
+ * Store data:
+ * ```json
+ * {
+ *   "obj": {"foo":"bar"}
+ *   "text": "{\"foo\":\"bar\"}"
+ * }
+ * ```
+ */
 export default class JsonControl extends Rete.Control {
   static component = JsonEditor;
 
