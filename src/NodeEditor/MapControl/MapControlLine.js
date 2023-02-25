@@ -19,7 +19,7 @@ import { fillColor, isEmpty } from './helpers';
  * }
  * ```
  */
-export default class MapControl extends Rete.Control {
+export default class MapControlLine extends Rete.Control {
   // @type {Node|null} In constructor this.parent is null
   // parent
 
@@ -36,16 +36,15 @@ export default class MapControl extends Rete.Control {
     super(key);
     this.emitter = emitter;
     this.key = key;
-    this.component = MapControl.component;
+    this.component = MapControlLine.component;
 
     this.sourceId = props.sourceId; // "nmSourceId123"
     this.layerId = `${this.sourceId}LayerId`;
     this.layerIdPoint = `${this.sourceId}LayerIdPoint`;
-    this.layerIdFill = `${this.sourceId}LayerIdFill`;
     this.layerIdArrow = `${this.sourceId}LayerIdArrow`;
     this.hoveredStateId = null; // The id when mouse hover on
     // layer id list (used to remove all layers one by one)
-    // this.layerIdList = [this.layerId, this.layerIdPoint, this.layerIdFill, this.layerIdArrow];
+    // this.layerIdList = [this.layerId, this.layerIdPoint, this.layerIdArrow];
 
     /**
      * IMPORTANT!
@@ -91,13 +90,11 @@ export default class MapControl extends Rete.Control {
     if (field === 'lineColor') {
       map.setPaintProperty(this.layerId, 'line-color', val);
       map.setPaintProperty(this.layerIdPoint, 'circle-color', val);
+      // map.setPaintProperty(this.layerId, 'fill-color', fillColor(val));
     }
     if (field === 'lineWidth') {
       map.setPaintProperty(this.layerId, 'line-width', val);
       map.setPaintProperty(this.layerIdPoint, 'circle-radius', val);
-    }
-    if (field === 'colorBaseOnField') {
-      map.setPaintProperty(this.layerIdFill, 'fill-color', fillColor(val));
     }
   }
 
@@ -109,7 +106,6 @@ export default class MapControl extends Rete.Control {
     // if (map.getLayer(this.layerId)) {
     //   map.removeLayer(this.layerId);
     //   map.removeLayer(this.layerIdPoint);
-    //   map.removeLayer(this.layerIdFill);
     //   map.removeLayer(this.layerIdArrow);
     // }
 
@@ -124,7 +120,7 @@ export default class MapControl extends Rete.Control {
     const map = window.mapbox;
 
     const loadSourceAndLayers = () => {
-      this.mouseEventHover(this.layerIdFill);
+      this.mouseEventHover(this.layerId);
       this.mouseEventPopup();
 
       console.debug('addSource', this.sourceId);
@@ -159,41 +155,6 @@ export default class MapControl extends Rete.Control {
         paint: {
           'circle-radius': defaultValue.lineWidth,
           'circle-color': defaultValue.lineColor,
-        },
-      });
-
-      console.debug('map.addLayer', this.layerIdFill);
-      map.addLayer({
-        id: this.layerIdFill,
-        type: 'fill',
-        source: this.sourceId,
-        paint: {
-          // 'fill-opacity': 0.5,
-          'fill-opacity': [
-            'case',
-            ['boolean', ['feature-state', 'hover'], false],
-            1,
-            0.5,
-          ],
-          // 'fill-color': lineColor,
-          // 'fill-color': ['interpolate', ['linear'], ['get', 'value'], 0, 'red', 10, 'yellow'],
-          // 'fill-color': [
-          //   'interpolate', ['linear'], ['get', 'value'],
-          //   // value ≤ 0 时，半径为 5
-          //   0, 'red',
-          //   // value ≥ 100 时，半径为 15
-          //   3, 'green',
-          // ],
-          // 'fill-color': [
-          //   'step',
-          //   ['get', ''],
-          //   '#EFFF85',
-          //   1, '#98F300',
-          //   2, '#37C508',
-          //   3, '#00CA8D',
-          //   4, '#0098A3',
-          // ],
-          'fill-color': fillColor(),
         },
       });
 
@@ -254,10 +215,10 @@ export default class MapControl extends Rete.Control {
       return;
     }
     map.setPaintProperty(this.layerId, 'line-color', lineColor);
+    // map.setPaintProperty(this.layerId, 'fill-color', fillColor(colorBaseOnField));
     map.setPaintProperty(this.layerId, 'line-width', lineWidth);
     map.setPaintProperty(this.layerIdPoint, 'circle-color', lineColor);
     map.setPaintProperty(this.layerIdPoint, 'circle-radius', lineWidth);
-    map.setPaintProperty(this.layerIdFill, 'fill-color', fillColor(colorBaseOnField));
   }
 
   _mapHideOrShowImgLayerAccordingToData(geojson) {

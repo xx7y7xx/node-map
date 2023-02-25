@@ -6,16 +6,16 @@ const jsonNodeExample = async () => {
   const { editor, allComponents } = window.___nodeMap;
 
   const jsonNode = await allComponents.jsonComponent.createNode({ [CONTROL_KEY]: { text: JSON.stringify(geojson, null, 2), obj: geojson } });
-  const mapLayerV3Node = await allComponents.mapLayerV3Component.createNode();
+  const mapLineLayerNode = await allComponents.mapLineLayerComponent.createNode();
 
-  mapLayerV3Node.position = [300, -100];
+  mapLineLayerNode.position = [300, -100];
 
   editor.addNode(jsonNode);
-  editor.addNode(mapLayerV3Node);
+  editor.addNode(mapLineLayerNode);
 
   editor.connect(
     jsonNode.outputs.get(OUTPUT_KEY),
-    mapLayerV3Node.inputs.get(INPUT_KEY),
+    mapLineLayerNode.inputs.get(INPUT_KEY),
   );
 
   editor.view.area.translate(100, 100);

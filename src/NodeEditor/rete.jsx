@@ -27,6 +27,7 @@ import MapGeoJsonComponent from './MapGeoJsonComponent';
 import MapLayerComponent from './MapLayerComponent';
 import MapLayerV2Component from './MapLayerV2Component';
 import MapLayerV3Component from './MapLayerV3Component';
+import MapLineLayerComponent from './MapLineLayerComponent';
 import TurfLineStringComponent from './TurfLineStringComponent';
 import {
   clearMap, loadConfig, reteContextMenuOptions,
@@ -48,6 +49,7 @@ export async function createEditor(container) {
   const mapLayerComponent = new MapLayerComponent();
   const mapLayerV2Component = new MapLayerV2Component();
   const mapLayerV3Component = new MapLayerV3Component();
+  const mapLineLayerComponent = new MapLineLayerComponent();
   const authComponent = new AuthComponent();
   const turfLineStringComponent = new TurfLineStringComponent();
   const uploadComponent = new UploadComponent();
@@ -78,6 +80,7 @@ export async function createEditor(container) {
     mapLayerComponent,
     mapLayerV2Component,
     mapLayerV3Component,
+    mapLineLayerComponent,
     authComponent,
     turfLineStringComponent,
   });

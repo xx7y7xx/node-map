@@ -8,7 +8,7 @@ export const MODAL = 'modal';
 export const INLINE = 'inline';
 
 /**
- * A layer config panel for mapbox line+fill(polygon) type layer
+ * A layer config panel for mapbox line type layer
  *
  * @param {*} props
  * @param {('modal'|'inline')} props.mode Default is "modal", will show a button, and click to show modal, another is "inline", will show all input box in node directly
