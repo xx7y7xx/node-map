@@ -28,7 +28,9 @@ import MapLayerComponent from './MapLayerComponent';
 import MapLayerV2Component from './MapLayerV2Component';
 import MapLayerV3Component from './MapLayerV3Component';
 import TurfLineStringComponent from './TurfLineStringComponent';
-import { loadConfig, reteContextMenuOptions } from './helpers';
+import {
+  clearMap, loadConfig, reteContextMenuOptions,
+} from './helpers';
 
 export async function createEditor(container) {
   const concatComponent = new ConcatComponent();
@@ -135,7 +137,16 @@ export function useRete() {
   useEffect(
     () => () => {
       if (editorRef.current) {
-        console.log('destroy');
+        console.log('destroy rete');
+
+        /**
+         * This is useful when in development, React hot reload and call MapControl:constructor again and will addSource with same id
+         * But because React hot reload will call this componentWillUnmount/useEffect thing
+         * So we can put the map clean code here to do something like GC
+         * This will remove all the mapbox map data created in MapControl and other controls
+         */
+        clearMap();
+
         editorRef.current.destroy();
       }
     },

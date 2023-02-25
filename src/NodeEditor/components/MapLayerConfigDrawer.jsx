@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Drawer } from 'antd';
 import ColorPicker from './ColorPicker';
 import NumberSlider from './NumberSlider';
@@ -11,12 +11,29 @@ import InputField from './InputField';
  * @returns
  */
 export default function MapLayerConfigDrawer({
-  visible, sourceId, defaultValue, onChange,
+  visible, sourceId, defaultValue, onChange, onCleanup,
 }) {
   const [open, setOpen] = useState(false);
   const [lineColor, setLineColor] = useState(/* #000 */defaultValue.lineColor);
   const [lineWidth, setLineWidth] = useState(/* 1 */defaultValue.lineWidth);
   const [colorBaseOnField, setColorBaseOnField] = useState(/* '' */defaultValue.colorBaseOnField);
+
+  /**
+   * Why react hot reload not call this?
+   *
+   * This should be called to remove mapbox layers created by MapControl,
+   * and prevent error of calling addSource same id more than once.
+   *
+   * But because this cannot be called, so use another way in rete.jsx:useRete to do clean work
+   */
+  useEffect(() => {
+    console.log('MapLayerConfigDrawer useEffect');
+    // Specify how to clean up after this effect:
+    return function cleanup() {
+      console.log('MapLayerConfigDrawer useEffect cleanup');
+      onCleanup();
+    };
+  });
 
   const showDrawer = () => {
     setOpen(true);

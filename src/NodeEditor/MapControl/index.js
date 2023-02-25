@@ -73,6 +73,7 @@ export default class MapControl extends Rete.Control {
       sourceId: this.sourceId,
       defaultValue,
       onChange: this.handleChange.bind(this),
+      onCleanup: this.handleCleanup.bind(this),
     };
 
     // this.mmaapp();
@@ -100,8 +101,25 @@ export default class MapControl extends Rete.Control {
     }
   }
 
+  // TODO no idea when this will be called
+  handleCleanup() {
+    console.log('MapControl handleCleanup');
+
+    // const map = window.mapbox;
+    // if (map.getLayer(this.layerId)) {
+    //   map.removeLayer(this.layerId);
+    //   map.removeLayer(this.layerIdPoint);
+    //   map.removeLayer(this.layerIdFill);
+    //   map.removeLayer(this.layerIdArrow);
+    // }
+
+    // if (map.getSource(this.sourceId)) {
+    //   map.removeSource(this.sourceId);
+    // }
+  }
+
   initMap(defaultValue) {
-    console.debug('initMap', defaultValue);
+    console.debug('initMap23456', defaultValue);
 
     const map = window.mapbox;
 

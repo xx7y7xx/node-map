@@ -43,6 +43,13 @@ export default function MenuDropdown() {
     fr.readAsText(document.getElementById('import-config-file').files[0]);
   };
 
+  const handleClean = () => {
+    if (window.confirm('Are you sure to clear all data?') !== true) { // eslint-disable-line no-alert
+      return;
+    }
+    clearEditorAndMap();
+  };
+
   const items = [
     {
       key: 'export',
@@ -91,7 +98,7 @@ export default function MenuDropdown() {
     {
       key: 'clear-editor',
       label: (
-        <a onClick={clearEditorAndMap}>
+        <a onClick={handleClean}>
           Clear Node Map
         </a>
       ),

@@ -130,15 +130,8 @@ export const downloadObjectAsJson = (exportJsonString, exportName) => {
 
 export const genSourceId = () => (`${mapboxSourceLayerIdPrefix}${Math.round(Math.random() * 1000)}`);
 
-export const clearEditorAndMap = () => {
-  if (window.confirm('Are you sure to clear all data?') !== true) { // eslint-disable-line no-alert
-    return;
-  }
-
-  const { editor } = window.___nodeMap;
+export const clearMap = () => {
   const map = window.mapbox;
-
-  editor.clear();
 
   map.getStyle().layers.forEach((layer) => {
     if (layer.id.startsWith(mapboxSourceLayerIdPrefix)) {
@@ -153,4 +146,11 @@ export const clearEditorAndMap = () => {
       map.removeSource(sourceId);
     }
   });
+};
+
+export const clearEditorAndMap = () => {
+  const { editor } = window.___nodeMap;
+
+  editor.clear();
+  clearMap();
 };

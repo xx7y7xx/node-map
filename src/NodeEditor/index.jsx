@@ -11,6 +11,7 @@ export default function NodeEditor({ style }) {
   return (
     <div className="nm-node-editor" style={style}>
       <div
+        className="nm-node-editor-container"
         ref={(ref) => ref && setContainer(ref)}
         style={{
           width: style.width, // eslint-disable-line react/prop-types
