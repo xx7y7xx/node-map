@@ -1,0 +1,27 @@
+.ant-slider {
+  margin: 0;
+}
+.ant-slider-horizontal {
+  height: 24px;
+}
+.ant-slider-track {
+  top: 0;
+  height: 24px !important;
+  background-color: #4772B3 !important;
+  border-radius: 4px !important;
+}
+.ant-slider-rail {
+  top: 0;
+  height: 24px !important;
+  background-color: #656565 !important;
+  border-radius: 4px !important;
+}
+.ant-slider-handle {
+  width: 24px !important;
+  height: 24px !important;
+  inset-block-start: 2px !important;
+}
+.ant-slider-handle::after {
+  box-shadow: 0 0 0 2px #4772B3 !important;
+  background-color: #4772B3 !important;
+}

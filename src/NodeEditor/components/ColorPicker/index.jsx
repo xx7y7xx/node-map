@@ -1,6 +1,8 @@
 import React from 'react';
 import { Col, Input, Row } from 'antd';
 
+import './styles.css';
+
 export default function ColorPicker({ label, value, onChange }) {
   return (
     <Row style={{
