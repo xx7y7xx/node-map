@@ -232,18 +232,18 @@ export default class MapControl extends Rete.Control {
   }
 
   setAllData(geojson) {
-    this._mapSetSource(geojson);
+    this._mapSetSourceData(geojson);
     this._mapHideOrShowImgLayerAccordingToData(geojson);
   }
 
   setAllDataWithStyle(geojson, lineCfg) {
-    this._mapSetSource(geojson);
+    this._mapSetSourceData(geojson);
     this._mapSetLayerStyle(lineCfg);
     this._mapHideOrShowImgLayerAccordingToData(geojson);
   }
 
   setEmptyData() {
-    this._mapSetSource(turf.featureCollection([]));
+    this._mapSetSourceData(turf.featureCollection([]));
   }
 
   _mapSetLayerStyle({ lineColor, lineWidth, colorBaseOnField }) {
@@ -285,7 +285,7 @@ export default class MapControl extends Rete.Control {
     map.setLayoutProperty(this.layerIdArrow, 'visibility', 'visible');
   }
 
-  _mapSetSource(geojson) {
+  _mapSetSourceData(geojson) {
     const map = window.mapbox;
 
     // Fly map to data

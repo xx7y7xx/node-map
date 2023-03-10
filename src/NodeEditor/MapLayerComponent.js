@@ -10,13 +10,12 @@ const INPUT_KEY = 'sourceId';
 const CONTROL_KEY = 'colorControl';
 const CONTROL_KEY_LINE_WIDTH = 'lineWidthWidth';
 
-export default class MapLayerComponent extends Rete.Component {
+/**
+ * https://docs.mapbox.com/mapbox-gl-js/style-spec/layers/#line
+ */
+export default class MapLayerComponent extends Rete.Component { // TODO rename to "LineLayerComponent"
   constructor() {
-    super('Map Layer Node');
-
-    window.mapbox.on('load', () => {
-      this.mapReady = true;
-    });
+    super('LineLayer');
   }
 
   builder(node) {
@@ -31,7 +30,7 @@ export default class MapLayerComponent extends Rete.Component {
   worker(node, inputs) {
     const sourceId = inputs[INPUT_KEY][0];
     const layerId = `${sourceId}layerId`;
-    const layerIdPoint = `${sourceId}layerIdPoint`;
+    // const layerIdPoint = `${sourceId}layerIdPoint`;
 
     if (!sourceId) {
       // no data input, maybe link disconnect
@@ -40,31 +39,25 @@ export default class MapLayerComponent extends Rete.Component {
       if (map.getLayer(layerId)) {
         map.removeLayer(layerId);
       }
-      if (map.getLayer(layerIdPoint)) {
-        map.removeLayer(layerIdPoint);
-      }
+      // if (map.getLayer(layerIdPoint)) {
+      //   map.removeLayer(layerIdPoint);
+      // }
       return;
     }
 
-    if (this.mapReady) {
-      this.addOrUpdateLayer(sourceId, node);
-    } else {
-      window.mapbox.on('load', () => {
-        this.addOrUpdateLayer(sourceId, node);
-      });
-    }
+    this.addOrUpdateLayer(sourceId, node);
   }
 
   addOrUpdateLayer(sourceId, node) {
     const map = window.mapbox;
     const layerId = `${sourceId}layerId`;
-    const layerIdPoint = `${sourceId}layerIdPoint`;
+    // const layerIdPoint = `${sourceId}layerIdPoint`;
 
     if (map.getLayer(layerId)) {
       map.setPaintProperty(layerId, 'line-color', node.data[CONTROL_KEY]);
       map.setPaintProperty(layerId, 'line-width', node.data[CONTROL_KEY_LINE_WIDTH]);
-      map.setPaintProperty(layerIdPoint, 'circle-color', node.data[CONTROL_KEY]);
-      map.setPaintProperty(layerIdPoint, 'circle-radius', node.data[CONTROL_KEY_LINE_WIDTH]);
+      // map.setPaintProperty(layerIdPoint, 'circle-color', node.data[CONTROL_KEY]);
+      // map.setPaintProperty(layerIdPoint, 'circle-radius', node.data[CONTROL_KEY_LINE_WIDTH]);
     } else {
       window.mapbox.addLayer({
         // id: LAYER_ID,
@@ -81,16 +74,16 @@ export default class MapLayerComponent extends Rete.Component {
         },
       });
 
-      window.mapbox.addLayer({
-        // id: LAYER_ID_POINT,
-        id: layerIdPoint,
-        type: 'circle',
-        source: sourceId,
-        paint: {
-          'circle-radius': node.data[CONTROL_KEY_LINE_WIDTH],
-          'circle-color': node.data[CONTROL_KEY],
-        },
-      });
+      // window.mapbox.addLayer({
+      //   // id: LAYER_ID_POINT,
+      //   id: layerIdPoint,
+      //   type: 'circle',
+      //   source: sourceId,
+      //   paint: {
+      //     'circle-radius': node.data[CONTROL_KEY_LINE_WIDTH],
+      //     'circle-color': node.data[CONTROL_KEY],
+      //   },
+      // });
     }
   }
 }

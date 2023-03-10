@@ -13,13 +13,18 @@ const CONTROL_KEY = 'mapGeoJsonControl';
 // const SOURCE_ID = 'nm-line-string-source';
 const OUTPUT_KEY = 'sourceId';
 
-export default class MapGeoJsonComponent extends Rete.Component {
+/**
+ * API - https://docs.mapbox.com/mapbox-gl-js/api/sources/#geojsonsource
+ * Input1: GeoJSON
+ * Input2: URL
+ * Output1: sourceId1
+ * Output2: sourceId2
+ * ...
+ * Output<N>: sourceId<N>
+ */
+export default class MapGeoJsonComponent extends Rete.Component { // TODO rename to "GeoJSONSourceComponent"
   constructor() {
-    super('Map GeoJSON Node');
-
-    window.mapbox.on('load', () => {
-      this.mapReady = true;
-    });
+    super('GeoJSONSource');
   }
 
   builder(node) {
@@ -105,13 +110,7 @@ export default class MapGeoJsonComponent extends Rete.Component {
       outputs[`${OUTPUT_KEY}${i}`] = this.getSourceId(node);
     }
 
-    if (this.mapReady) {
-      this.addOrUpdateSource(geojson, node);
-    } else {
-      window.mapbox.on('load', () => {
-        this.addOrUpdateSource(geojson, node);
-      });
-    }
+    this.addOrUpdateSource(geojson, node);
   }
 
   // update text in preview control
@@ -124,6 +123,7 @@ export default class MapGeoJsonComponent extends Rete.Component {
   }
 
   addOrUpdateSource(geojson, node) {
+    console.debug('MapGeoJsonComponent addOrUpdateSource', geojson, node);
     const map = window.mapbox;
 
     const sourceData = {

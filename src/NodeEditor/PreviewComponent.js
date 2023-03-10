@@ -16,10 +16,6 @@ export default class PreviewComponent extends Rete.Component {
 
     const map = window.mapbox;
 
-    window.mapbox.on('load', () => {
-      this.mapReady = true;
-    });
-
     window.mapbox.on('sourcedata', (e) => {
       if (e.sourceId !== SOURCE_ID || !e.isSourceLoaded) return;
       const f = map.querySourceFeatures(SOURCE_ID);
@@ -68,12 +64,8 @@ export default class PreviewComponent extends Rete.Component {
             .setLngLat(feature)
             .addTo(window.mapbox);
           this.markers.push(marker);
-        } else if (this.mapReady) {
-          this.renderLineString(feature);
         } else {
-          window.mapbox.on('load', () => {
-            this.renderLineString(feature);
-          });
+          this.renderLineString(feature);
         }
       });
     console.debug('[PreviewComponent] fit bounds to markers');

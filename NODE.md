@@ -20,11 +20,15 @@ Example: https://xx7y7xx.github.io/node-map/?load=/node-map/examples/deps.json
 
 Call turfjs to convert array of coordinates into GeoJSON.
 
-## Map GeoJSON Node
+## GeoJSONSource Node
 
 Create a GeoJSON data source in mapbox.
 
-## Map Layer Node
+## LineLayer Node
+
+Render map with input data source ID.
+
+## CircleLayer Node
 
 Render map with input data source ID.
 

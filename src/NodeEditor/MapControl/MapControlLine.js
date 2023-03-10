@@ -39,12 +39,12 @@ export default class MapControlLine extends Rete.Control {
     this.component = MapControlLine.component;
 
     this.sourceId = props.sourceId; // "nmSourceId123"
-    this.layerId = `${this.sourceId}LayerId`;
-    this.layerIdPoint = `${this.sourceId}LayerIdPoint`;
-    this.layerIdArrow = `${this.sourceId}LayerIdArrow`;
+    this.layerIdLine = `${this.sourceId}LayerIdLine`;
+    // this.layerIdPoint = `${this.sourceId}LayerIdPoint`;
+    // this.layerIdArrow = `${this.sourceId}LayerIdArrow`;
     this.hoveredStateId = null; // The id when mouse hover on
     // layer id list (used to remove all layers one by one)
-    // this.layerIdList = [this.layerId, this.layerIdPoint, this.layerIdArrow];
+    // this.layerIdList = [this.layerIdLine, this.layerIdPoint, this.layerIdArrow];
 
     /**
      * IMPORTANT!
@@ -88,13 +88,13 @@ export default class MapControlLine extends Rete.Control {
 
     const map = window.mapbox;
     if (field === 'lineColor') {
-      map.setPaintProperty(this.layerId, 'line-color', val);
-      map.setPaintProperty(this.layerIdPoint, 'circle-color', val);
-      // map.setPaintProperty(this.layerId, 'fill-color', fillColor(val));
+      map.setPaintProperty(this.layerIdLine, 'line-color', val);
+      // map.setPaintProperty(this.layerIdPoint, 'circle-color', val);
+      // map.setPaintProperty(this.layerIdLine, 'fill-color', fillColor(val));
     }
     if (field === 'lineWidth') {
-      map.setPaintProperty(this.layerId, 'line-width', val);
-      map.setPaintProperty(this.layerIdPoint, 'circle-radius', val);
+      map.setPaintProperty(this.layerIdLine, 'line-width', val);
+      // map.setPaintProperty(this.layerIdPoint, 'circle-radius', val);
     }
   }
 
@@ -103,9 +103,9 @@ export default class MapControlLine extends Rete.Control {
     console.log('MapControl handleCleanup');
 
     // const map = window.mapbox;
-    // if (map.getLayer(this.layerId)) {
-    //   map.removeLayer(this.layerId);
-    //   map.removeLayer(this.layerIdPoint);
+    // if (map.getLayer(this.layerIdLine)) {
+    //   map.removeLayer(this.layerIdLine);
+    // map.removeLayer(this.layerIdPoint);
     //   map.removeLayer(this.layerIdArrow);
     // }
 
@@ -120,7 +120,7 @@ export default class MapControlLine extends Rete.Control {
     const map = window.mapbox;
 
     const loadSourceAndLayers = () => {
-      this.mouseEventHover(this.layerId);
+      this.mouseEventHover(this.layerIdLine);
       this.mouseEventPopup();
 
       console.debug('addSource', this.sourceId);
@@ -132,9 +132,9 @@ export default class MapControlLine extends Rete.Control {
         promoteId: 'id',
       });
 
-      console.debug('map.addLayer', this.layerId);
+      console.debug('map.addLayer', this.layerIdLine);
       map.addLayer({
-        id: this.layerId,
+        id: this.layerIdLine,
         type: 'line',
         source: this.sourceId,
         layout: {
@@ -147,16 +147,16 @@ export default class MapControlLine extends Rete.Control {
         },
       });
 
-      console.debug('map.addLayer', this.layerIdPoint);
-      map.addLayer({
-        id: this.layerIdPoint,
-        type: 'circle',
-        source: this.sourceId,
-        paint: {
-          'circle-radius': defaultValue.lineWidth,
-          'circle-color': defaultValue.lineColor,
-        },
-      });
+      // console.debug('map.addLayer', this.layerIdPoint);
+      // map.addLayer({
+      //   id: this.layerIdPoint,
+      //   type: 'circle',
+      //   source: this.sourceId,
+      //   paint: {
+      //     'circle-radius': defaultValue.lineWidth,
+      //     'circle-color': defaultValue.lineColor,
+      //   },
+      // });
 
       this.initImgLayer();
     };
@@ -169,84 +169,84 @@ export default class MapControlLine extends Rete.Control {
 
     const map = window.mapbox;
 
-    // console.log('image exists?', map.hasImage(imageIdArrow));
-    if (map.getLayer(this.layerIdArrow)) {
-      console.warn('img layer already exists');
-      return;
-    }
+    // // console.log('image exists?', map.hasImage(imageIdArrow));
+    // if (map.getLayer(this.layerIdArrow)) {
+    //   console.warn('img layer already exists');
+    //   return;
+    // }
 
-    console.debug('map.addLayer', this.layerIdArrow);
-    map.addLayer({
-      id: this.layerIdArrow,
-      type: 'symbol',
-      source: this.sourceId,
-      layout: {
-        'symbol-placement': 'line',
-        'symbol-spacing': 100,
-        'icon-allow-overlap': true,
-        // 'icon-ignore-placement': true,
-        'icon-image': imageIdArrow,
-        'icon-size': 1,
-        visibility: 'none', // 'visible' or 'none'
-      },
-    });
+    // console.debug('map.addLayer', this.layerIdArrow);
+    // map.addLayer({
+    //   id: this.layerIdArrow,
+    //   type: 'symbol',
+    //   source: this.sourceId,
+    //   layout: {
+    //     'symbol-placement': 'line',
+    //     'symbol-spacing': 100,
+    //     'icon-allow-overlap': true,
+    //     // 'icon-ignore-placement': true,
+    //     'icon-image': imageIdArrow,
+    //     'icon-size': 1,
+    //     visibility: 'none', // 'visible' or 'none'
+    //   },
+    // });
   }
 
   setAllData(geojson) {
-    this._mapSetSource(geojson);
+    this._mapSetSourceData(geojson);
     this._mapHideOrShowImgLayerAccordingToData(geojson);
   }
 
   setAllDataWithStyle(geojson, lineCfg) {
-    this._mapSetSource(geojson);
+    this._mapSetSourceData(geojson);
     this._mapSetLayerStyle(lineCfg);
     this._mapHideOrShowImgLayerAccordingToData(geojson);
   }
 
   setEmptyData() {
-    this._mapSetSource(turf.featureCollection([]));
+    this._mapSetSourceData(turf.featureCollection([]));
   }
 
   _mapSetLayerStyle({ lineColor, lineWidth, colorBaseOnField }) {
     const map = window.mapbox;
 
-    if (!map.getLayer(this.layerId)) {
-      console.warn('_mapSetLayerStyle layer not ready', this.layerId);
+    if (!map.getLayer(this.layerIdLine)) {
+      console.warn('_mapSetLayerStyle layer not ready', this.layerIdLine);
       return;
     }
-    map.setPaintProperty(this.layerId, 'line-color', lineColor);
-    // map.setPaintProperty(this.layerId, 'fill-color', fillColor(colorBaseOnField));
-    map.setPaintProperty(this.layerId, 'line-width', lineWidth);
-    map.setPaintProperty(this.layerIdPoint, 'circle-color', lineColor);
-    map.setPaintProperty(this.layerIdPoint, 'circle-radius', lineWidth);
+    map.setPaintProperty(this.layerIdLine, 'line-color', lineColor);
+    // map.setPaintProperty(this.layerIdLine, 'fill-color', fillColor(colorBaseOnField));
+    map.setPaintProperty(this.layerIdLine, 'line-width', lineWidth);
+    // map.setPaintProperty(this.layerIdPoint, 'circle-color', lineColor);
+    // map.setPaintProperty(this.layerIdPoint, 'circle-radius', lineWidth);
   }
 
   _mapHideOrShowImgLayerAccordingToData(geojson) {
     const map = window.mapbox;
 
-    if (!map.getLayer(this.layerIdArrow)) {
-      console.debug('img layer not ready yet');
-      return;
-    }
+    // if (!map.getLayer(this.layerIdArrow)) {
+    //   console.debug('img layer not ready yet');
+    //   return;
+    // }
 
-    // * When first feature in collection is not line string, then no show arrow image
-    // * When the feature is not line string, then no show arrow image
-    if (geojson.type === 'FeatureCollection') {
-      if (geojson.features[0].geometry.type !== 'LineString') {
-        map.setLayoutProperty(this.layerIdArrow, 'visibility', 'none');
-        return;
-      }
-    } else if (geojson.type === 'Feature') {
-      if (geojson.geometry.type !== 'LineString') {
-        map.setLayoutProperty(this.layerIdArrow, 'visibility', 'none');
-        return;
-      }
-    }
+    // // * When first feature in collection is not line string, then no show arrow image
+    // // * When the feature is not line string, then no show arrow image
+    // if (geojson.type === 'FeatureCollection') {
+    //   if (geojson.features[0].geometry.type !== 'LineString') {
+    //     map.setLayoutProperty(this.layerIdArrow, 'visibility', 'none');
+    //     return;
+    //   }
+    // } else if (geojson.type === 'Feature') {
+    //   if (geojson.geometry.type !== 'LineString') {
+    //     map.setLayoutProperty(this.layerIdArrow, 'visibility', 'none');
+    //     return;
+    //   }
+    // }
 
-    map.setLayoutProperty(this.layerIdArrow, 'visibility', 'visible');
+    // map.setLayoutProperty(this.layerIdArrow, 'visibility', 'visible');
   }
 
-  _mapSetSource(geojson) {
+  _mapSetSourceData(geojson) {
     const map = window.mapbox;
 
     // Fly map to data
@@ -316,36 +316,36 @@ export default class MapControlLine extends Rete.Control {
       closeOnClick: false,
     });
 
-    // Show popup when mouse on a circle
-    map.on('mouseenter', this.layerIdPoint, (e) => {
-      // Change the cursor style as a UI indicator.
-      map.getCanvas().style.cursor = 'pointer';
+    // // Show popup when mouse on a circle
+    // map.on('mouseenter', this.layerIdPoint, (e) => {
+    //   // Change the cursor style as a UI indicator.
+    //   map.getCanvas().style.cursor = 'pointer';
 
-      if (e.features[0].geometry.type !== 'Point') {
-        // Only show popup for Point
-        return;
-      }
+    //   if (e.features[0].geometry.type !== 'Point') {
+    //     // Only show popup for Point
+    //     return;
+    //   }
 
-      // Copy coordinates array.
-      const coordinates = e.features[0].geometry.coordinates.slice();
-      const { description } = e.features[0].properties;
+    //   // Copy coordinates array.
+    //   const coordinates = e.features[0].geometry.coordinates.slice();
+    //   const { description } = e.features[0].properties;
 
-      // Ensure that if the map is zoomed out such that multiple
-      // copies of the feature are visible, the popup appears
-      // over the copy being pointed to.
-      while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-        coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-      }
+    //   // Ensure that if the map is zoomed out such that multiple
+    //   // copies of the feature are visible, the popup appears
+    //   // over the copy being pointed to.
+    //   while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+    //     coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+    //   }
 
-      // Populate the popup and set its coordinates
-      // based on the feature found.
-      popup.setLngLat(coordinates).setHTML(description).addTo(map);
-    });
+    //   // Populate the popup and set its coordinates
+    //   // based on the feature found.
+    //   popup.setLngLat(coordinates).setHTML(description).addTo(map);
+    // });
 
-    map.on('mouseleave', this.layerIdPoint, () => {
-      map.getCanvas().style.cursor = '';
-      popup.remove();
-    });
+    // map.on('mouseleave', this.layerIdPoint, () => {
+    //   map.getCanvas().style.cursor = '';
+    //   popup.remove();
+    // });
   }
 
   // /**

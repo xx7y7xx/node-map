@@ -11,10 +11,6 @@ export default class MapMarkersComponent extends Rete.Component {
   constructor() {
     super('MapMarkers');
     this.markers = [];
-
-    window.mapbox.on('load', () => {
-      this.mapReady = true;
-    });
   }
 
   builder(node) {
