@@ -4,6 +4,7 @@ import { stringSocket } from './UploadCsvComponent';
 import ColorPickerControl from './ColorPickerControl';
 import SliderControl from './SliderControl';
 
+const KEY = 'LineLayer';
 // const LAYER_ID = 'nm-line-string-layer';
 // const LAYER_ID_POINT = 'nm-point-layer';
 export const INPUT_KEY = 'sourceId';
@@ -13,10 +14,12 @@ export const CONTROL_KEY_LINE_WIDTH = 'lineWidthWidth';
 /**
  * https://docs.mapbox.com/mapbox-gl-js/style-spec/layers/#line
  */
-export default class MapLayerComponent extends Rete.Component { // TODO rename to "LineLayerComponent"
+export default class LineLayerComponent extends Rete.Component { // TODO rename to "LineLayerComponent"
   constructor() {
-    super('LineLayer');
+    super(KEY);
   }
+
+  static key = KEY;
 
   builder(node) {
     const input = new Rete.Input(INPUT_KEY, 'sourceId', stringSocket);
@@ -28,7 +31,7 @@ export default class MapLayerComponent extends Rete.Component { // TODO rename t
   }
 
   worker(node, inputs) {
-    console.debug('MapLayerComponent worker', inputs);
+    console.debug('LineLayerComponent worker', inputs);
     const sourceId = inputs[INPUT_KEY][0];
     const layerId = `${sourceId}layerId`;
     // const layerIdPoint = `${sourceId}layerIdPoint`;
@@ -60,7 +63,7 @@ export default class MapLayerComponent extends Rete.Component { // TODO rename t
       // map.setPaintProperty(layerIdPoint, 'circle-color', node.data[CONTROL_KEY]);
       // map.setPaintProperty(layerIdPoint, 'circle-radius', node.data[CONTROL_KEY_LINE_WIDTH]);
     } else {
-      console.debug('MapLayerComponent addLayer');
+      console.debug('LineLayerComponent addLayer');
       window.mapbox.addLayer({
         // id: LAYER_ID,
         id: layerId,

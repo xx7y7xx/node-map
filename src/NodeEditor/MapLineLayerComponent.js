@@ -20,7 +20,7 @@ const CONTROL_KEY_MAP = 'controlKeyMap';
 
 /**
  * Show all the input controls and other controls on the right side Drawer component
- * MapLineLayerComponent = MapGeoJsonComponent + MapLayerComponent
+ * MapLineLayerComponent = MapGeoJsonComponent + LineLayerComponent
  * The data stored in this node:
  * ```json
  * {

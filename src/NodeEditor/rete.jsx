@@ -24,7 +24,7 @@ import RemoteDataComponent from './RemoteDataComponent';
 import MapComponent from './MapComponent';
 import MapMarkersComponent from './MapMarkersComponent';
 import MapGeoJsonComponent from './MapGeoJsonComponent';
-import MapLayerComponent from './MapLayerComponent';
+import LineLayerComponent from './LineLayerComponent';
 import CircleLayerComponent from './CircleLayerComponent';
 import MapLayerV2Component from './MapLayerV2Component';
 import MapLayerV3Component from './MapLayerV3Component';
@@ -47,7 +47,6 @@ export async function createEditor(container) {
   const mapComponent = new MapComponent();
   const mapMarkersComponent = new MapMarkersComponent();
   const mapGeoJsonComponent = new MapGeoJsonComponent();
-  const mapLayerComponent = new MapLayerComponent();
   const circleLayerComponent = new CircleLayerComponent();
   const mapLayerV2Component = new MapLayerV2Component();
   const mapLayerV3Component = new MapLayerV3Component();
@@ -79,7 +78,7 @@ export async function createEditor(container) {
     mapComponent,
     mapMarkersComponent,
     mapGeoJsonComponent,
-    mapLayerComponent,
+    [LineLayerComponent.key]: new LineLayerComponent(),
     circleLayerComponent,
     mapLayerV2Component,
     mapLayerV3Component,
@@ -91,6 +90,7 @@ export async function createEditor(container) {
   Object.keys(allComponents).forEach((key) => {
     editor.register(allComponents[key]);
     engine.register(allComponents[key]);
+    console.debug('createEditor components', editor.components);
   });
 
   await loadConfig(editor);
