@@ -18,6 +18,10 @@ function ExampleModal({ open, onOk, onCancel }) {
       <Row>
         <Col span={6}><button type="button" onClick={handleExample('simple')}>Example 1</button></Col>
         <Col span={6}><button type="button" onClick={handleExample('lineString')}>Line String</button></Col>
+        <Col span={6}>
+          <button type="button" onClick={handleExample('Add a polygon to a map using a GeoJSON source')}>Add a polygon to a map using a GeoJSON source</button>
+          <a href="https://docs.mapbox.com/mapbox-gl-js/example/geojson-polygon/">Example Link</a>
+        </Col>
       </Row>
     </Modal>
 

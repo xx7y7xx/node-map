@@ -12,6 +12,7 @@
 * A plain text node with only information, no input and no output
 * Syntax highlighting in FAQ markdown
 * Eval code node, code show incorrect when scroll to bottom
+* Follow mapbox api document to add more examples
 
 ## Development
 

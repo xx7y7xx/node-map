@@ -8,10 +8,11 @@ import ButtonControl from './ButtonControl';
 import InputControl from './InputControl';
 import { genSourceId } from './helpers';
 
-const CONTROL_KEY_SOURCE_ID = 'controlKeySourceId';
+export const INPUT_KEY = 'json';
+export const CONTROL_KEY_SOURCE_ID = 'controlKeySourceId';
 const CONTROL_KEY = 'mapGeoJsonControl';
 // const SOURCE_ID = 'nm-line-string-source';
-const OUTPUT_KEY = 'sourceId';
+export const OUTPUT_KEY = 'sourceId';
 
 /**
  * API - https://docs.mapbox.com/mapbox-gl-js/api/sources/#geojsonsource
@@ -33,7 +34,7 @@ export default class MapGeoJsonComponent extends Rete.Component { // TODO rename
 
     let index = 0;
 
-    const input = new Rete.Input('json', 'GeoJSON', objectSocket);
+    const input = new Rete.Input(INPUT_KEY, 'GeoJSON', objectSocket);
     const output = new Rete.Output(OUTPUT_KEY, 'sourceId', stringSocket);
 
     const onClick = () => {
@@ -97,7 +98,7 @@ export default class MapGeoJsonComponent extends Rete.Component { // TODO rename
   worker(node, inputs, outputs) {
     // inputs.json=[] // no data
     // inputs.json=[[[103.8254528,1.2655414]]]
-    const geojson = inputs.json[0];
+    const geojson = inputs[INPUT_KEY][0];
 
     if (!geojson) {
       // no data input, maybe link disconnect

@@ -6,9 +6,9 @@ import SliderControl from './SliderControl';
 
 // const LAYER_ID = 'nm-line-string-layer';
 // const LAYER_ID_POINT = 'nm-point-layer';
-const INPUT_KEY = 'sourceId';
-const CONTROL_KEY = 'colorControl';
-const CONTROL_KEY_LINE_WIDTH = 'lineWidthWidth';
+export const INPUT_KEY = 'sourceId';
+export const CONTROL_KEY = 'colorControl';
+export const CONTROL_KEY_LINE_WIDTH = 'lineWidthWidth';
 
 /**
  * https://docs.mapbox.com/mapbox-gl-js/style-spec/layers/#line
@@ -28,6 +28,7 @@ export default class MapLayerComponent extends Rete.Component { // TODO rename t
   }
 
   worker(node, inputs) {
+    console.debug('MapLayerComponent worker', inputs);
     const sourceId = inputs[INPUT_KEY][0];
     const layerId = `${sourceId}layerId`;
     // const layerIdPoint = `${sourceId}layerIdPoint`;
@@ -59,6 +60,7 @@ export default class MapLayerComponent extends Rete.Component { // TODO rename t
       // map.setPaintProperty(layerIdPoint, 'circle-color', node.data[CONTROL_KEY]);
       // map.setPaintProperty(layerIdPoint, 'circle-radius', node.data[CONTROL_KEY_LINE_WIDTH]);
     } else {
+      console.debug('MapLayerComponent addLayer');
       window.mapbox.addLayer({
         // id: LAYER_ID,
         id: layerId,
