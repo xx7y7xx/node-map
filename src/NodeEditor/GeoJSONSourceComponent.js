@@ -53,12 +53,24 @@ export default class GeoJSONSourceComponent extends Rete.Component {
       if (e.sourceId !== this.getSourceId(node) || !e.isSourceLoaded) return;
       const fs = window.mapbox.querySourceFeatures(this.getSourceId(node));
       if (fs.length === 0) return;
-      console.debug('zoom to features', fs);
-      const bbox = turf.bbox({
-        type: 'FeatureCollection',
-        features: fs,
-      });
-      window.mapbox.fitBounds(bbox, { padding: 20 });
+
+      console.debug('zoom to features, fitBounds', fs);
+
+      // has animation
+      // const bbox = turf.bbox({
+      //   type: 'FeatureCollection',
+      //   features: fs,
+      // });
+      // window.mapbox.fitBounds(bbox, { padding: 20, linear: true });
+
+      // no animation
+      // window.mapbox.jumpTo({
+      //   center: turf.center({
+      //     type: 'FeatureCollection',
+      //     features: fs,
+      //   }).geometry.coordinates,
+      //   zoom: 5,
+      // });
     });
 
     return node;

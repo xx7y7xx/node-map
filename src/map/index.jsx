@@ -14,7 +14,7 @@ export default function Map({ width, onMapboxReady }) {
       container: mapboxElRef.current,
       // style: 'mapbox://styles/mapbox/light-v10',
       style: 'mapbox://styles/mapbox/dark-v10', // dark theme
-      center: [103.7041631, 1.3139961],
+      // center: [103.7041631, 1.3139961], // MapComponent will call setCenter to init the map center
       zoom: 9,
     };
     const c = JSON.parse(localStorage.getItem('nm_mapbox_transform_request') || '[]');

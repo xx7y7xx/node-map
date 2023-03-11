@@ -45,7 +45,6 @@ export async function createEditor(container) {
   const csvToJsonComponent = new CsvToJsonComponent();
   const uploadCsvComponent = new UploadCsvComponent();
   const remoteDataComponent = new RemoteDataComponent();
-  const mapComponent = new MapComponent();
   const mapMarkersComponent = new MapMarkersComponent();
   const circleLayerComponent = new CircleLayerComponent();
   const mapLayerV2Component = new MapLayerV2Component();
@@ -75,7 +74,7 @@ export async function createEditor(container) {
     csvToJsonComponent,
     uploadCsvComponent,
     remoteDataComponent,
-    mapComponent,
+    [MapComponent]: new MapComponent(),
     mapMarkersComponent,
     [GeoJSONSourceComponent.key]: new GeoJSONSourceComponent(),
     [LineLayerComponent.key]: new LineLayerComponent(),
