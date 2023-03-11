@@ -23,19 +23,12 @@ export default async function Example() {
   console.debug('Example components get', editor.components.get(LineLayerComponent.key));
   const m = editor.components;
   const lineLayerNode = await m.get(LineLayerComponent.key).createNode({ [MAP_LINE_LAYER_CONTROL_KEY]: '#ec1313', [CONTROL_KEY_LINE_WIDTH]: 3 });
-  // const mapLayerNode = await c[LineLayerComponent.key].createNode({ [MAP_LINE_LAYER_CONTROL_KEY]: '#ec1313', [CONTROL_KEY_LINE_WIDTH]: 3 });
-  const fillLayerNode = await m.get(FillLayerComponent.key).createNode({ [FILL_LAYER_CONTROL_KEY]: '#ec1313' });
+  const fillLayerNode = await m.get(FillLayerComponent.key).createNode({ [FILL_LAYER_CONTROL_KEY]: '#cccccc' });
 
   jsonNode.position = [0, 250];
   mapGeoJsonNode.position = [270, 250];
   lineLayerNode.position = [600, 50];
   fillLayerNode.position = [600, 350];
-
-  const index = 0;
-  const geojsonSourceOutputKey = `${MAP_GEOJSON_OUTPUT_KEY}${index}`;
-  mapGeoJsonNode.addOutput(
-    new Rete.Output(geojsonSourceOutputKey, geojsonSourceOutputKey, stringSocket),
-  );
 
   editor.addNode(mapNode);
   editor.addNode(jsonNode);
@@ -52,7 +45,7 @@ export default async function Example() {
     lineLayerNode.inputs.get(MAP_LINE_LAYER_INPUT_KEY),
   );
   editor.connect(
-    mapGeoJsonNode.outputs.get(geojsonSourceOutputKey),
+    mapGeoJsonNode.outputs.get(MAP_GEOJSON_OUTPUT_KEY),
     fillLayerNode.inputs.get(MAP_FILL_LAYER_INPUT_KEY),
   );
 

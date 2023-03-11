@@ -1,27 +1,28 @@
 import Rete from 'rete';
 import * as turf from '@turf/turf';
 
-// import TextControl from './TextControl';
 import { objectSocket } from './JsonComponent';
 import { stringSocket } from './UploadCsvComponent';
-import ButtonControl from './ButtonControl';
 import InputControl from './InputControl';
 import { genSourceId } from './helpers';
 
 export const INPUT_KEY = 'json';
 export const CONTROL_KEY_SOURCE_ID = 'controlKeySourceId';
 const CONTROL_KEY = 'mapGeoJsonControl';
-// const SOURCE_ID = 'nm-line-string-source';
 export const OUTPUT_KEY = 'sourceId';
 
 /**
  * API - https://docs.mapbox.com/mapbox-gl-js/api/sources/#geojsonsource
  * Input1: GeoJSON
  * Input2: URL
- * Output1: sourceId1
- * Output2: sourceId2
- * ...
- * Output<N>: sourceId<N>
+ * Output: sourceId
+ *
+ * The data stored in this node
+ * ```json
+ * {
+ *   "<CONTROL_KEY_SOURCE_ID>": "sourceId123"
+ * }
+ * ```
  */
 export default class MapGeoJsonComponent extends Rete.Component { // TODO rename to "GeoJSONSourceComponent"
   constructor() {
@@ -29,47 +30,21 @@ export default class MapGeoJsonComponent extends Rete.Component { // TODO rename
   }
 
   builder(node) {
+    console.debug('MapGeoJsonComponent builder', node);
     if (!this.nodeIdMap) this.nodeIdMap = {};
     this.nodeIdMap[node.id] = node;
-
-    let index = 0;
 
     const input = new Rete.Input(INPUT_KEY, 'GeoJSON', objectSocket);
     const output = new Rete.Output(OUTPUT_KEY, 'sourceId', stringSocket);
 
-    const onClick = () => {
-      node.addOutput(
-        new Rete.Output(`${OUTPUT_KEY}${index}`, `${OUTPUT_KEY}${index}`, stringSocket),
-      );
-      index += 1;
-      node.data.outputCount += 1;
-      node.update(); // Rerender MapGeoJsonComponent
-    };
-
     node
       .addInput(input)
       .addOutput(output)
-      .addControl(new InputControl(this.editor, CONTROL_KEY_SOURCE_ID, node, { label: 'sourceId' }))
-      // .addControl(new TextControl(this.editor, CONTROL_KEY, node, true))
-      .addControl(
-        new ButtonControl(this.editor, 'addOutputSocket', {
-          text: 'Add Output Socket',
-          onClick,
-        }),
-      );
+      .addControl(new InputControl(this.editor, CONTROL_KEY_SOURCE_ID, node, { label: 'sourceId' }));
 
     // Initial the source ID input box with value
     if (this.getSourceId(node) === null || this.getSourceId(node) === undefined) {
       this.setSourceId(node, genSourceId());
-    }
-
-    if (node.data.outputCount > 0) {
-      for (let i = 0; i < node.data.outputCount; i += 1) {
-        node.addOutput(
-          new Rete.Output(`${OUTPUT_KEY}${i}`, `${OUTPUT_KEY}${i}`, stringSocket),
-        );
-        index += 1;
-      }
     }
 
     window.mapbox.on('sourcedata', (e) => {
@@ -108,9 +83,6 @@ export default class MapGeoJsonComponent extends Rete.Component { // TODO rename
     }
 
     outputs[OUTPUT_KEY] = this.getSourceId(node);
-    for (let i = 0; i < node.data.outputCount; i += 1) {
-      outputs[`${OUTPUT_KEY}${i}`] = this.getSourceId(node);
-    }
 
     this.addOrUpdateSource(geojson, node);
   }
