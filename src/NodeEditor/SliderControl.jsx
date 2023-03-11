@@ -10,7 +10,7 @@ export default class SliderControl extends Rete.Control {
     this.key = key;
     this.component = SliderControl.component;
 
-    const initial = node.data[key] || 1;
+    const initial = node.data[key] || props.defaultValue || 1;
 
     node.data[key] = initial;
     this.props = {

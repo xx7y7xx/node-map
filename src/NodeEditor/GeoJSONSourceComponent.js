@@ -8,8 +8,8 @@ import { genSourceId } from './helpers';
 
 const KEY = 'GeoJSONSource';
 export const INPUT_KEY = 'json';
-export const CONTROL_KEY_SOURCE_ID = 'controlKeySourceId';
 export const OUTPUT_KEY = 'sourceId';
+export const CONTROL_KEY_SOURCE_ID = 'controlKeySourceId';
 
 /**
  * API - https://docs.mapbox.com/mapbox-gl-js/api/sources/#geojsonsource

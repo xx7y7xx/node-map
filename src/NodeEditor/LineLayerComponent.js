@@ -5,11 +5,9 @@ import ColorPickerControl from './ColorPickerControl';
 import SliderControl from './SliderControl';
 
 const KEY = 'LineLayer';
-// const LAYER_ID = 'nm-line-string-layer';
-// const LAYER_ID_POINT = 'nm-point-layer';
 export const INPUT_KEY = 'sourceId';
-export const CONTROL_KEY = 'colorControl';
-export const CONTROL_KEY_LINE_WIDTH = 'lineWidthWidth';
+// export const CONTROL_KEY = 'colorControl';
+// export const CONTROL_KEY_LINE_WIDTH = 'lineWidthWidth';
 
 /**
  * https://docs.mapbox.com/mapbox-gl-js/style-spec/layers/#line
@@ -26,8 +24,8 @@ export default class LineLayerComponent extends Rete.Component {
 
     return node
       .addInput(input)
-      .addControl(new ColorPickerControl(this.editor, CONTROL_KEY, node, { label: 'color' }))
-      .addControl(new SliderControl(this.editor, CONTROL_KEY_LINE_WIDTH, node, { label: 'line-width' }));
+      .addControl(new ColorPickerControl(this.editor, 'line-color', node, { label: 'color' }))
+      .addControl(new SliderControl(this.editor, 'line-width', node, { label: 'line-width' }));
   }
 
   worker(node, inputs) {
@@ -53,8 +51,8 @@ export default class LineLayerComponent extends Rete.Component {
     const layerId = `${sourceId}lineLayerId`;
 
     if (map.getLayer(layerId)) {
-      map.setPaintProperty(layerId, 'line-color', node.data[CONTROL_KEY]);
-      map.setPaintProperty(layerId, 'line-width', node.data[CONTROL_KEY_LINE_WIDTH]);
+      map.setPaintProperty(layerId, 'line-color', node.data['line-color']);
+      map.setPaintProperty(layerId, 'line-width', node.data['line-width']);
     } else {
       console.debug('LineLayerComponent addLayer');
       window.mapbox.addLayer({
@@ -67,21 +65,10 @@ export default class LineLayerComponent extends Rete.Component {
           'line-cap': 'round',
         },
         paint: {
-          'line-color': node.data[CONTROL_KEY],
-          'line-width': node.data[CONTROL_KEY_LINE_WIDTH],
+          'line-color': node.data['line-color'],
+          'line-width': node.data['line-width'],
         },
       });
-
-      // window.mapbox.addLayer({
-      //   // id: LAYER_ID_POINT,
-      //   id: layerIdPoint,
-      //   type: 'circle',
-      //   source: sourceId,
-      //   paint: {
-      //     'circle-radius': node.data[CONTROL_KEY_LINE_WIDTH],
-      //     'circle-color': node.data[CONTROL_KEY],
-      //   },
-      // });
     }
   }
 }

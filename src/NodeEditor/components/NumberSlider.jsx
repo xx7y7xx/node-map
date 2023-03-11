@@ -1,7 +1,9 @@
 import React from 'react';
 import { Slider, InputNumber } from 'antd';
 
-export default function NumberSlider({ label, value, onChange }) {
+export default function NumberSlider({
+  label, min = 1, max = 20, step, value, onChange,
+}) {
   return (
     <div
       style={{ position: 'relative', margin: '4px 0px' }}
@@ -13,11 +15,12 @@ export default function NumberSlider({ label, value, onChange }) {
 
       <div>
         <Slider
-          min={1}
-          max={20}
+          min={min}
+          max={max}
+          step={step}
           defaultValue={1}
           value={value}
-          onChange={(val) => onChange(val)}
+          onChange={onChange}
         />
       </div>
       <div style={{
