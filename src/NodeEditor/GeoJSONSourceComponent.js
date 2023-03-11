@@ -6,9 +6,9 @@ import { stringSocket } from './UploadCsvComponent';
 import InputControl from './InputControl';
 import { genSourceId } from './helpers';
 
+const KEY = 'GeoJSONSource';
 export const INPUT_KEY = 'json';
 export const CONTROL_KEY_SOURCE_ID = 'controlKeySourceId';
-const CONTROL_KEY = 'mapGeoJsonControl';
 export const OUTPUT_KEY = 'sourceId';
 
 /**
@@ -24,13 +24,15 @@ export const OUTPUT_KEY = 'sourceId';
  * }
  * ```
  */
-export default class MapGeoJsonComponent extends Rete.Component { // TODO rename to "GeoJSONSourceComponent"
+export default class GeoJSONSourceComponent extends Rete.Component {
   constructor() {
-    super('GeoJSONSource');
+    super(KEY);
   }
 
+  static key = KEY;
+
   builder(node) {
-    console.debug('MapGeoJsonComponent builder', node);
+    console.debug('GeoJSONSourceComponent builder', node);
     if (!this.nodeIdMap) this.nodeIdMap = {};
     this.nodeIdMap[node.id] = node;
 
@@ -71,14 +73,13 @@ export default class MapGeoJsonComponent extends Rete.Component { // TODO rename
   }
 
   worker(node, inputs, outputs) {
-    console.debug('MapGeoJsonComponent worker', node, inputs, outputs);
+    console.debug('GeoJSONSourceComponent worker', node, inputs, outputs);
     // inputs.json=[] // no data
     // inputs.json=[[[103.8254528,1.2655414]]]
     const geojson = inputs[INPUT_KEY][0];
 
     if (!geojson) {
       // no data input, maybe link disconnect
-      this.updateText(node, '');
       return;
     }
 
@@ -87,25 +88,14 @@ export default class MapGeoJsonComponent extends Rete.Component { // TODO rename
     this.addOrUpdateSource(geojson, node);
   }
 
-  // update text in preview control
-  updateText(node, text) {
-    this.editor.nodes
-      .find((n) => n.id === node.id)
-      .controls
-      .get(CONTROL_KEY)
-      ?.setValue(text);
-  }
-
   addOrUpdateSource(geojson, node) {
-    console.debug('MapGeoJsonComponent addOrUpdateSource', geojson, node);
+    console.debug('GeoJSONSourceComponent addOrUpdateSource', geojson, node);
     const map = window.mapbox;
 
     const sourceData = {
       type: 'geojson',
       data: geojson,
     };
-
-    this.updateText(node, `${JSON.stringify(sourceData)}`);
 
     const mpSource = map.getSource(this.getSourceId(node));
     if (mpSource) {

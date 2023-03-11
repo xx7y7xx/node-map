@@ -1,9 +1,6 @@
-import Rete from 'rete';
-
 import FillLayerComponent, { INPUT_KEY as MAP_FILL_LAYER_INPUT_KEY, CONTROL_KEY as FILL_LAYER_CONTROL_KEY } from 'NodeEditor/FillLayerComponent';
-import { stringSocket } from 'NodeEditor/UploadCsvComponent';
 import { CONTROL_KEY, OUTPUT_KEY } from '../../JsonComponent';
-import { INPUT_KEY as MAP_GEOJSON_INPUT_KEY, OUTPUT_KEY as MAP_GEOJSON_OUTPUT_KEY, CONTROL_KEY_SOURCE_ID } from '../../MapGeoJsonComponent';
+import GeoJSONSourceComponent, { INPUT_KEY as MAP_GEOJSON_INPUT_KEY, OUTPUT_KEY as MAP_GEOJSON_OUTPUT_KEY, CONTROL_KEY_SOURCE_ID } from '../../GeoJSONSourceComponent';
 import LineLayerComponent, {
   INPUT_KEY as MAP_LINE_LAYER_INPUT_KEY, CONTROL_KEY as MAP_LINE_LAYER_CONTROL_KEY, CONTROL_KEY_LINE_WIDTH,
 } from '../../LineLayerComponent';
@@ -13,39 +10,39 @@ export default async function Example() {
   const { editor, allComponents: c } = window.___nodeMap;
 
   const {
-    mapComponent, jsonComponent, mapGeoJsonComponent,
+    mapComponent, jsonComponent,
   } = c;
+  const m = editor.components;
 
   const mapNode = await mapComponent.createNode();
   const jsonNode = await jsonComponent.createNode({ [CONTROL_KEY]: { text: JSON.stringify(geojson, null, 2), obj: geojson } });
-  const mapGeoJsonNode = await mapGeoJsonComponent.createNode({ [CONTROL_KEY_SOURCE_ID]: 'maine' });
+  const geojsonSourceNode = await m.get(GeoJSONSourceComponent.key).createNode({ [CONTROL_KEY_SOURCE_ID]: 'maine' });
 
   console.debug('Example components get', editor.components.get(LineLayerComponent.key));
-  const m = editor.components;
   const lineLayerNode = await m.get(LineLayerComponent.key).createNode({ [MAP_LINE_LAYER_CONTROL_KEY]: '#ec1313', [CONTROL_KEY_LINE_WIDTH]: 3 });
   const fillLayerNode = await m.get(FillLayerComponent.key).createNode({ [FILL_LAYER_CONTROL_KEY]: '#cccccc' });
 
   jsonNode.position = [0, 250];
-  mapGeoJsonNode.position = [270, 250];
+  geojsonSourceNode.position = [270, 250];
   lineLayerNode.position = [600, 50];
   fillLayerNode.position = [600, 350];
 
   editor.addNode(mapNode);
   editor.addNode(jsonNode);
-  editor.addNode(mapGeoJsonNode);
+  editor.addNode(geojsonSourceNode);
   editor.addNode(lineLayerNode);
   editor.addNode(fillLayerNode);
 
   editor.connect(
     jsonNode.outputs.get(OUTPUT_KEY),
-    mapGeoJsonNode.inputs.get(MAP_GEOJSON_INPUT_KEY),
+    geojsonSourceNode.inputs.get(MAP_GEOJSON_INPUT_KEY),
   );
   editor.connect(
-    mapGeoJsonNode.outputs.get(MAP_GEOJSON_OUTPUT_KEY),
+    geojsonSourceNode.outputs.get(MAP_GEOJSON_OUTPUT_KEY),
     lineLayerNode.inputs.get(MAP_LINE_LAYER_INPUT_KEY),
   );
   editor.connect(
-    mapGeoJsonNode.outputs.get(MAP_GEOJSON_OUTPUT_KEY),
+    geojsonSourceNode.outputs.get(MAP_GEOJSON_OUTPUT_KEY),
     fillLayerNode.inputs.get(MAP_FILL_LAYER_INPUT_KEY),
   );
 

@@ -19,7 +19,7 @@ const CONTROL_KEY_MAP = 'controlKeyMap';
 
 /**
  * Show all the input control and other controls on the node
- * MapLayerV2Component = MapGeoJsonComponent + LineLayerComponent
+ * MapLayerV2Component = GeoJSONSourceComponent + LineLayerComponent
  */
 export default class MapLayerV2Component extends Rete.Component {
   constructor() {
