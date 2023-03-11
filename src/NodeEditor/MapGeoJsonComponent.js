@@ -43,7 +43,7 @@ export default class MapGeoJsonComponent extends Rete.Component { // TODO rename
       );
       index += 1;
       node.data.outputCount += 1;
-      node.update(); // Rerender ConcatComponent
+      node.update(); // Rerender MapGeoJsonComponent
     };
 
     node
@@ -96,6 +96,7 @@ export default class MapGeoJsonComponent extends Rete.Component { // TODO rename
   }
 
   worker(node, inputs, outputs) {
+    console.debug('MapGeoJsonComponent worker', node, inputs, outputs);
     // inputs.json=[] // no data
     // inputs.json=[[[103.8254528,1.2655414]]]
     const geojson = inputs[INPUT_KEY][0];

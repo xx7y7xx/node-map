@@ -25,6 +25,7 @@ import MapComponent from './MapComponent';
 import MapMarkersComponent from './MapMarkersComponent';
 import MapGeoJsonComponent from './MapGeoJsonComponent';
 import LineLayerComponent from './LineLayerComponent';
+import FillLayerComponent from './FillLayerComponent';
 import CircleLayerComponent from './CircleLayerComponent';
 import MapLayerV2Component from './MapLayerV2Component';
 import MapLayerV3Component from './MapLayerV3Component';
@@ -79,6 +80,7 @@ export async function createEditor(container) {
     mapMarkersComponent,
     mapGeoJsonComponent,
     [LineLayerComponent.key]: new LineLayerComponent(),
+    [FillLayerComponent.key]: new FillLayerComponent(),
     circleLayerComponent,
     mapLayerV2Component,
     mapLayerV3Component,

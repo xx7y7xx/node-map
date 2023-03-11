@@ -14,7 +14,7 @@ export const CONTROL_KEY_LINE_WIDTH = 'lineWidthWidth';
 /**
  * https://docs.mapbox.com/mapbox-gl-js/style-spec/layers/#line
  */
-export default class LineLayerComponent extends Rete.Component { // TODO rename to "LineLayerComponent"
+export default class LineLayerComponent extends Rete.Component {
   constructor() {
     super(KEY);
   }
@@ -33,8 +33,7 @@ export default class LineLayerComponent extends Rete.Component { // TODO rename 
   worker(node, inputs) {
     console.debug('LineLayerComponent worker', inputs);
     const sourceId = inputs[INPUT_KEY][0];
-    const layerId = `${sourceId}layerId`;
-    // const layerIdPoint = `${sourceId}layerIdPoint`;
+    const layerId = `${sourceId}lineLayerId`;
 
     if (!sourceId) {
       // no data input, maybe link disconnect
@@ -43,9 +42,6 @@ export default class LineLayerComponent extends Rete.Component { // TODO rename 
       if (map.getLayer(layerId)) {
         map.removeLayer(layerId);
       }
-      // if (map.getLayer(layerIdPoint)) {
-      //   map.removeLayer(layerIdPoint);
-      // }
       return;
     }
 
@@ -54,14 +50,11 @@ export default class LineLayerComponent extends Rete.Component { // TODO rename 
 
   addOrUpdateLayer(sourceId, node) {
     const map = window.mapbox;
-    const layerId = `${sourceId}layerId`;
-    // const layerIdPoint = `${sourceId}layerIdPoint`;
+    const layerId = `${sourceId}lineLayerId`;
 
     if (map.getLayer(layerId)) {
       map.setPaintProperty(layerId, 'line-color', node.data[CONTROL_KEY]);
       map.setPaintProperty(layerId, 'line-width', node.data[CONTROL_KEY_LINE_WIDTH]);
-      // map.setPaintProperty(layerIdPoint, 'circle-color', node.data[CONTROL_KEY]);
-      // map.setPaintProperty(layerIdPoint, 'circle-radius', node.data[CONTROL_KEY_LINE_WIDTH]);
     } else {
       console.debug('LineLayerComponent addLayer');
       window.mapbox.addLayer({
