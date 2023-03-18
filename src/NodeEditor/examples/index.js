@@ -4,7 +4,7 @@ import geojsonPolygon from './geojsonPolygon';
 
 const examples = {
   simple: jsonNode,
-  lineString,
+  'Add a line to a map using a GeoJSON source': lineString,
   'Add a polygon to a map using a GeoJSON source': geojsonPolygon,
 };
 

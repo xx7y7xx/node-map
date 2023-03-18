@@ -1,13 +1,14 @@
-import { CONTROL_KEY, OUTPUT_KEY } from '../../JsonComponent';
+import JsonComponent, { CONTROL_KEY, OUTPUT_KEY } from '../../JsonComponent';
 import { INPUT_KEY } from '../../MapLayerV3Component';
 import geojson from './data.json';
 
 const jsonNodeExample = async () => {
   const { editor, allComponents } = window.___nodeMap;
+  const m = editor.components;
 
   editor.clear();
 
-  const jsonNode = await allComponents.jsonComponent.createNode({ [CONTROL_KEY]: { text: JSON.stringify(geojson, null, 2), obj: geojson } });
+  const jsonNode = await m.get(JsonComponent.key).createNode({ [CONTROL_KEY]: { text: JSON.stringify(geojson, null, 2), obj: geojson } });
   const mapLayerV3Node = await allComponents.mapLayerV3Component.createNode();
 
   mapLayerV3Node.position = [300, -100];

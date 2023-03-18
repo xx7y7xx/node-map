@@ -3,6 +3,7 @@
 import { message } from 'antd';
 import axios from 'axios';
 import { mapboxSourceLayerIdPrefix, LS_KEY_NODE_EDITOR_DATA } from 'constants';
+import JsonComponent from './JsonComponent';
 import mockJsonData from './mockData.json';
 
 const defaultFnStr = `return input.data.map((item) => (
@@ -11,9 +12,10 @@ const defaultFnStr = `return input.data.map((item) => (
 
 export const createSampleNodes = async () => {
   const { editor, allComponents } = window.___nodeMap;
+  const m = editor.components;
 
   const uploadNode = await allComponents.uploadComponent.createNode({ upload: {} });
-  const jsonNode = await allComponents.jsonComponent.createNode({
+  const jsonNode = await m.get(JsonComponent.key).createNode({
     json: mockJsonData,
   });
   const transformNode = await allComponents.transformComponent.createNode();

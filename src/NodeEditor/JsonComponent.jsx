@@ -3,6 +3,7 @@ import JsonControl from './JsonControl';
 
 export const objectSocket = new Rete.Socket('Object value');
 
+export const KEY = 'JSON';
 export const OUTPUT_KEY = 'json1';
 export const CONTROL_KEY = 'json2';
 
@@ -20,8 +21,10 @@ export const CONTROL_KEY = 'json2';
  */
 export default class JsonComponent extends Rete.Component {
   constructor() {
-    super('JSON'); // node title
+    super(KEY); // node title
   }
+
+  static key = KEY;
 
   builder(node) {
     return node

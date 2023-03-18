@@ -37,7 +37,6 @@ import {
 
 export async function createEditor(container) {
   const concatComponent = new ConcatComponent();
-  const jsonComponent = new JsonComponent();
   const transformComponent = new TransformComponent();
   const evalCodeComponent = new EvalCodeComponent();
   const globalComponent = new GlobalComponent();
@@ -65,7 +64,7 @@ export async function createEditor(container) {
 
   const allComponents = ({
     uploadComponent,
-    jsonComponent,
+    [JsonComponent.key]: new JsonComponent(),
     transformComponent,
     evalCodeComponent,
     globalComponent,

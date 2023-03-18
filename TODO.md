@@ -13,6 +13,7 @@
 * Syntax highlighting in FAQ markdown
 * Eval code node, code show incorrect when scroll to bottom
 * Follow mapbox api document to add more examples
+* Support short color code like "#ccc" in LineLayerComponent (and other components)
 
 ## Development
 
