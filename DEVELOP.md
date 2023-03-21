@@ -17,3 +17,7 @@ $ mv node_modules/.cache/default-development /tmp
 * Write markdow in `src/NodeEditor/FooBarFaq.md` for `FooBarComponent.js` node
 * Register this markdow in `src/NodeEditor/Faq.jsx`
 * Use it in retejs component `.addControl(new FaqControl(this.editor, 'faq', node, {path: 'FooBarFaq'}))`
+
+## See also
+
+* [https://maputnik.github.io/](https://maputnik.github.io/)

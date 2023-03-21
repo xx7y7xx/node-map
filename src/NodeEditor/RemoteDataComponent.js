@@ -67,13 +67,20 @@ export default class RemoteDataComponent extends Rete.Component {
       url: this.node.data.inputControlUrl,
       headers,
       transformResponse: (data, responseHeaders) => {
-        if (responseHeaders && responseHeaders['content-type'] === 'text/csv') {
-          const result = Papa.parse(data, {
-            header: true,
-            dynamicTyping: true,
-          });
-          return result.data;
+        if (responseHeaders) {
+          if (responseHeaders['content-type'] === 'text/csv') {
+            const result = Papa.parse(data, {
+              header: true,
+              dynamicTyping: true,
+            });
+            return result.data;
+          }
+          if (responseHeaders['content-type'] === 'application/json; charset=utf-8') {
+            return JSON.parse(data);
+          }
+          console.error('RemoteDataComponent unknown response content type', responseHeaders);
         }
+
         return data;
       },
     }).then((response) => {
