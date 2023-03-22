@@ -3,61 +3,6 @@
 import { message } from 'antd';
 import axios from 'axios';
 import { mapboxSourceLayerIdPrefix, LS_KEY_NODE_EDITOR_DATA } from 'constants';
-import JsonComponent from './JsonComponent';
-import mockJsonData from './mockData.json';
-
-const defaultFnStr = `return input.data.map((item) => (
-  [item.point.Lng, item.point.Lat]
-))`;
-
-export const createSampleNodes = async () => {
-  const { editor, allComponents } = window.___nodeMap;
-  const m = editor.components;
-
-  const uploadNode = await allComponents.uploadComponent.createNode({ upload: {} });
-  const jsonNode = await m.get(JsonComponent.key).createNode({
-    json: mockJsonData,
-  });
-  const transformNode = await allComponents.transformComponent.createNode();
-  const evalCodeNode = await allComponents.evalCodeComponent.createNode({ fnStr: defaultFnStr }); // eslint-disable-line max-len
-  const concatNode = await allComponents.concatComponent.createNode({ inputCount: 2 });
-  const previewNode = await allComponents.previewComponent.createNode();
-
-  uploadNode.position = [0, 500];
-  jsonNode.position = [0, 0];
-  transformNode.position = [500, 0];
-  evalCodeNode.position = [500, 500];
-  concatNode.position = [1000, 0];
-  previewNode.position = [1500, 0];
-
-  editor.addNode(uploadNode);
-  editor.addNode(jsonNode);
-  editor.addNode(transformNode);
-  editor.addNode(evalCodeNode);
-  editor.addNode(concatNode);
-  editor.addNode(previewNode);
-
-  editor.connect(
-    jsonNode.outputs.get('json'),
-    transformNode.inputs.get('json'),
-  );
-  editor.connect(
-    uploadNode.outputs.get('json'),
-    evalCodeNode.inputs.get('json'),
-  );
-  editor.connect(
-    transformNode.outputs.get('json'),
-    concatNode.inputs.get('json0'),
-  );
-  editor.connect(
-    evalCodeNode.outputs.get('json'),
-    concatNode.inputs.get('json1'),
-  );
-  editor.connect(
-    concatNode.outputs.get('json'),
-    previewNode.inputs.get('json'),
-  );
-};
 
 export const getUrlParams = () => new Proxy(new URLSearchParams(window.location.search), {
   get: (searchParams, prop) => searchParams.get(prop),
