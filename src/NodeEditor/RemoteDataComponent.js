@@ -5,13 +5,12 @@ import { message } from 'antd';
 
 import RemoteDataControl from './RemoteDataControl';
 import InputControl from './InputControl';
-import RequestHeadersControl from './RequestHeadersControl';
 import DivControl from './DivControl';
 import { objectSocket } from './JsonComponent';
 
+const INPUT_KEY_HEADERS = 'inputKeyHeaders';
 const CONTROL_KEY_URL = 'inputControlUrl';
 const CONTROL_KEY = 'remoteDataControl';
-const CONTROL_KEY_REQUEST_HEADERS = 'headers';
 const CONTROL_KEY_ERROR_MESSAGE = 'errorMessage';
 const OUTPUT_KEY = 'csv';
 
@@ -22,9 +21,10 @@ export default class RemoteDataComponent extends Rete.Component {
 
   builder(node) {
     this.node = node;
+    const input = new Rete.Input(INPUT_KEY_HEADERS, 'Headers', objectSocket);
     node
+      .addInput(input)
       .addControl(new InputControl(this.editor, CONTROL_KEY_URL, node, { label: 'url' }))
-      .addControl(new RequestHeadersControl(this.editor, CONTROL_KEY_REQUEST_HEADERS, node))
       .addControl(new RemoteDataControl(this.editor, CONTROL_KEY, {
         onClick: this.handleClick.bind(this),
       }))
@@ -38,6 +38,7 @@ export default class RemoteDataComponent extends Rete.Component {
   }
 
   worker(node, inputs, outputs) {
+    this.nmInputs = inputs;
     outputs[OUTPUT_KEY] = node.data[CONTROL_KEY];
   }
 
@@ -49,17 +50,7 @@ export default class RemoteDataComponent extends Rete.Component {
   }
 
   handleClick() {
-    // Get from Auth Node
-    let headersJSON = window.NM_REQUEST_HEADERS;
-
-    if (this.node.data[CONTROL_KEY_REQUEST_HEADERS]) {
-      headersJSON = this.node.data[CONTROL_KEY_REQUEST_HEADERS];
-    }
-
-    let headers = {};
-    if (headersJSON) {
-      headers = JSON.parse(headersJSON);
-    }
+    const headers = this.nmInputs[INPUT_KEY_HEADERS][0] || {};
 
     axios({
       method: 'get',

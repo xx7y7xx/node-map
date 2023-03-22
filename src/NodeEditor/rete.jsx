@@ -10,7 +10,6 @@ import AreaPlugin from 'rete-area-plugin';
 import ContextMenuPlugin from 'rete-context-menu-plugin';
 
 import { LS_KEY_NODE_EDITOR_DATA, NODE_EDITOR_ID } from '../constants';
-import AuthComponent from './AuthComponent';
 import ConcatComponent from './ConcatComponent';
 import CsvToJsonComponent from './CsvToJsonComponent';
 import JsonComponent from './JsonComponent';
@@ -49,7 +48,6 @@ export async function createEditor(container) {
   const mapLayerV2Component = new MapLayerV2Component();
   const mapLayerV3Component = new MapLayerV3Component();
   const mapLineLayerComponent = new MapLineLayerComponent();
-  const authComponent = new AuthComponent();
   const turfLineStringComponent = new TurfLineStringComponent();
   const uploadComponent = new UploadComponent();
 
@@ -82,7 +80,6 @@ export async function createEditor(container) {
     mapLayerV2Component,
     mapLayerV3Component,
     mapLineLayerComponent,
-    authComponent,
     turfLineStringComponent,
   });
   window.___nodeMap.allComponents = allComponents;
