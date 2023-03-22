@@ -118,7 +118,12 @@ export async function createEditor(container) {
 
   editor.view.resize();
   editor.trigger('process');
-  AreaPlugin.zoomAt(editor, editor.nodes);
+
+  // wait then zoom, prevent node with/height is 0 when calc bbox
+  // AreaPlugin.zoomAt(editor, editor.nodes);
+  setTimeout(() => {
+    AreaPlugin.zoomAt(editor, editor.nodes);
+  }, 100);
 
   return editor;
 }
