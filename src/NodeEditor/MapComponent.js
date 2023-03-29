@@ -1,13 +1,14 @@
 import Rete from 'rete';
-import * as turf from '@turf/turf';
 
-import InputControl from './InputControl';
+import InputNumberControl from './InputNumberControl';
 import SliderControl from './SliderControl';
+import SelectControl from './SelectControl';
 
 const KEY = 'Map Node';
 export const CONTROL_KEY_LNG = 'inputControlLng';
 export const CONTROL_KEY_LAT = 'inputControlLat';
 export const CONTROL_KEY_ZOOM = 'inputControlZoom';
+export const CONTROL_KEY_PROJECTION = 'inputControlProjection';
 const defaultZoom = 9;
 
 const updateValues = (node) => (event) => {
@@ -28,6 +29,19 @@ export default class MapComponent extends Rete.Component {
   static key = KEY;
 
   builder(node) {
+    console.debug('MapComponent builder', node);
+
+    // init node data
+    if (node.data[CONTROL_KEY_LNG] === undefined) {
+      node.data[CONTROL_KEY_LNG] = 0;
+    }
+    if (node.data[CONTROL_KEY_LAT] === undefined) {
+      node.data[CONTROL_KEY_LAT] = 0;
+    }
+    if (node.data[CONTROL_KEY_ZOOM] === undefined) {
+      node.data[CONTROL_KEY_ZOOM] = defaultZoom;
+    }
+
     window.mapbox.on('dragend', updateValues(node));
     window.mapbox.on('zoomend', updateValues(node));
 
@@ -37,14 +51,19 @@ export default class MapComponent extends Rete.Component {
     // });
     window.mapbox.setCenter([node.data[CONTROL_KEY_LNG], node.data[CONTROL_KEY_LAT]]);
     window.mapbox.setZoom(node.data[CONTROL_KEY_ZOOM]);
+    window.mapbox.setProjection(node.data[CONTROL_KEY_PROJECTION]);
 
+    // https://docs.mapbox.com/mapbox-gl-js/style-spec/projection/
+    const projections = ['albers', 'equalEarth', 'equirectangular', 'lambertConformalConic', 'mercator', 'naturalEarth', 'winkelTripel', 'globe'].map((item) => ({ value: item, label: item }));
     return node
-      .addControl(new InputControl(this.editor, CONTROL_KEY_LNG, node, { label: 'lng' }))
-      .addControl(new InputControl(this.editor, CONTROL_KEY_LAT, node, { label: 'lat' }))
-      .addControl(new SliderControl(this.editor, CONTROL_KEY_ZOOM, node, { label: 'zoom' }));
+      .addControl(new InputNumberControl(this.editor, CONTROL_KEY_LNG, node, { label: 'lng' }))
+      .addControl(new InputNumberControl(this.editor, CONTROL_KEY_LAT, node, { label: 'lat' }))
+      .addControl(new SliderControl(this.editor, CONTROL_KEY_ZOOM, node, { label: 'zoom' }))
+      .addControl(new SelectControl(this.editor, CONTROL_KEY_PROJECTION, node, { label: 'projection', style: { width: '150px' }, options: projections }));
   }
 
   worker(node, inputs, outputs) {
+    console.debug('MapComponent worker', node, inputs, outputs);
     // outputs[OUTPUT_KEY] = node.data[CONTROL_KEY];
 
     // if (window.mapbox) {
@@ -54,5 +73,8 @@ export default class MapComponent extends Rete.Component {
     //     zoom: node.data[CONTROL_KEY_ZOOM] || defaultZoom,
     //   });
     // }
+
+    window.mapbox.setZoom(node.data[CONTROL_KEY_ZOOM]);
+    window.mapbox.setProjection(node.data[CONTROL_KEY_PROJECTION]);
   }
 }

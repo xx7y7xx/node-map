@@ -17,6 +17,7 @@ function ExampleModal({ open, onOk, onCancel }) {
     <Modal title="Example Modal" open={open} onOk={onOk} onCancel={onCancel}>
       <Row>
         <Col span={6}><button type="button" onClick={handleExample('simple')}>Example 1</button></Col>
+        <Col span={6}><button type="button" onClick={handleExample('Display a web map using an alternate projection')}>Display a web map using an alternate projection</button></Col>
         <Col span={6}><button type="button" onClick={handleExample('Add a line to a map using a GeoJSON source')}>Add a line to a map using a GeoJSON source</button></Col>
         <Col span={6}>
           <button type="button" onClick={handleExample('Add a polygon to a map using a GeoJSON source')}>Add a polygon to a map using a GeoJSON source</button>
