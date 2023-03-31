@@ -3,13 +3,19 @@ import Rete from 'rete';
 import InputNumberControl from './InputNumberControl';
 import SliderControl from './SliderControl';
 import SelectControl from './SelectControl';
+import InputControl from './InputControl';
 
 const KEY = 'Map Node';
+export const CONTROL_KEY_STYLE = 'inputControlStyle';
 export const CONTROL_KEY_LNG = 'inputControlLng';
 export const CONTROL_KEY_LAT = 'inputControlLat';
 export const CONTROL_KEY_ZOOM = 'inputControlZoom';
 export const CONTROL_KEY_PROJECTION = 'inputControlProjection';
+const defaultStyle = 'mapbox://styles/mapbox/streets-v12';
 const defaultZoom = 9;
+
+// https://docs.mapbox.com/mapbox-gl-js/style-spec/projection/
+const PROJECTIONS = ['albers', 'equalEarth', 'equirectangular', 'lambertConformalConic', 'mercator', 'naturalEarth', 'winkelTripel', 'globe'];
 
 const updateValues = (node) => (event) => {
   const map = event.target;
@@ -32,6 +38,9 @@ export default class MapComponent extends Rete.Component {
     console.debug('MapComponent builder', node);
 
     // init node data
+    if (node.data[CONTROL_KEY_STYLE] === undefined) {
+      node.data[CONTROL_KEY_STYLE] = defaultStyle;
+    }
     if (node.data[CONTROL_KEY_LNG] === undefined) {
       node.data[CONTROL_KEY_LNG] = 0;
     }
@@ -53,9 +62,9 @@ export default class MapComponent extends Rete.Component {
     window.mapbox.setZoom(node.data[CONTROL_KEY_ZOOM]);
     window.mapbox.setProjection(node.data[CONTROL_KEY_PROJECTION]);
 
-    // https://docs.mapbox.com/mapbox-gl-js/style-spec/projection/
-    const projections = ['albers', 'equalEarth', 'equirectangular', 'lambertConformalConic', 'mercator', 'naturalEarth', 'winkelTripel', 'globe'].map((item) => ({ value: item, label: item }));
+    const projections = PROJECTIONS.map((item) => ({ value: item, label: item }));
     return node
+      .addControl(new InputControl(this.editor, CONTROL_KEY_STYLE, node, { label: 'style' }))
       .addControl(new InputNumberControl(this.editor, CONTROL_KEY_LNG, node, { label: 'lng' }))
       .addControl(new InputNumberControl(this.editor, CONTROL_KEY_LAT, node, { label: 'lat' }))
       .addControl(new SliderControl(this.editor, CONTROL_KEY_ZOOM, node, { label: 'zoom' }))
@@ -74,6 +83,7 @@ export default class MapComponent extends Rete.Component {
     //   });
     // }
 
+    window.mapbox.setStyle(node.data[CONTROL_KEY_STYLE]);
     window.mapbox.setZoom(node.data[CONTROL_KEY_ZOOM]);
     window.mapbox.setProjection(node.data[CONTROL_KEY_PROJECTION]);
   }
