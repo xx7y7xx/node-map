@@ -26,6 +26,7 @@ import GeoJSONSourceComponent from './GeoJSONSourceComponent';
 import LineLayerComponent from './LineLayerComponent';
 import FillLayerComponent from './FillLayerComponent';
 import CircleLayerComponent from './CircleLayerComponent';
+import SymbolLayerComponent from './SymbolLayerComponent';
 import MapLayerV2Component from './MapLayerV2Component';
 import MapLayerV3Component from './MapLayerV3Component';
 import MapLineLayerComponent from './MapLineLayerComponent';
@@ -44,7 +45,6 @@ export async function createEditor(container) {
   const uploadCsvComponent = new UploadCsvComponent();
   const remoteDataComponent = new RemoteDataComponent();
   const mapMarkersComponent = new MapMarkersComponent();
-  const circleLayerComponent = new CircleLayerComponent();
   const mapLayerV2Component = new MapLayerV2Component();
   const mapLayerV3Component = new MapLayerV3Component();
   const mapLineLayerComponent = new MapLineLayerComponent();
@@ -76,7 +76,8 @@ export async function createEditor(container) {
     [GeoJSONSourceComponent.key]: new GeoJSONSourceComponent(),
     [LineLayerComponent.key]: new LineLayerComponent(),
     [FillLayerComponent.key]: new FillLayerComponent(),
-    circleLayerComponent,
+    [CircleLayerComponent.key]: new CircleLayerComponent(),
+    [SymbolLayerComponent.key]: new SymbolLayerComponent(),
     mapLayerV2Component,
     mapLayerV3Component,
     mapLineLayerComponent,

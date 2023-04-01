@@ -13,16 +13,21 @@ function ExampleModal({ open, onOk, onCancel }) {
     examples[example](); // load the data from example to map and editor
     onOk(); // hide modal
   };
+  const es = ['Display a web map using an alternate projection', 'Add a line to a map using a GeoJSON source', 'Create and style clusters'];
   return (
     <Modal title="Example Modal" open={open} onOk={onOk} onCancel={onCancel}>
       <Row>
-        <Col span={6}><button type="button" onClick={handleExample('simple')}>Example 1</button></Col>
-        <Col span={6}><button type="button" onClick={handleExample('Display a web map using an alternate projection')}>Display a web map using an alternate projection</button></Col>
-        <Col span={6}><button type="button" onClick={handleExample('Add a line to a map using a GeoJSON source')}>Add a line to a map using a GeoJSON source</button></Col>
-        <Col span={6}>
-          <button type="button" onClick={handleExample('Add a polygon to a map using a GeoJSON source')}>Add a polygon to a map using a GeoJSON source</button>
-          <a href="https://docs.mapbox.com/mapbox-gl-js/example/geojson-polygon/">Example Link</a>
-        </Col>
+        {Object.keys(examples).map((e) => {
+          if (typeof examples[e] !== 'object') {
+            return <Col key={e} span={6}><button type="button" onClick={handleExample(e)}>{ e}</button></Col>;
+          }
+          return (
+            <Col key={e} span={6}>
+              <button type="button" onClick={handleExample(e)}>{e}</button>
+              <a href={examples[e].link}>Example Link</a>
+            </Col>
+          );
+        })}
       </Row>
     </Modal>
 

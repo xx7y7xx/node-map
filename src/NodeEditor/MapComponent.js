@@ -83,7 +83,8 @@ export default class MapComponent extends Rete.Component {
     //   });
     // }
 
-    window.mapbox.setStyle(node.data[CONTROL_KEY_STYLE]);
+    // TODO setStyle will also remove all sources/layers
+    // window.mapbox.setStyle(node.data[CONTROL_KEY_STYLE]);
     window.mapbox.setZoom(node.data[CONTROL_KEY_ZOOM]);
     window.mapbox.setProjection(node.data[CONTROL_KEY_PROJECTION]);
   }

@@ -14,10 +14,17 @@ const CONTROL_KEY = 'remoteDataControl';
 const CONTROL_KEY_ERROR_MESSAGE = 'errorMessage';
 const OUTPUT_KEY = 'csv';
 
+const KEY = 'RemoteData';
 export default class RemoteDataComponent extends Rete.Component {
   constructor() {
-    super('RemoteData'); // node title
+    super(KEY); // node title
   }
+
+  static key = KEY;
+
+  static controlKeyUrl = CONTROL_KEY_URL;
+
+  static outputKey = OUTPUT_KEY;
 
   builder(node) {
     this.node = node;
@@ -66,7 +73,7 @@ export default class RemoteDataComponent extends Rete.Component {
             });
             return result.data;
           }
-          if (responseHeaders['content-type'] === 'application/json; charset=utf-8') {
+          if (['application/json; charset=utf-8', 'application/geo+json'].indexOf(responseHeaders['content-type']) !== -1) {
             return JSON.parse(data);
           }
           console.error('RemoteDataComponent unknown response content type', responseHeaders);

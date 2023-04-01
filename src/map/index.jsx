@@ -12,8 +12,8 @@ export default function Map({ width, onMapboxReady }) {
   useEffect(() => {
     const options = {
       container: mapboxElRef.current,
-      // style: 'mapbox://styles/mapbox/light-v10',
-      style: 'mapbox://styles/mapbox/dark-v10', // dark theme
+      style: 'mapbox://styles/mapbox/light-v10',
+      // style: 'mapbox://styles/mapbox/dark-v10', // dark theme
       // center: [103.7041631, 1.3139961], // MapComponent will call setCenter to init the map center
       zoom: 9,
     };

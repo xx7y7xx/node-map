@@ -3,20 +3,25 @@ import Rete from 'rete';
 import { stringSocket } from './UploadCsvComponent';
 import ColorPickerControl from './ColorPickerControl';
 import SliderControl from './SliderControl';
+import InputNumberControl from './InputNumberControl';
 
-// const LAYER_ID = 'nm-line-string-layer';
-// const LAYER_ID_POINT = 'nm-point-layer';
 const INPUT_KEY = 'sourceId';
-const CONTROL_KEY = 'colorControl';
-const CONTROL_KEY_LINE_WIDTH = 'lineWidthWidth';
+const CONTROL_KEY = 'circleColor';
+const CONTROL_KEY_CIRCLE_RADIUS = 'circleRadius';
+
+const KEY = 'CircleLayer';
 
 /**
  * https://docs.mapbox.com/mapbox-gl-js/style-spec/layers/#circle
  */
 export default class CircleLayerComponent extends Rete.Component {
   constructor() {
-    super('CircleLayer');
+    super(KEY);
   }
+
+  static key = KEY;
+
+  static inputKey = INPUT_KEY;
 
   builder(node) {
     const input = new Rete.Input(INPUT_KEY, 'sourceId', stringSocket);
@@ -24,64 +29,53 @@ export default class CircleLayerComponent extends Rete.Component {
     return node
       .addInput(input)
       .addControl(new ColorPickerControl(this.editor, CONTROL_KEY, node, { label: 'color' }))
-      .addControl(new SliderControl(this.editor, CONTROL_KEY_LINE_WIDTH, node, { label: 'line-width' }));
+      .addControl(new SliderControl(this.editor, CONTROL_KEY_CIRCLE_RADIUS, node, { label: 'circle-radius' }))
+      .addControl(new InputNumberControl(this.editor, 'circleStrokeWidth', node, { label: 'circle-stroke-width' }))
+      .addControl(new ColorPickerControl(this.editor, 'circleStrokeColor', node, { label: 'circle-stroke-color' }));
   }
 
   worker(node, inputs) {
+    console.debug('CircleLayerComponent worker', node, inputs);
     const sourceId = inputs[INPUT_KEY][0];
-    // const layerId = `${sourceId}layerId`;
-    const layerIdPoint = `${sourceId}layerIdPoint`;
+    const layerId = `${sourceId}LayerIdCircle`;
 
     if (!sourceId) {
+      console.debug('CircleLayerComponent sourceId doesnt exist', sourceId);
       // no data input, maybe link disconnect
       const map = window.mapbox;
 
-      // if (map.getLayer(layerId)) {
-      //   map.removeLayer(layerId);
-      // }
-      if (map.getLayer(layerIdPoint)) {
-        map.removeLayer(layerIdPoint);
+      if (map.getLayer(layerId)) {
+        console.debug('CircleLayerComponent remove layer', layerId);
+        map.removeLayer(layerId);
       }
       return;
     }
+    console.debug('CircleLayerComponent sourceId exists', sourceId);
 
     this.addOrUpdateLayer(sourceId, node);
   }
 
   addOrUpdateLayer(sourceId, node) {
     const map = window.mapbox;
-    // const layerId = `${sourceId}layerId`;
-    const layerIdPoint = `${sourceId}layerIdPoint`;
+    const layerId = `${sourceId}LayerIdCircle`;
 
-    if (map.getLayer(layerIdPoint)) {
-      // map.setPaintProperty(layerId, 'line-color', node.data[CONTROL_KEY]);
-      // map.setPaintProperty(layerId, 'line-width', node.data[CONTROL_KEY_LINE_WIDTH]);
-      map.setPaintProperty(layerIdPoint, 'circle-color', node.data[CONTROL_KEY]);
-      map.setPaintProperty(layerIdPoint, 'circle-radius', node.data[CONTROL_KEY_LINE_WIDTH]);
+    if (map.getLayer(layerId)) {
+      console.debug('CircleLayerComponent layer exists', layerId);
+      map.setPaintProperty(layerId, 'circle-color', node.data[CONTROL_KEY]);
+      map.setPaintProperty(layerId, 'circle-radius', node.data[CONTROL_KEY_CIRCLE_RADIUS]);
+      map.setPaintProperty(layerId, 'circle-stroke-width', node.data.circleStrokeWidth);
+      map.setPaintProperty(layerId, 'circle-stroke-color', node.data.circleStrokeColor);
     } else {
-      // window.mapbox.addLayer({
-      //   // id: LAYER_ID,
-      //   id: layerId,
-      //   type: 'line',
-      //   source: sourceId,
-      //   layout: {
-      //     'line-join': 'round',
-      //     'line-cap': 'round',
-      //   },
-      //   paint: {
-      //     'line-color': node.data[CONTROL_KEY],
-      //     'line-width': node.data[CONTROL_KEY_LINE_WIDTH],
-      //   },
-      // });
-
+      console.debug('CircleLayerComponent layer doesnt exist', layerId);
       window.mapbox.addLayer({
-        // id: LAYER_ID_POINT,
-        id: layerIdPoint,
+        id: layerId,
         type: 'circle',
         source: sourceId,
         paint: {
-          'circle-radius': node.data[CONTROL_KEY_LINE_WIDTH],
+          'circle-radius': node.data[CONTROL_KEY_CIRCLE_RADIUS],
           'circle-color': node.data[CONTROL_KEY],
+          'circle-stroke-width': node.data.circleStrokeWidth,
+          'circle-stroke-color': node.data.circleStrokeColor,
         },
       });
     }

@@ -10,7 +10,13 @@ export default class SelectControl extends Rete.Control {
     this.key = key;
     this.component = SelectControl.component;
 
-    const initial = node.data[key] || '';
+    let initial = '';
+    if (props.mode === 'multiple') {
+      initial = [];
+    }
+    if (node.data[key]) {
+      initial = node.data[key];
+    }
 
     node.data[key] = initial;
     this.props = {
