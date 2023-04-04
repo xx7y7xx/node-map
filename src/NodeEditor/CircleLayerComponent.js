@@ -1,13 +1,37 @@
 import Rete from 'rete';
 
 import { stringSocket } from './UploadCsvComponent';
-import ColorPickerControl from './ColorPickerControl';
-import SliderControl from './SliderControl';
 import InputNumberControl from './InputNumberControl';
+import SliderAndExpressionControl from './SliderAndExpressionControl';
+import { genLayer } from './helpers';
+import InputControl from './InputControl';
+import ColorPickerAndExpressionControl from './ColorPickerAndExpressionControl';
+import ExpressionControl from './ExpressionControl';
 
 const INPUT_KEY = 'sourceId';
-const CONTROL_KEY = 'circleColor';
-const CONTROL_KEY_CIRCLE_RADIUS = 'circleRadius';
+
+const defaultCircleStrokeColor = '#000000';
+const defaultCircleStrokeWidth = 0;
+
+const paintProperties = {
+  'circle-color': {
+    defaultValue: '#000000',
+    control: ColorPickerAndExpressionControl,
+  },
+  'circle-radius': {
+    defaultValue: 0,
+    control: SliderAndExpressionControl,
+  },
+  'circle-stroke-color': {
+    defaultValue: '#000000',
+    control: ColorPickerAndExpressionControl,
+  },
+  'circle-stroke-width': {
+    defaultValue: 0,
+    control: InputNumberControl,
+  },
+};
+const allProperties = { ...paintProperties };
 
 const KEY = 'CircleLayer';
 
@@ -24,20 +48,31 @@ export default class CircleLayerComponent extends Rete.Component {
   static inputKey = INPUT_KEY;
 
   builder(node) {
-    const input = new Rete.Input(INPUT_KEY, 'sourceId', stringSocket);
+    // Initial the layer ID input box with value
+    if (!node.data.layerId) {
+      node.data.layerId = genLayer();
+    }
 
-    return node
-      .addInput(input)
-      .addControl(new ColorPickerControl(this.editor, CONTROL_KEY, node, { label: 'color' }))
-      .addControl(new SliderControl(this.editor, CONTROL_KEY_CIRCLE_RADIUS, node, { label: 'circle-radius' }))
-      .addControl(new InputNumberControl(this.editor, 'circleStrokeWidth', node, { label: 'circle-stroke-width' }))
-      .addControl(new ColorPickerControl(this.editor, 'circleStrokeColor', node, { label: 'circle-stroke-color' }));
+    node
+      .addInput(new Rete.Input(INPUT_KEY, 'sourceId', stringSocket))
+      .addControl(new InputControl(this.editor, 'layerId', node, { label: 'layerId', disabled: true }))
+      .addControl(new ExpressionControl(this.editor, 'filter', node, { label: 'filter' }));
+
+    Object.keys(allProperties).forEach((key) => {
+      const { control: Ctrl, defaultValue } = allProperties[key];
+
+      if (!node.data[key] === undefined) {
+        node.data[key] = defaultValue;
+      }
+
+      node.addControl(new Ctrl(this.editor, key, node, { label: key }));
+    });
   }
 
   worker(node, inputs) {
     console.debug('CircleLayerComponent worker', node, inputs);
     const sourceId = inputs[INPUT_KEY][0];
-    const layerId = `${sourceId}LayerIdCircle`;
+    const { layerId } = node.data;
 
     if (!sourceId) {
       console.debug('CircleLayerComponent sourceId doesnt exist', sourceId);
@@ -57,25 +92,24 @@ export default class CircleLayerComponent extends Rete.Component {
 
   addOrUpdateLayer(sourceId, node) {
     const map = window.mapbox;
-    const layerId = `${sourceId}LayerIdCircle`;
+    const { layerId } = node.data;
 
     if (map.getLayer(layerId)) {
       console.debug('CircleLayerComponent layer exists', layerId);
-      map.setPaintProperty(layerId, 'circle-color', node.data[CONTROL_KEY]);
-      map.setPaintProperty(layerId, 'circle-radius', node.data[CONTROL_KEY_CIRCLE_RADIUS]);
-      map.setPaintProperty(layerId, 'circle-stroke-width', node.data.circleStrokeWidth);
-      map.setPaintProperty(layerId, 'circle-stroke-color', node.data.circleStrokeColor);
+      map.setFilter(layerId, node.data.filter);
+
+      Object.keys(paintProperties).forEach((key) => {
+        map.setPaintProperty(layerId, key, node.data[key]);
+      });
     } else {
       console.debug('CircleLayerComponent layer doesnt exist', layerId);
       window.mapbox.addLayer({
         id: layerId,
         type: 'circle',
         source: sourceId,
+        filter: node.data.filter,
         paint: {
-          'circle-radius': node.data[CONTROL_KEY_CIRCLE_RADIUS],
-          'circle-color': node.data[CONTROL_KEY],
-          'circle-stroke-width': node.data.circleStrokeWidth,
-          'circle-stroke-color': node.data.circleStrokeColor,
+          ...Object.keys(paintProperties).reduce((a, v) => ({ ...a, [v]: node.data[v] }), {}),
         },
       });
     }

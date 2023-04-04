@@ -12,7 +12,6 @@ export default function NumberSlider({
         e.stopPropagation();
       }}
     >
-
       <div>
         <Slider
           min={min}
@@ -28,6 +27,12 @@ export default function NumberSlider({
       }}
       >
         <span>{label}</span>
+      </div>
+      <div style={{
+        position: 'absolute', right: '20px', top: '0px', lineHeight: '24px', pointerEvents: 'none', color: 'white',
+      }}
+      >
+        <span>{value}</span>
       </div>
       {/* <InputNumber
         value={value}

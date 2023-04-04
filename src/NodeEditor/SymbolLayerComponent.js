@@ -2,19 +2,41 @@ import Rete from 'rete';
 
 import { stringSocket } from './UploadCsvComponent';
 import ColorPickerControl from './ColorPickerControl';
-import SliderControl from './SliderControl';
 import SelectControl from './SelectControl';
 import InputControl from './InputControl';
+import SliderAndExpressionControl from './SliderAndExpressionControl';
 
 const INPUT_KEY = 'sourceId';
-const CONTROL_KEY_TEXT_COLOR = 'textColor';
-const CONTROL_KEY_TEXT_SIZE = 'textSize';
-const CONTROL_KEY_TEXT_FONT = 'textFont';
-const CONTROL_KEY_TEXT_FIELD = 'textField';
 
 const KEY = 'SymbolLayer';
 
 const defaultTextFont = ['Open Sans Regular', 'Arial Unicode MS Regular'];
+
+const layoutProperties = {
+  'text-size': {
+    defaultValue: 0,
+    control: SliderAndExpressionControl,
+  },
+  'text-font': {
+    defaultValue: ['Open Sans Regular', 'Arial Unicode MS Regular'],
+    control: SelectControl,
+    props: {
+      mode: 'multiple',
+      options: defaultTextFont.map((item) => ({ value: item, label: item })),
+    },
+  },
+  'text-field': {
+    defaultValue: '',
+    control: InputControl,
+  },
+};
+const paintProperties = {
+  'text-color': {
+    defaultValue: '#000000',
+    control: ColorPickerControl,
+  },
+};
+const allProperties = { ...layoutProperties, ...paintProperties };
 
 /**
  * https://docs.mapbox.com/mapbox-gl-js/style-spec/layers/#symbol
@@ -31,29 +53,33 @@ export default class SymbolLayerComponent extends Rete.Component {
   builder(node) {
     const input = new Rete.Input(INPUT_KEY, 'sourceId', stringSocket);
 
-    return node
-      .addInput(input)
-      // paint
-      .addControl(new ColorPickerControl(this.editor, CONTROL_KEY_TEXT_COLOR, node, { label: 'text-color' }))
-      // layout
-      .addControl(new SliderControl(this.editor, CONTROL_KEY_TEXT_SIZE, node, { label: 'text-size' }))
-      .addControl(new SelectControl(this.editor, CONTROL_KEY_TEXT_FONT, node, { label: 'text-font', mode: 'multiple', options: defaultTextFont.map((item) => ({ value: item, label: item })) }))
-      .addControl(new InputControl(this.editor, CONTROL_KEY_TEXT_FIELD, node, { label: 'text-field' }));
+    node
+      .addInput(input);
+
+    Object.keys(allProperties).forEach((key) => {
+      const { control: Ctrl, defaultValue, props = {} } = allProperties[key];
+
+      if (!node.data[key] === undefined) {
+        node.data[key] = defaultValue;
+      }
+
+      node.addControl(new Ctrl(this.editor, key, node, { label: key, ...props }));
+    });
   }
 
   worker(node, inputs) {
     console.debug('SymbolLayerComponent worker', node, inputs);
     const sourceId = inputs[INPUT_KEY][0];
-    const layerIdSymbol = `${sourceId}LayerIdSymbol`;
+    const layerId = `${sourceId}LayerIdSymbol`;
 
     if (!sourceId) {
       console.debug('SymbolLayerComponent sourceId doesnt exist', sourceId);
       // no data input, maybe link disconnect
       const map = window.mapbox;
 
-      if (map.getLayer(layerIdSymbol)) {
-        console.debug('SymbolLayerComponent remove layer', layerIdSymbol);
-        map.removeLayer(layerIdSymbol);
+      if (map.getLayer(layerId)) {
+        console.debug('SymbolLayerComponent remove layer', layerId);
+        map.removeLayer(layerId);
       }
       return;
     }
@@ -64,37 +90,44 @@ export default class SymbolLayerComponent extends Rete.Component {
 
   addOrUpdateLayer(sourceId, node) {
     const map = window.mapbox;
-    const layerIdSymbol = `${sourceId}LayerIdSymbol`;
+    const layerId = `${sourceId}LayerIdSymbol`;
 
-    if (map.getLayer(layerIdSymbol)) {
-      console.debug('SymbolLayerComponent layer exists', layerIdSymbol);
-      map.setPaintProperty(layerIdSymbol, 'text-color', node.data[CONTROL_KEY_TEXT_COLOR]);
-      map.setLayoutProperty(layerIdSymbol, 'text-size', node.data[CONTROL_KEY_TEXT_SIZE]);
-      map.setLayoutProperty(layerIdSymbol, 'text-font', node.data[CONTROL_KEY_TEXT_FONT]);
-      map.setLayoutProperty(layerIdSymbol, 'text-field', this.convertTextField(node));
+    if (map.getLayer(layerId)) {
+      console.debug('SymbolLayerComponent layer exists', layerId);
+
+      Object.keys(layoutProperties).forEach((key) => {
+        if (key === 'text-field') {
+          map.setLayoutProperty(layerId, key, this.convertTextField(node.data[key])); // TODO
+        } else {
+          map.setLayoutProperty(layerId, key, node.data[key]);
+        }
+      });
+      Object.keys(paintProperties).forEach((key) => {
+        map.setPaintProperty(layerId, key, node.data[key]);
+      });
     } else {
-      console.debug('SymbolLayerComponent layer doesnt exist', layerIdSymbol);
+      console.debug('SymbolLayerComponent layer doesnt exist', layerId);
       window.mapbox.addLayer({
-        id: layerIdSymbol,
+        id: layerId,
         type: 'symbol',
         source: sourceId,
         paint: {
-          'text-color': node.data[CONTROL_KEY_TEXT_COLOR],
+          ...Object.keys(paintProperties).reduce((a, v) => ({ ...a, [v]: node.data[v] }), {}),
         },
         layout: {
-          'text-size': node.data[CONTROL_KEY_TEXT_SIZE],
-          'text-font': node.data[CONTROL_KEY_TEXT_FONT], // ['Noto Sans Regular']
-          'text-field': this.convertTextField(node), // ['get', 'point_count_abbreviated']
+          ...Object.keys(layoutProperties).reduce((a, v) => ({
+            ...a, [v]: v === 'text-field' ? this.convertTextField(node.data[v]) : node.data[v],
+          }), {}),
         },
       });
     }
   }
 
-  convertTextField(node) {
-    const inputBoxStr = node.data[CONTROL_KEY_TEXT_FIELD];
+  convertTextField(textField) {
+    const inputBoxStr = textField;
     if (!inputBoxStr.startsWith('[')) {
-      return node.data[CONTROL_KEY_TEXT_FIELD];
+      return textField;
     }
-    return JSON.parse(node.data[CONTROL_KEY_TEXT_FIELD]);
+    return JSON.parse(textField);
   }
 }

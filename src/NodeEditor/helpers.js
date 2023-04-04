@@ -2,7 +2,7 @@
 
 import { message } from 'antd';
 import axios from 'axios';
-import { mapboxSourceLayerIdPrefix, LS_KEY_NODE_EDITOR_DATA } from 'constants';
+import { mapboxSourceLayerIdPrefix, mapboxLayerIdPrefix, LS_KEY_NODE_EDITOR_DATA } from 'constants';
 
 export const getUrlParams = () => new Proxy(new URLSearchParams(window.location.search), {
   get: (searchParams, prop) => searchParams.get(prop),
@@ -76,6 +76,7 @@ export const downloadObjectAsJson = (exportJsonString, exportName) => {
 };
 
 export const genSourceId = () => (`${mapboxSourceLayerIdPrefix}${Math.round(Math.random() * 1000)}`);
+export const genLayer = () => (`${mapboxLayerIdPrefix}${Math.round(Math.random() * 1000)}`);
 
 export const clearMap = () => {
   const map = window.mapbox;

@@ -12,9 +12,6 @@ const KEY = 'GeoJSONSource';
 export const INPUT_KEY = 'json';
 export const OUTPUT_KEY = 'sourceId';
 export const CONTROL_KEY_SOURCE_ID = 'controlKeySourceId';
-export const CONTROL_KEY_CLUSTER = 'controlKeyCluster';
-export const CONTROL_KEY_CLUSTER_MAX_ZOOM = 'controlKeyClusterMaxZoom';
-export const CONTROL_KEY_CLUSTER_RADIUS = 'controlKeyClusterRadius';
 
 const defaultCluster = false;
 const defaultClusterMaxZoom = 14; // TODO Defaults to one zoom less than maxzoom (so that last zoom features are not clustered).
@@ -45,14 +42,14 @@ export default class GeoJSONSourceComponent extends Rete.Component {
     if (!this.nodeIdMap) this.nodeIdMap = {};
     this.nodeIdMap[node.id] = node;
 
-    if (node.data[CONTROL_KEY_CLUSTER] === undefined) {
-      node.data[CONTROL_KEY_CLUSTER] = defaultCluster;
+    if (node.data.cluster === undefined) {
+      node.data.cluster = defaultCluster;
     }
-    if (node.data[CONTROL_KEY_CLUSTER_MAX_ZOOM] === undefined) {
-      node.data[CONTROL_KEY_CLUSTER_MAX_ZOOM] = defaultClusterMaxZoom;
+    if (node.data.clusterMaxZoom === undefined) {
+      node.data.clusterMaxZoom = defaultClusterMaxZoom;
     }
-    if (node.data[CONTROL_KEY_CLUSTER_RADIUS] === undefined) {
-      node.data[CONTROL_KEY_CLUSTER_RADIUS] = defaultClusterRadius;
+    if (node.data.clusterRadius === undefined) {
+      node.data.clusterRadius = defaultClusterRadius;
     }
 
     const input = new Rete.Input(INPUT_KEY, 'GeoJSON', objectSocket);
@@ -62,9 +59,9 @@ export default class GeoJSONSourceComponent extends Rete.Component {
       .addInput(input)
       .addOutput(output)
       .addControl(new InputControl(this.editor, CONTROL_KEY_SOURCE_ID, node, { label: 'sourceId' }))
-      .addControl(new SwitchControl(this.editor, CONTROL_KEY_CLUSTER, node, { label: 'cluster' }))
-      .addControl(new InputNumberControl(this.editor, CONTROL_KEY_CLUSTER_MAX_ZOOM, node, { label: 'clusterMaxZoom' })) // Max zoom to cluster points on
-      .addControl(new InputNumberControl(this.editor, CONTROL_KEY_CLUSTER_RADIUS, node, { label: 'clusterRadius' })); // Radius of each cluster when clustering points (defaults to 50)
+      .addControl(new SwitchControl(this.editor, 'cluster', node, { label: 'cluster' }))
+      .addControl(new InputNumberControl(this.editor, 'clusterMaxZoom', node, { label: 'clusterMaxZoom' })) // Max zoom to cluster points on
+      .addControl(new InputNumberControl(this.editor, 'clusterRadius', node, { label: 'clusterRadius' })); // Radius of each cluster when clustering points (defaults to 50)
 
     // Initial the source ID input box with value
     if (this.getSourceId(node) === null || this.getSourceId(node) === undefined) {
@@ -149,18 +146,18 @@ export default class GeoJSONSourceComponent extends Rete.Component {
       // https://stackoverflow.com/questions/70109527/mapbox-change-source-property
       // TODO maybe have performance issues when replacing whole style
       const style = map.getStyle();
-      style.sources[sourceId].cluster = this.getNodeDataByKey(node, CONTROL_KEY_CLUSTER);
-      style.sources[sourceId].clusterMaxZoom = this.getNodeDataByKey(node, CONTROL_KEY_CLUSTER_MAX_ZOOM);
-      style.sources[sourceId].clusterRadius = this.getNodeDataByKey(node, CONTROL_KEY_CLUSTER_RADIUS);
+      style.sources[sourceId].cluster = this.getNodeDataByKey(node, 'cluster');
+      style.sources[sourceId].clusterMaxZoom = this.getNodeDataByKey(node, 'clusterMaxZoom');
+      style.sources[sourceId].clusterRadius = this.getNodeDataByKey(node, 'clusterRadius');
       map.setStyle(style);
     } else {
       console.debug('GeoJSONSourceComponent source doesnt exist', sourceId);
       window.mapbox.addSource(this.getSourceId(node), {
         type: 'geojson',
         data: geojson,
-        cluster: this.getNodeDataByKey(node, CONTROL_KEY_CLUSTER),
-        clusterMaxZoom: this.getNodeDataByKey(node, CONTROL_KEY_CLUSTER_MAX_ZOOM), // Max zoom to cluster points on
-        clusterRadius: this.getNodeDataByKey(node, CONTROL_KEY_CLUSTER_RADIUS), // Radius of each cluster when clustering points (defaults to 50)
+        cluster: this.getNodeDataByKey(node, 'cluster'),
+        clusterMaxZoom: this.getNodeDataByKey(node, 'clusterMaxZoom'), // Max zoom to cluster points on
+        clusterRadius: this.getNodeDataByKey(node, 'clusterRadius'), // Radius of each cluster when clustering points (defaults to 50)
       });
     }
   }

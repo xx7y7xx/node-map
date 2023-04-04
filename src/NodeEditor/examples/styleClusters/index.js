@@ -14,8 +14,14 @@ const jsonNodeExample = async () => {
     [CONTROL_KEY_ZOOM]: 3,
   });
   const remoteDataNode = await m.get(RemoteDataComponent.key).createNode({ [RemoteDataComponent.controlKeyUrl]: 'https://docs.mapbox.com/mapbox-gl-js/assets/earthquakes.geojson' });
-  const geojsonSourceNode = await m.get(GeoJSONSourceComponent.key).createNode({ [CONTROL_KEY_SOURCE_ID]: 'earthquakes' });
+  const geojsonSourceNode = await m.get(GeoJSONSourceComponent.key).createNode({
+    [CONTROL_KEY_SOURCE_ID]: 'earthquakes',
+    cluster: true,
+    clusterMaxZoom: 14, // Max zoom to cluster points on
+    clusterRadius: 50, // Radius of each cluster when clustering points (defaults to 50)
+  });
   const circleLayerNode = await m.get(CircleLayerComponent.key).createNode({
+    filter: ['has', 'point_count'],
     // paint: {
     //   // Use step expressions (https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions-step)
     //   // with three steps to implement three types of circles:
@@ -41,24 +47,24 @@ const jsonNodeExample = async () => {
     //     40,
     //   ],
     // },
-    // circleColor: [
-    //   'step',
-    //   ['get', 'point_count'],
-    //   '#51bbd6',
-    //   100,
-    //   '#f1f075',
-    //   750,
-    //   '#f28cb1',
-    // ],
-    // circleRadius: [
-    //   'step',
-    //   ['get', 'point_count'],
-    //   20,
-    //   100,
-    //   30,
-    //   750,
-    //   40,
-    // ],
+    'circle-color': [
+      'step',
+      ['get', 'point_count'],
+      '#51bbd6',
+      100,
+      '#f1f075',
+      750,
+      '#f28cb1',
+    ],
+    'circle-radius': [
+      'step',
+      ['get', 'point_count'],
+      20,
+      100,
+      30,
+      750,
+      40,
+    ],
   });
   const symbolLayerNode = await m.get(SymbolLayerComponent.key).createNode({
     // layout: {
@@ -66,28 +72,29 @@ const jsonNodeExample = async () => {
     //   'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
     //   'text-size': 12,
     // },
-    textField: '["get", "point_count_abbreviated"]',
-    textFont: ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
-    textSize: 12,
+    'text-field': '["get", "point_count_abbreviated"]',
+    'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+    'text-size': 12,
   });
   const circleLayerNode2 = await m.get(CircleLayerComponent.key).createNode({
+    filter: ['!', ['has', 'point_count']],
     // paint: {
     //   'circle-color': '#11b4da',
     //   'circle-radius': 4,
     //   'circle-stroke-width': 1,
     //   'circle-stroke-color': '#fff',
     // },
-    circleColor: '#11b4da',
-    circleRadius: 4,
-    circleStrokeWidth: 1,
-    circleStrokeColor: '#fff',
+    'circle-color': '#11b4da',
+    'circle-radius': 4,
+    'circle-stroke-width': 1,
+    'circle-stroke-color': '#fff',
   });
 
   mapNode.position = [0, 0];
   remoteDataNode.position = [0, 300];
   geojsonSourceNode.position = [300, 300];
-  circleLayerNode.position = [600, 300];
-  symbolLayerNode.position = [600, 500];
+  circleLayerNode.position = [600, 0];
+  symbolLayerNode.position = [900, 350];
   circleLayerNode2.position = [600, 700];
 
   editor.addNode(mapNode);

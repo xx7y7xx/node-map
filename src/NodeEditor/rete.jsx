@@ -124,7 +124,7 @@ export async function createEditor(container) {
   // AreaPlugin.zoomAt(editor, editor.nodes);
   setTimeout(() => {
     AreaPlugin.zoomAt(editor, editor.nodes);
-  }, 100);
+  }, 500);
 
   return editor;
 }
