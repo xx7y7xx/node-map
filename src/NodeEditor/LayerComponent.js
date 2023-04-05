@@ -1,38 +1,21 @@
 import Rete from 'rete';
-import { genLayer } from './helpers';
+
 import InputControl from './InputControl';
 import ExpressionControl from './ExpressionControl';
-
 import { stringSocket } from './UploadCsvComponent';
-// import ColorPickerControl from './ColorPickerControl';
-// import SliderControl from './SliderControl';
-// import InputControl from './InputControl';
-// import ExpressionControl from './ExpressionControl';
-// import { genLayer } from './helpers';
+import { genLayer } from './helpers';
 
 const INPUT_KEY = 'sourceId';
 
-// const paintProperties = {
-//   'fill-color': {
-//     defaultValue: '#000000',
-//     control: ColorPickerControl,
-//   },
-//   'fill-opacity': {
-//     defaultValue: 1,
-//     control: SliderControl,
-//     props: {
-//       min: 0, max: 1, step: 0.1, defaultValue: 0.5,
-//     },
-//   },
-// };
-// const allProperties = { ...paintProperties };
-
-// const KEY = 'FillLayer';
-
 export default class LayerComponent extends Rete.Component {
-  // constructor(name) {
-  //   super(`${name}Layer`);
-  // }
+  constructor(name) {
+    super(name);
+
+    // init
+    this.allProperties = {};
+    this.layoutProperties = {};
+    this.paintProperties = {};
+  }
 
   static inputKey = INPUT_KEY;
 
