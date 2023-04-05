@@ -1,5 +1,5 @@
 import GeoJSONSourceComponent, { CONTROL_KEY_SOURCE_ID } from 'NodeEditor/GeoJSONSourceComponent';
-import LineLayerComponent, { INPUT_KEY as LINE_LAYER_INPUT_KEY } from 'NodeEditor/LineLayerComponent';
+import LineLayerComponent from 'NodeEditor/LineLayerComponent';
 import MapComponent, { CONTROL_KEY_LAT, CONTROL_KEY_LNG, CONTROL_KEY_ZOOM } from 'NodeEditor/MapComponent';
 import JsonComponent, { CONTROL_KEY, OUTPUT_KEY } from '../../JsonComponent';
 import geojson from './data.json';
@@ -39,7 +39,7 @@ const jsonNodeExample = async () => {
   );
   editor.connect(
     geojsonSourceNode.outputs.get(GeoJSONSourceComponent.outputKey),
-    lineLayerNode.inputs.get(LINE_LAYER_INPUT_KEY),
+    lineLayerNode.inputs.get(LineLayerComponent.inputKey),
   );
 
   editor.view.area.translate(100, 100);
