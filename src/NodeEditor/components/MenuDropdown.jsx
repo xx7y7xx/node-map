@@ -1,17 +1,36 @@
 /* eslint-disable jsx-a11y/anchor-is-valid, jsx-a11y/click-events-have-key-events,
    jsx-a11y/no-static-element-interactions */
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Dropdown, Space } from 'antd';
 import {
   DownOutlined, ExportOutlined, ImportOutlined, FolderOpenOutlined,
 } from '@ant-design/icons';
-import { clearEditorAndMap, downloadObjectAsJson } from 'NodeEditor/helpers';
+import { clearEditorAndMap, clearEditorAndMapConfirm, downloadObjectAsJson } from 'NodeEditor/helpers';
 import { LS_KEY_NODE_EDITOR_DATA } from 'constants';
 import ExampleModal from './ExampleModal';
 
 export default function MenuDropdown() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    // https://stackoverflow.com/questions/64032647/event-listener-for-multiple-keys-in-react
+    const callback = (e) => {
+      if ((e.metaKey || e.ctrlKey)) {
+        switch (e.code) {
+          case 'KeyL': { e.preventDefault(); return clearEditorAndMapConfirm(); }
+          case 'KeyX': { e.preventDefault(); return setIsModalOpen(true); }
+          default:
+            console.debug('no key action', e.code);
+        }
+      }
+      return '';
+    };
+    document.addEventListener('keydown', callback);
+    return () => {
+      document.removeEventListener('keydown', callback);
+    };
+  }, []);
 
   const handleLoadExample = () => {
     setIsModalOpen(true);
@@ -44,10 +63,7 @@ export default function MenuDropdown() {
   };
 
   const handleClean = () => {
-    if (window.confirm('Are you sure to clear all data?') !== true) { // eslint-disable-line no-alert
-      return;
-    }
-    clearEditorAndMap();
+    clearEditorAndMapConfirm();
   };
 
   const items = [

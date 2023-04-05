@@ -9,8 +9,8 @@ import InputNumberControl from './InputNumberControl';
 import { genSourceId } from './helpers';
 
 const KEY = 'GeoJSONSource';
-export const INPUT_KEY = 'json';
-export const OUTPUT_KEY = 'sourceId';
+const INPUT_KEY = 'json';
+const OUTPUT_KEY = 'sourceId';
 export const CONTROL_KEY_SOURCE_ID = 'controlKeySourceId';
 
 const defaultCluster = false;
@@ -36,6 +36,10 @@ export default class GeoJSONSourceComponent extends Rete.Component {
   }
 
   static key = KEY;
+
+  static inputKey = INPUT_KEY;
+
+  static outputKey = OUTPUT_KEY;
 
   builder(node) {
     console.debug('GeoJSONSourceComponent builder', node);

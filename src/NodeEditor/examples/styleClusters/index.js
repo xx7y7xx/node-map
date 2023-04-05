@@ -1,4 +1,4 @@
-import GeoJSONSourceComponent, { INPUT_KEY as GEOJSON_SOURCE_INPUT_KEY, OUTPUT_KEY as GEOJSON_SOURCE_OUTPUT_KEY, CONTROL_KEY_SOURCE_ID } from 'NodeEditor/GeoJSONSourceComponent';
+import GeoJSONSourceComponent, { CONTROL_KEY_SOURCE_ID } from 'NodeEditor/GeoJSONSourceComponent';
 import MapComponent, { CONTROL_KEY_LAT, CONTROL_KEY_LNG, CONTROL_KEY_ZOOM } from 'NodeEditor/MapComponent';
 import RemoteDataComponent from 'NodeEditor/RemoteDataComponent';
 import CircleLayerComponent from 'NodeEditor/CircleLayerComponent';
@@ -106,18 +106,18 @@ const jsonNodeExample = async () => {
 
   editor.connect(
     remoteDataNode.outputs.get(RemoteDataComponent.outputKey),
-    geojsonSourceNode.inputs.get(GEOJSON_SOURCE_INPUT_KEY),
+    geojsonSourceNode.inputs.get(GeoJSONSourceComponent.inputKey),
   );
   editor.connect(
-    geojsonSourceNode.outputs.get(GEOJSON_SOURCE_OUTPUT_KEY),
+    geojsonSourceNode.outputs.get(GeoJSONSourceComponent.outputKey),
     circleLayerNode.inputs.get(CircleLayerComponent.inputKey),
   );
   editor.connect(
-    geojsonSourceNode.outputs.get(GEOJSON_SOURCE_OUTPUT_KEY),
+    geojsonSourceNode.outputs.get(GeoJSONSourceComponent.outputKey),
     symbolLayerNode.inputs.get(SymbolLayerComponent.inputKey),
   );
   editor.connect(
-    geojsonSourceNode.outputs.get(GEOJSON_SOURCE_OUTPUT_KEY),
+    geojsonSourceNode.outputs.get(GeoJSONSourceComponent.outputKey),
     circleLayerNode2.inputs.get(CircleLayerComponent.inputKey),
   );
 

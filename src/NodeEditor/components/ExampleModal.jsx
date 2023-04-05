@@ -13,7 +13,6 @@ function ExampleModal({ open, onOk, onCancel }) {
     exampleFn(); // load the data from example to map and editor
     onOk(); // hide modal
   };
-  const es = ['Display a web map using an alternate projection', 'Add a line to a map using a GeoJSON source', 'Create and style clusters'];
   return (
     <Modal title="Example Modal" open={open} onOk={onOk} onCancel={onCancel}>
       <Row>

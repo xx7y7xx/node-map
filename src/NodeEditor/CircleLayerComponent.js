@@ -3,15 +3,10 @@ import Rete from 'rete';
 import { stringSocket } from './UploadCsvComponent';
 import InputNumberControl from './InputNumberControl';
 import SliderAndExpressionControl from './SliderAndExpressionControl';
-import { genLayer } from './helpers';
 import InputControl from './InputControl';
 import ColorPickerAndExpressionControl from './ColorPickerAndExpressionControl';
 import ExpressionControl from './ExpressionControl';
-
-const INPUT_KEY = 'sourceId';
-
-const defaultCircleStrokeColor = '#000000';
-const defaultCircleStrokeWidth = 0;
+import { genLayer } from './helpers';
 
 const paintProperties = {
   'circle-color': {
@@ -34,6 +29,7 @@ const paintProperties = {
 const allProperties = { ...paintProperties };
 
 const KEY = 'CircleLayer';
+const INPUT_KEY = 'sourceId';
 
 /**
  * https://docs.mapbox.com/mapbox-gl-js/style-spec/layers/#circle
@@ -59,13 +55,13 @@ export default class CircleLayerComponent extends Rete.Component {
       .addControl(new ExpressionControl(this.editor, 'filter', node, { label: 'filter' }));
 
     Object.keys(allProperties).forEach((key) => {
-      const { control: Ctrl, defaultValue } = allProperties[key];
+      const { control: Ctrl, defaultValue, props = {} } = allProperties[key];
 
       if (!node.data[key] === undefined) {
         node.data[key] = defaultValue;
       }
 
-      node.addControl(new Ctrl(this.editor, key, node, { label: key }));
+      node.addControl(new Ctrl(this.editor, key, node, { label: key, ...props }));
     });
   }
 
@@ -103,15 +99,19 @@ export default class CircleLayerComponent extends Rete.Component {
       });
     } else {
       console.debug('CircleLayerComponent layer doesnt exist', layerId);
-      window.mapbox.addLayer({
+      const config = {
         id: layerId,
         type: 'circle',
         source: sourceId,
-        filter: node.data.filter,
         paint: {
           ...Object.keys(paintProperties).reduce((a, v) => ({ ...a, [v]: node.data[v] }), {}),
         },
-      });
+      };
+      if (node.data.filter) {
+        config.filter = node.data.filter;
+      }
+      console.debug('CircleLayerComponent add layer', config);
+      window.mapbox.addLayer(config);
     }
   }
 }

@@ -5,10 +5,8 @@ import ColorPickerControl from './ColorPickerControl';
 import SelectControl from './SelectControl';
 import InputControl from './InputControl';
 import SliderAndExpressionControl from './SliderAndExpressionControl';
-
-const INPUT_KEY = 'sourceId';
-
-const KEY = 'SymbolLayer';
+import ExpressionControl from './ExpressionControl';
+import { genLayer } from './helpers';
 
 const defaultTextFont = ['Open Sans Regular', 'Arial Unicode MS Regular'];
 
@@ -38,6 +36,9 @@ const paintProperties = {
 };
 const allProperties = { ...layoutProperties, ...paintProperties };
 
+const KEY = 'SymbolLayer';
+const INPUT_KEY = 'sourceId';
+
 /**
  * https://docs.mapbox.com/mapbox-gl-js/style-spec/layers/#symbol
  */
@@ -51,10 +52,15 @@ export default class SymbolLayerComponent extends Rete.Component {
   static inputKey = INPUT_KEY;
 
   builder(node) {
-    const input = new Rete.Input(INPUT_KEY, 'sourceId', stringSocket);
+    // Initial the layer ID input box with value
+    if (!node.data.layerId) {
+      node.data.layerId = genLayer();
+    }
 
     node
-      .addInput(input);
+      .addInput(new Rete.Input(INPUT_KEY, 'sourceId', stringSocket))
+      .addControl(new InputControl(this.editor, 'layerId', node, { label: 'layerId', disabled: true }))
+      .addControl(new ExpressionControl(this.editor, 'filter', node, { label: 'filter' }));
 
     Object.keys(allProperties).forEach((key) => {
       const { control: Ctrl, defaultValue, props = {} } = allProperties[key];
@@ -70,7 +76,7 @@ export default class SymbolLayerComponent extends Rete.Component {
   worker(node, inputs) {
     console.debug('SymbolLayerComponent worker', node, inputs);
     const sourceId = inputs[INPUT_KEY][0];
-    const layerId = `${sourceId}LayerIdSymbol`;
+    const { layerId } = node.data;
 
     if (!sourceId) {
       console.debug('SymbolLayerComponent sourceId doesnt exist', sourceId);
@@ -90,10 +96,11 @@ export default class SymbolLayerComponent extends Rete.Component {
 
   addOrUpdateLayer(sourceId, node) {
     const map = window.mapbox;
-    const layerId = `${sourceId}LayerIdSymbol`;
+    const { layerId } = node.data;
 
     if (map.getLayer(layerId)) {
       console.debug('SymbolLayerComponent layer exists', layerId);
+      map.setFilter(layerId, node.data.filter);
 
       Object.keys(layoutProperties).forEach((key) => {
         if (key === 'text-field') {
@@ -107,7 +114,7 @@ export default class SymbolLayerComponent extends Rete.Component {
       });
     } else {
       console.debug('SymbolLayerComponent layer doesnt exist', layerId);
-      window.mapbox.addLayer({
+      const config = {
         id: layerId,
         type: 'symbol',
         source: sourceId,
@@ -119,7 +126,12 @@ export default class SymbolLayerComponent extends Rete.Component {
             ...a, [v]: v === 'text-field' ? this.convertTextField(node.data[v]) : node.data[v],
           }), {}),
         },
-      });
+      };
+      if (node.data.filter) {
+        config.filter = node.data.filter;
+      }
+      console.debug('SymbolLayerComponent add layer', config);
+      window.mapbox.addLayer(config);
     }
   }
 

@@ -2,7 +2,7 @@
 
 import { message } from 'antd';
 import axios from 'axios';
-import { mapboxSourceLayerIdPrefix, mapboxLayerIdPrefix, LS_KEY_NODE_EDITOR_DATA } from 'constants';
+import { mapboxSourceLayerIdPrefix, mapboxLayerIdPrefix, LS_KEY_NODE_EDITOR_DATA } from 'constants.js';
 
 export const getUrlParams = () => new Proxy(new URLSearchParams(window.location.search), {
   get: (searchParams, prop) => searchParams.get(prop),
@@ -82,7 +82,7 @@ export const clearMap = () => {
   const map = window.mapbox;
 
   map.getStyle().layers.forEach((layer) => {
-    if (layer.id.startsWith(mapboxSourceLayerIdPrefix)) {
+    if (layer.id.startsWith(mapboxLayerIdPrefix)) {
       console.debug('Clear layer:', layer.id);
       map.removeLayer(layer.id);
     }
@@ -101,4 +101,11 @@ export const clearEditorAndMap = () => {
 
   editor.clear();
   clearMap();
+};
+
+export const clearEditorAndMapConfirm = () => {
+  if (window.confirm('Are you sure to clear all data?') !== true) { // eslint-disable-line no-alert
+    return;
+  }
+  clearEditorAndMap();
 };

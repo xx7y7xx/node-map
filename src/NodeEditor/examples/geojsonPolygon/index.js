@@ -1,8 +1,8 @@
-import FillLayerComponent, { INPUT_KEY as MAP_FILL_LAYER_INPUT_KEY } from 'NodeEditor/FillLayerComponent';
+import FillLayerComponent from 'NodeEditor/FillLayerComponent';
 import MapComponent, { CONTROL_KEY_LAT, CONTROL_KEY_LNG, CONTROL_KEY_ZOOM } from 'NodeEditor/MapComponent';
 import JsonComponent, { CONTROL_KEY, OUTPUT_KEY } from '../../JsonComponent';
-import GeoJSONSourceComponent, { INPUT_KEY as MAP_GEOJSON_INPUT_KEY, OUTPUT_KEY as MAP_GEOJSON_OUTPUT_KEY, CONTROL_KEY_SOURCE_ID } from '../../GeoJSONSourceComponent';
-import LineLayerComponent, { INPUT_KEY as MAP_LINE_LAYER_INPUT_KEY } from '../../LineLayerComponent';
+import GeoJSONSourceComponent, { CONTROL_KEY_SOURCE_ID } from '../../GeoJSONSourceComponent';
+import LineLayerComponent from '../../LineLayerComponent';
 import geojson from './data.json';
 
 export default async function Example() {
@@ -34,15 +34,15 @@ export default async function Example() {
 
   editor.connect(
     jsonNode.outputs.get(OUTPUT_KEY),
-    geojsonSourceNode.inputs.get(MAP_GEOJSON_INPUT_KEY),
+    geojsonSourceNode.inputs.get(GeoJSONSourceComponent.inputKey),
   );
   editor.connect(
-    geojsonSourceNode.outputs.get(MAP_GEOJSON_OUTPUT_KEY),
-    lineLayerNode.inputs.get(MAP_LINE_LAYER_INPUT_KEY),
+    geojsonSourceNode.outputs.get(GeoJSONSourceComponent.outputKey),
+    lineLayerNode.inputs.get(LineLayerComponent.inputKey),
   );
   editor.connect(
-    geojsonSourceNode.outputs.get(MAP_GEOJSON_OUTPUT_KEY),
-    fillLayerNode.inputs.get(MAP_FILL_LAYER_INPUT_KEY),
+    geojsonSourceNode.outputs.get(GeoJSONSourceComponent.outputKey),
+    fillLayerNode.inputs.get(FillLayerComponent.inputKey),
   );
 
   editor.view.area.translate(100, 100);
