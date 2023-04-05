@@ -1,8 +1,13 @@
+/* eslint-disable import/no-unresolved, import/extensions */
+
+import { Node } from 'rete';
+import { NodeData, WorkerInputs } from 'rete/types/core/data';
+
 import LayerComponent from './LayerComponent';
-import ColorPickerControl from './ColorPickerControl';
-import SelectControl from './SelectControl';
-import InputControl from './InputControl';
-import SliderAndExpressionControl from './SliderAndExpressionControl';
+import ColorPickerControl from './ColorPickerControl.jsx';
+import SelectControl from './SelectControl.js';
+import InputControl from './InputControl.js';
+import SliderAndExpressionControl from './SliderAndExpressionControl.jsx';
 
 const defaultTextFont = ['Open Sans Regular', 'Arial Unicode MS Regular'];
 
@@ -30,7 +35,6 @@ const paintProperties = {
     control: ColorPickerControl,
   },
 };
-const allProperties = { ...layoutProperties, ...paintProperties };
 
 const KEY = 'SymbolLayer';
 
@@ -38,20 +42,22 @@ const KEY = 'SymbolLayer';
  * https://docs.mapbox.com/mapbox-gl-js/style-spec/layers/#symbol
  */
 export default class SymbolLayerComponent extends LayerComponent {
+  type = 'symbol';
+
+  layoutProperties = layoutProperties;
+
+  paintProperties = paintProperties;
+
   constructor() {
     super(KEY);
-
-    this.type = 'symbol';
-    this.allProperties = allProperties;
-    this.layoutProperties = layoutProperties;
-    this.paintProperties = paintProperties;
   }
 
   static key = KEY;
 
-  layerBuilder(node) {
+  async layerBuilder(node: Node) {
+    return null;
   }
 
-  layerWorker(node, inputs) {
+  layerWorker(node: NodeData, inputs: WorkerInputs) {
   }
 }

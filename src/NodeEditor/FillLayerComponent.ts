@@ -1,7 +1,13 @@
-import LayerComponent from './LayerComponent';
-import ColorPickerControl from './ColorPickerControl';
-import SliderControl from './SliderControl';
+/* eslint-disable import/no-unresolved, import/extensions */
 
+import { Node } from 'rete';
+import { NodeData, WorkerInputs } from 'rete/types/core/data.js';
+
+import LayerComponent from './LayerComponent';
+import ColorPickerControl from './ColorPickerControl.jsx';
+import SliderControl from './SliderControl.jsx';
+
+const layoutProperties = {};
 const paintProperties = {
   'fill-color': {
     defaultValue: '#000000',
@@ -15,7 +21,6 @@ const paintProperties = {
     },
   },
 };
-const allProperties = { ...paintProperties };
 
 const KEY = 'FillLayer';
 
@@ -23,19 +28,22 @@ const KEY = 'FillLayer';
  * https://docs.mapbox.com/mapbox-gl-js/style-spec/layers/#fill
  */
 export default class FillLayerComponent extends LayerComponent {
+  type = 'fill';
+
+  layoutProperties = layoutProperties;
+
+  paintProperties = paintProperties;
+
   constructor() {
     super(KEY);
-
-    this.type = 'fill';
-    this.allProperties = allProperties;
-    this.paintProperties = paintProperties;
   }
 
   static key = KEY;
 
-  layerBuilder(node) {
+  async layerBuilder(node: Node) {
+    return null;
   }
 
-  layerWorker(node, inputs) {
+  layerWorker(node: NodeData, inputs: WorkerInputs) {
   }
 }
