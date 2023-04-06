@@ -83,7 +83,18 @@
       "class-methods-use-this": "off",
       "no-unused-vars": "off",
       "import/no-unresolved": "off",
-      "import/extensions": "off"
+      "import/extensions": "off",
+      "react/jsx-filename-extension": [
+        2,
+        {
+          "extensions": [
+            ".js",
+            ".jsx",
+            ".ts",
+            ".tsx"
+          ]
+        }
+      ]
     }
   },
   "browserslist": {
