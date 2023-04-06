@@ -4,20 +4,23 @@ import { Node } from 'rete';
 import { NodeData, WorkerInputs } from 'rete/types/core/data.js';
 
 import LayerComponent from './LayerComponent';
-import ColorPickerControl from './ColorPickerControl.jsx';
 import SliderControl from './SliderControl.jsx';
+import ColorPickerAndExpressionControl from './ColorPickerAndExpressionControl';
 
 const layoutProperties = {};
 const paintProperties = {
   'fill-color': {
     defaultValue: '#000000',
-    control: ColorPickerControl,
+    control: ColorPickerAndExpressionControl,
   },
   'fill-opacity': {
     defaultValue: 1,
     control: SliderControl,
     props: {
-      min: 0, max: 1, step: 0.1, defaultValue: 0.5,
+      min: 0,
+      max: 1,
+      step: 0.1,
+      defaultValue: 0.5,
     },
   },
 };
@@ -44,6 +47,5 @@ export default class FillLayerComponent extends LayerComponent {
     return null;
   }
 
-  layerWorker(node: NodeData, inputs: WorkerInputs) {
-  }
+  layerWorker(node: NodeData, inputs: WorkerInputs) {}
 }

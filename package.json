@@ -52,7 +52,8 @@
       "react-app",
       "react-app/jest",
       "plugin:react/recommended",
-      "airbnb"
+      "airbnb",
+      "prettier"
     ],
     "parserOptions": {
       "ecmaFeatures": {
@@ -80,7 +81,9 @@
       "no-underscore-dangle": "off",
       "react/prop-types": "off",
       "class-methods-use-this": "off",
-      "no-unused-vars": "off"
+      "no-unused-vars": "off",
+      "import/no-unresolved": "off",
+      "import/extensions": "off"
     }
   },
   "browserslist": {
@@ -101,6 +104,7 @@
   },
   "devDependencies": {
     "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-import": "^2.27.4",
     "eslint-plugin-jsx-a11y": "^6.7.1",
     "eslint-plugin-react": "^7.32.0",
