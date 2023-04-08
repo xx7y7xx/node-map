@@ -7,12 +7,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* google search dark theme color code */
-body.nm-dark-mode {
-  background: #202124;
-  color: #969ba1;
-}
-
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;

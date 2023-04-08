@@ -3,8 +3,8 @@
 import { Node } from 'rete';
 import { NodeData, WorkerInputs } from 'rete/types/core/data';
 import LayerComponent from './LayerComponent';
-import InputNumberControl from './InputNumberControl.js';
-import SliderAndExpressionControl from './SliderAndExpressionControl.jsx';
+import InputNumberControl from './InputNumberControl';
+import SliderAndExpressionControl from './SliderAndExpressionControl';
 import ColorPickerAndExpressionControl from './ColorPickerAndExpressionControl';
 
 const layoutProperties = {};

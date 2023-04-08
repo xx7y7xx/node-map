@@ -1,7 +1,7 @@
-import Rete, { Component as ReteComponent, Node } from 'rete';
+import Rete, { Component, Node } from 'rete';
 
 import { NodeData, WorkerInputs, WorkerOutputs } from 'rete/types/core/data'; // eslint-disable-line import/no-unresolved
-import { Layer } from 'mapbox-gl';
+import { AnyLayer, Layer, Map } from 'mapbox-gl';
 import InputControl from './InputControl';
 import ExpressionControl from './ExpressionControl';
 import { stringSocket } from './UploadCsvComponent';
@@ -10,9 +10,9 @@ import { genLayer } from './helpers';
 const INPUT_KEY = 'sourceId';
 
 declare global {
-    interface Window {
-        mapbox: any;
-    }
+  interface Window {
+    mapbox: Map;
+  }
 }
 
 type Item = {
@@ -21,12 +21,12 @@ type Item = {
   props?: {
     [key: string]: unknown;
   };
-}
+};
 type Properties = {
   [key: string]: Item;
-}
+};
 
-export default abstract class LayerComponent extends ReteComponent {
+export default abstract class LayerComponent extends Component {
   static inputKey = INPUT_KEY;
 
   abstract type: string;
@@ -47,10 +47,20 @@ export default abstract class LayerComponent extends ReteComponent {
 
     node
       .addInput(new Rete.Input(INPUT_KEY, 'sourceId', stringSocket))
-      .addControl(new InputControl(this.editor, 'layerId', node, { label: 'layerId', disabled: true }))
-      .addControl(new ExpressionControl(this.editor, 'filter', node, { label: 'filter' }));
+      .addControl(
+        new InputControl(this.editor, 'layerId', node, {
+          label: 'layerId',
+          disabled: true,
+        }),
+      )
+      .addControl(
+        new ExpressionControl(this.editor, 'filter', node, { label: 'filter' }),
+      );
 
-    const allProperties: Properties = { ...this.layoutProperties, ...this.paintProperties };
+    const allProperties: Properties = {
+      ...this.layoutProperties,
+      ...this.paintProperties,
+    };
 
     // add layer controls
     Object.keys(allProperties).forEach((key) => {
@@ -60,17 +70,29 @@ export default abstract class LayerComponent extends ReteComponent {
         node.data[key] = defaultValue;
       }
 
-      node.addControl(new Ctrl(this.editor, key, node, { label: key, ...props }));
+      node.addControl(
+        new Ctrl(this.editor, key, node, { label: key, ...props }),
+      );
     });
   }
 
-  abstract layerWorker(node: NodeData, inputs: WorkerInputs, outputs: WorkerOutputs, ...args: unknown[]): void;
+  abstract layerWorker(
+    node: NodeData,
+    inputs: WorkerInputs,
+    outputs: WorkerOutputs,
+    ...args: unknown[]
+  ): void;
 
-  worker(node: NodeData, inputs: WorkerInputs, outputs: WorkerOutputs, ...args: unknown[]) {
+  worker(
+    node: NodeData,
+    inputs: WorkerInputs,
+    outputs: WorkerOutputs,
+    ...args: unknown[]
+  ) {
     console.debug('LayerComponent worker', node, inputs);
 
     const sourceId = inputs[INPUT_KEY][0] as string;
-    const { layerId } = node.data;
+    const layerId = node.data.layerId as string;
 
     this.layerWorker(node, inputs, outputs, ...args);
 
@@ -98,11 +120,15 @@ export default abstract class LayerComponent extends ReteComponent {
 
     if (map.getLayer(layerId)) {
       console.debug('LayerComponent layer exists', layerId);
-      map.setFilter(layerId, node.data.filter);
+      map.setFilter(layerId, node.data.filter as string[]);
 
       Object.keys(this.layoutProperties).forEach((key) => {
         if (key === 'text-field') {
-          map.setLayoutProperty(layerId, key, this.convertTextField(node.data[key] as string)); // TODO
+          map.setLayoutProperty(
+            layerId,
+            key,
+            this.convertTextField(node.data[key] as string),
+          ); // TODO
         } else {
           map.setLayoutProperty(layerId, key, node.data[key]);
         }
@@ -121,19 +147,29 @@ export default abstract class LayerComponent extends ReteComponent {
         //   'line-cap': 'round',
         // },
         layout: {
-          ...Object.keys(this.layoutProperties).reduce((a, v) => ({
-            ...a, [v]: v === 'text-field' ? this.convertTextField(node.data[v] as string) : node.data[v],
-          }), {}),
+          ...Object.keys(this.layoutProperties).reduce(
+            (a, v) => ({
+              ...a,
+              [v]:
+                v === 'text-field'
+                  ? this.convertTextField(node.data[v] as string)
+                  : node.data[v],
+            }),
+            {},
+          ),
         },
         paint: {
-          ...Object.keys(this.paintProperties).reduce((a, v) => ({ ...a, [v]: node.data[v] }), {}),
+          ...Object.keys(this.paintProperties).reduce(
+            (a, v) => ({ ...a, [v]: node.data[v] }),
+            {},
+          ),
         },
       };
       if (node.data.filter) {
         config.filter = node.data.filter as any[];
       }
       console.debug('LayerComponent add layer', config);
-      window.mapbox.addLayer(config);
+      window.mapbox.addLayer(config as AnyLayer);
     }
   }
 
