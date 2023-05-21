@@ -20,7 +20,7 @@ const RemoteDataField = ({
 );
 
 type ControlInternalProps = {
-  // value: string;
+  value: string;
   onClick: () => void;
   onReset: () => void;
 };
@@ -50,6 +50,7 @@ export default class RemoteDataControl extends Control {
     // const node = this.getNode();
 
     this.props = {
+      value: '',
       onClick,
       onReset: () => {
         // this.setContent('');
@@ -63,11 +64,11 @@ export default class RemoteDataControl extends Control {
   //   this.emitter.trigger('process'); // call down stream to re-process data
   // }
 
-  // setValue(val: string) {
-  //   this.props.value = val;
-  //   this.putData(this.key, val);
-  //   this.update();
-  // }
+  setValue(val: string) {
+    this.props.value = val;
+    this.putData(this.key, val);
+    this.update();
+  }
 
   // getValue() {
   //   return this.props.value;

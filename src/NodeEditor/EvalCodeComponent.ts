@@ -9,14 +9,18 @@ import FaqControl from './FaqControl';
 import logger from './logger';
 import faq from './EvalCodeFaq.md';
 
+const KEY = 'EvalCode';
+
 const CONTROL_KEY_FAQ = 'controlKeyFaq';
 const CONTROL_KEY_CODE_BOX = 'controlKeyCodeBox';
 const log = logger('EvalCodeComponent');
 
 export default class EvalCodeComponent extends Rete.Component {
   constructor() {
-    super('EvalCode Node');
+    super(KEY);
   }
+
+  static key = KEY;
 
   builder(node) {
     const input = new Rete.Input('json', 'Json', objectSocket);

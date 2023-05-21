@@ -61,7 +61,9 @@ export default class RemoteDataComponent extends Component {
   }
 
   setControlValue(key: string, content: string) {
-    const control = this.node?.controls.get(key) as DivControl;
+    const control = this.node?.controls.get(key) as
+      | DivControl
+      | RemoteDataControl;
     if (control) {
       control.setValue(content);
     }

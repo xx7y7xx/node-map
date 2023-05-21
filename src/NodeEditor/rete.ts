@@ -16,7 +16,7 @@ import ConcatComponent from './ConcatComponent';
 // import CsvToJsonComponent from './CsvToJsonComponent';
 import JsonComponent from './JsonComponent';
 // import TransformComponent from './TransformComponent';
-// import EvalCodeComponent from './EvalCodeComponent';
+import EvalCodeComponent from './EvalCodeComponent';
 // import GlobalComponent from './GlobalComponent';
 // import PreviewComponent from './PreviewComponent';
 import UploadComponent from './UploadComponent';
@@ -48,7 +48,6 @@ declare global {
 
 export async function createEditor(container: HTMLDivElement) {
   // const transformComponent = new TransformComponent();
-  // const evalCodeComponent = new EvalCodeComponent();
   // const globalComponent = new GlobalComponent();
   // const previewComponent = new PreviewComponent();
   // const csvToJsonComponent = new CsvToJsonComponent();
@@ -72,7 +71,7 @@ export async function createEditor(container: HTMLDivElement) {
     [UploadComponent.key]: new UploadComponent(),
     [JsonComponent.key]: new JsonComponent(),
     // transformComponent,
-    // evalCodeComponent,
+    [EvalCodeComponent.key]: new EvalCodeComponent(),
     // globalComponent,
     [ConcatComponent.key]: new ConcatComponent(),
     // previewComponent,
