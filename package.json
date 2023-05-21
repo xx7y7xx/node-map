@@ -7,13 +7,7 @@
     "@ant-design/icons": "^5.0.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^14.4.3",
     "@turf/turf": "^6.5.0",
-    "@types/jest": "^27.5.2",
-    "@types/mapbox-gl": "^2.7.10",
-    "@types/node": "^16.18.23",
-    "@types/react": "^18.0.33",
-    "@types/react-dom": "^18.0.11",
     "antd": "^5.1.4",
     "axios": "^1.2.2",
     "lodash": "^4.17.21",
@@ -32,8 +26,7 @@
     "rete-connection-plugin": "^0.9.0",
     "rete-context-menu-plugin": "^0.6.0",
     "rete-react-render-plugin": "^0.3.0",
-    "typescript": "^4.9.5",
-    "web-vitals": "^3.1.1"
+    "typescript": "^4.9.5"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -43,48 +36,10 @@
     "build-localhost": "PUBLIC_URL=/ react-scripts build"
   },
   "eslintConfig": {
-    "env": {
-      "browser": true,
-      "es2021": true,
-      "jest": true
-    },
     "extends": [
       "react-app",
-      "react-app/jest",
-      "plugin:react/recommended",
-      "airbnb",
-      "prettier"
-    ],
-    "parserOptions": {
-      "ecmaFeatures": {
-        "jsx": true
-      },
-      "ecmaVersion": "latest",
-      "sourceType": "module"
-    },
-    "plugins": [
-      "react"
-    ],
-    "settings": {
-      "import/resolver": {
-        "node": {
-          "paths": [
-            "src"
-          ]
-        }
-      }
-    },
-    "rules": {
-      "no-console": "off",
-      "no-param-reassign": "off",
-      "max-len": "off",
-      "no-underscore-dangle": "off",
-      "react/prop-types": "off",
-      "class-methods-use-this": "off",
-      "no-unused-vars": "off",
-      "import/no-unresolved": "off",
-      "import/extensions": "off"
-    }
+      "react-app/jest"
+    ]
   },
   "browserslist": {
     "production": [
@@ -103,11 +58,15 @@
     ]
   },
   "devDependencies": {
-    "eslint-config-airbnb": "^19.0.4",
-    "eslint-config-prettier": "^8.8.0",
-    "eslint-plugin-import": "^2.27.4",
-    "eslint-plugin-jsx-a11y": "^6.7.1",
-    "eslint-plugin-react": "^7.32.0",
-    "eslint-plugin-react-hooks": "^4.6.0"
+    "@types/geojson": "^7946.0.10",
+    "@types/jest": "^27.5.2",
+    "@types/mapbox-gl": "^2.7.10",
+    "@types/node": "^16.18.23",
+    "@types/papaparse": "^5.3.7",
+    "@types/prismjs": "^1.26.0",
+    "@types/pubsub-js": "^1.8.3",
+    "@types/react": "^18.0.33",
+    "@types/react-dom": "^18.0.11",
+    "@types/turf": "^3.5.32"
   }
 }

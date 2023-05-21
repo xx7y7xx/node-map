@@ -4,7 +4,7 @@ import { Node } from 'rete';
 import { NodeData, WorkerInputs } from 'rete/types/core/data.js';
 
 import LayerComponent from './LayerComponent';
-import SliderControl from './SliderControl.jsx';
+import SliderControl from './SliderControl';
 import ColorPickerAndExpressionControl from './ColorPickerAndExpressionControl';
 
 const layoutProperties = {};

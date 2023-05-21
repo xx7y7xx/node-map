@@ -3,12 +3,11 @@
 import { Node } from 'rete';
 import { NodeData, WorkerInputs } from 'rete/types/core/data';
 import LayerComponent from './LayerComponent';
-import InputNumberControl from './InputNumberControl.js';
-import SliderAndExpressionControl from './SliderAndExpressionControl.jsx';
-import ColorPickerAndExpressionControl from './ColorPickerAndExpressionControl.jsx';
+import InputNumberControl from './InputNumberControl';
+import SliderAndExpressionControl from './SliderAndExpressionControl';
+import ColorPickerAndExpressionControl from './ColorPickerAndExpressionControl';
 
-const layoutProperties = {
-};
+const layoutProperties = {};
 const paintProperties = {
   'circle-color': {
     defaultValue: '#000000',
@@ -50,6 +49,5 @@ export default class CircleLayerComponent extends LayerComponent {
     return null;
   }
 
-  layerWorker(node: NodeData, inputs: WorkerInputs) {
-  }
+  layerWorker(node: NodeData, inputs: WorkerInputs) {}
 }

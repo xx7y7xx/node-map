@@ -4,8 +4,8 @@ import { Node } from 'rete';
 import { NodeData, WorkerInputs } from 'rete/types/core/data.js';
 
 import LayerComponent from './LayerComponent';
-import ColorPickerControl from './ColorPickerControl.jsx';
-import SliderControl from './SliderControl.jsx';
+import ColorPickerControl from './ColorPickerControl';
+import SliderControl from './SliderControl';
 
 const layoutProperties = {};
 const paintProperties = {
@@ -41,6 +41,5 @@ export default class LineLayerComponent extends LayerComponent {
     return null;
   }
 
-  layerWorker(node: NodeData, inputs: WorkerInputs) {
-  }
+  layerWorker(node: NodeData, inputs: WorkerInputs) {}
 }

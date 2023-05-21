@@ -4,10 +4,10 @@ import { Node } from 'rete';
 import { NodeData, WorkerInputs } from 'rete/types/core/data';
 
 import LayerComponent from './LayerComponent';
-import ColorPickerControl from './ColorPickerControl.jsx';
-import SelectControl from './SelectControl.js';
-import InputControl from './InputControl.js';
-import SliderAndExpressionControl from './SliderAndExpressionControl.jsx';
+import ColorPickerControl from './ColorPickerControl';
+import SelectControl from './SelectControl';
+import InputControl from './InputControl';
+import SliderAndExpressionControl from './SliderAndExpressionControl';
 
 const defaultTextFont = ['Open Sans Regular', 'Arial Unicode MS Regular'];
 
@@ -58,6 +58,5 @@ export default class SymbolLayerComponent extends LayerComponent {
     return null;
   }
 
-  layerWorker(node: NodeData, inputs: WorkerInputs) {
-  }
+  layerWorker(node: NodeData, inputs: WorkerInputs) {}
 }
