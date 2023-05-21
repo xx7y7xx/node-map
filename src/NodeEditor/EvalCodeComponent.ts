@@ -1,6 +1,4 @@
-// @ts-nocheck
-
-import Rete from 'rete';
+import Rete, { Node, Component } from 'rete';
 
 import { objectSocket } from './JsonComponent';
 import EvalCodeControl from './EvalCodeControl';
@@ -8,6 +6,7 @@ import DivControl from './DivControl';
 import FaqControl from './FaqControl';
 import logger from './logger';
 import faq from './EvalCodeFaq.md';
+import { NodeData, WorkerInputs, WorkerOutputs } from 'rete/types/core/data';
 
 const KEY = 'EvalCode';
 
@@ -15,18 +14,18 @@ const CONTROL_KEY_FAQ = 'controlKeyFaq';
 const CONTROL_KEY_CODE_BOX = 'controlKeyCodeBox';
 const log = logger('EvalCodeComponent');
 
-export default class EvalCodeComponent extends Rete.Component {
+export default class EvalCodeComponent extends Component {
   constructor() {
     super(KEY);
   }
 
   static key = KEY;
 
-  builder(node) {
+  async builder(node: Node) {
     const input = new Rete.Input('json', 'Json', objectSocket);
     const output = new Rete.Output('json', 'Json', objectSocket);
 
-    return node
+    node
       .addInput(input)
       .addOutput(output)
       .addControl(
@@ -49,7 +48,11 @@ export default class EvalCodeComponent extends Rete.Component {
    * @param {*} inputData
    * @param {*} outputData
    */
-  async worker(nodeData, inputData, outputData) {
+  async worker(
+    nodeData: NodeData,
+    inputData: WorkerInputs,
+    outputData: WorkerOutputs,
+  ) {
     log('worker', nodeData);
 
     let inputJson;
@@ -64,16 +67,20 @@ export default class EvalCodeComponent extends Rete.Component {
     // Run codes with global functions and vars
     // Because the "Global Node" may run after other nodes since in Rete.js nodes run follow the node ID.
     // So run the code in "Global Node" before running the code in current node.
-    const globalControl = this.editor.nodes
+    const globalControl = this.editor?.nodes
       .find((n) => n.name === 'Global Node')
-      ?.controls.get(CONTROL_KEY_CODE_BOX);
+      ?.controls.get(CONTROL_KEY_CODE_BOX) as EvalCodeControl;
     if (globalControl) {
       await globalControl.runCode(inputJson);
     }
 
-    const { controls } = this.editor.nodes.find((n) => n.id === nodeData.id);
-    const result = await controls.get(CONTROL_KEY_CODE_BOX).runCode(inputJson);
-
-    outputData.json = result;
+    const controls = this.editor?.nodes.find(
+      (n) => n.id === nodeData.id,
+    )?.controls;
+    if (controls) {
+      const control = controls.get(CONTROL_KEY_CODE_BOX) as EvalCodeControl;
+      const result = await control.runCode(inputJson);
+      outputData.json = result;
+    }
   }
 }

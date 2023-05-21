@@ -22,7 +22,7 @@ const deps = {
 export default class EvalCodeControl extends Rete.Control {
   static component = CodeEditor;
 
-  constructor(emitter, key, node, textAreaProps) {
+  constructor(emitter, key, node, textAreaProps = {}) {
     super(key);
     this.emitter = emitter;
     this.key = key;
