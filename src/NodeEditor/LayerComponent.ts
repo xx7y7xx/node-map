@@ -66,7 +66,7 @@ export default abstract class LayerComponent extends Component {
     Object.keys(allProperties).forEach((key) => {
       const { control: Ctrl, defaultValue, props = {} } = allProperties[key];
 
-      if (!node.data[key] === undefined) {
+      if (node.data[key] === undefined) {
         node.data[key] = defaultValue;
       }
 

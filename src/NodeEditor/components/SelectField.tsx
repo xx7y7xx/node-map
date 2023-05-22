@@ -30,7 +30,7 @@ export default function SelectField({
       <Col span={12}>
         <Select
           size="small"
-          style={style}
+          style={{ width: 150, ...style }}
           disabled={disabled}
           options={options}
           value={value}

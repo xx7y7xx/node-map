@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Mapbox Node Editor",
+  "name": "Mapbox Node Editor",
   "icons": [
     {
       "src": "favicon.ico",

@@ -3,12 +3,14 @@ import { Col, InputNumber, Row } from 'antd';
 
 export default function InputNumberField({
   label,
+  min,
   value,
   onChange,
   visible,
   disabled,
 }: {
   label: string;
+  min: number;
   value: number;
   onChange: (value: number | null) => void;
   visible: boolean;
@@ -25,6 +27,7 @@ export default function InputNumberField({
       <Col span={12}>
         <InputNumber
           size="small"
+          min={min}
           disabled={disabled}
           value={value}
           onChange={onChange}

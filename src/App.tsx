@@ -2,7 +2,7 @@ import React, { useRef, useState, MouseEvent } from 'react';
 
 import { Spin } from 'antd';
 
-import { handlerWidth } from './constants';
+import { LS_KEY_NM_PAGE_LEFT_WIDTH, handlerWidth } from './constants';
 import NodeEditor from './NodeEditor';
 import Map from './map';
 
@@ -10,7 +10,11 @@ import './App.css';
 
 function App() {
   const layoutRef = useRef<HTMLDivElement>(null);
-  const [leftWidth, setLeftWidth] = useState(0);
+  const [leftWidth, setLeftWidth] = useState(() => {
+    const d = localStorage.getItem(LS_KEY_NM_PAGE_LEFT_WIDTH);
+    if (!d) return 0;
+    return Number(d);
+  });
   const [isMouseDown, setIsMouseDown] = useState(false);
   const [mapboxReady, setMapboxReady] = useState(false);
 
@@ -21,6 +25,7 @@ function App() {
 
     // How far the mouse has been moved
     setLeftWidth(e.clientX);
+    localStorage.setItem(LS_KEY_NM_PAGE_LEFT_WIDTH, String(e.clientX));
   };
 
   const mouseUpHandler = () => {

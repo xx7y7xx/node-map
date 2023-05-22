@@ -1,7 +1,7 @@
 import React from 'react';
 import { Col, Switch, Row } from 'antd';
 
-export default function InputNumberField({
+export default function SwitchField({
   label,
   checked,
   onChange,
@@ -43,7 +43,7 @@ export default function InputNumberField({
   );
 }
 
-InputNumberField.defaultProps = {
+SwitchField.defaultProps = {
   visible: true,
   disabled: false,
 };
