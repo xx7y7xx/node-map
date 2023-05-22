@@ -22,6 +22,10 @@ export default class EvalCodeComponent extends Component {
   static key = KEY;
 
   async builder(node: Node) {
+    if (!this.editor) {
+      return;
+    }
+
     const input = new Rete.Input('json', 'Json', objectSocket);
     const output = new Rete.Output('json', 'Json', objectSocket);
 
@@ -55,13 +59,13 @@ export default class EvalCodeComponent extends Component {
   ) {
     log('worker', nodeData);
 
-    let inputJson;
+    let inputJson: string;
     if (inputData.json.length === 0) {
       // there is no input
-      inputJson = undefined;
+      inputJson = '';
       // return;
     } else {
-      [inputJson] = inputData.json;
+      [inputJson] = inputData.json as string[];
     }
 
     // Run codes with global functions and vars
