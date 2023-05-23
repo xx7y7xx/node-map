@@ -7,7 +7,7 @@ import LayerComponent from './LayerComponent';
 import ColorPickerControl from './ColorPickerControl';
 import SliderControl from './SliderControl';
 import SelectControl, { genOpts } from './SelectControl';
-import LineDashArrayControl from './LineDashArrayControl';
+import InputNumberArrayControl from './InputNumberArrayControl';
 
 const layoutProperties = {
   // Optional enum. One of "butt", "round", "square". Defaults to "butt".
@@ -35,7 +35,7 @@ const paintProperties = {
   // Optional array of numbers greater than or equal to 0. Units in line widths. Disabled by line-pattern.
   'line-dasharray': {
     defaultValue: [2, 2],
-    control: LineDashArrayControl,
+    control: InputNumberArrayControl,
   },
   // Optional number between 0 and 1 inclusive. Defaults to 1.
   'line-opacity': {

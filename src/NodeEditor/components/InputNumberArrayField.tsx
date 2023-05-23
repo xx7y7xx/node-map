@@ -1,7 +1,7 @@
 import React from 'react';
 import { Col, InputNumber, Row } from 'antd';
 
-export default function LineDashArrayField({
+export default function InputNumberArrayField({
   label,
   min,
   value,
@@ -72,7 +72,7 @@ export default function LineDashArrayField({
   );
 }
 
-LineDashArrayField.defaultProps = {
+InputNumberArrayField.defaultProps = {
   visible: true,
   disabled: false,
 };

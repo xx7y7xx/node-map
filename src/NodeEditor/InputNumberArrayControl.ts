@@ -1,16 +1,16 @@
 import { Control, Node, NodeEditor } from 'rete';
-import LineDashArrayField from './components/LineDashArrayField';
+import InputNumberArrayField from './components/InputNumberArrayField';
 
 type ControlInternalProps = {
   value?: number[];
   onChange: (value: number[]) => void;
 };
 
-export default class LineDashArrayControl extends Control {
-  static component = LineDashArrayField;
+export default class InputNumberArrayControl extends Control {
+  static component = InputNumberArrayField;
 
   emitter: NodeEditor;
-  component: typeof LineDashArrayField;
+  component: typeof InputNumberArrayField;
   props: ControlInternalProps;
 
   // `update` function for control is defined when event "rendercontrol"
@@ -23,7 +23,7 @@ export default class LineDashArrayControl extends Control {
     super(key);
     this.emitter = emitter;
     this.key = key;
-    this.component = LineDashArrayControl.component;
+    this.component = InputNumberArrayControl.component;
 
     // TODO Should use default value from layer component to initialize this
     let initial = [1, 1];

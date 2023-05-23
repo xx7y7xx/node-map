@@ -10,7 +10,7 @@ import InputControl from './InputControl';
 import SliderAndExpressionControl from './SliderAndExpressionControl';
 import SwitchControl from './SwitchControl';
 import InputNumberControl from './InputNumberControl';
-import LineDashArrayControl from './LineDashArrayControl';
+import InputNumberArrayControl from './InputNumberArrayControl';
 
 const layoutProperties = {
   'icon-allow-overlap': { defaultValue: true, control: SwitchControl },
@@ -40,7 +40,7 @@ const layoutProperties = {
   // Optional array of numbers. Defaults to [0,0]. Requires icon-image.
   'icon-offset': {
     defaultValue: [0, 0],
-    control: LineDashArrayControl,
+    control: InputNumberArrayControl,
   },
   'icon-rotate': { defaultValue: 90, control: InputNumberControl },
   // one of map, viewport, auto
