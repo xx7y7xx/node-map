@@ -69,3 +69,9 @@ export default class SelectControl extends Control {
     return this.props.value;
   }
 }
+
+export const genOpts = (arr: string[]) =>
+  arr.map((item) => ({
+    value: item,
+    label: item,
+  }));

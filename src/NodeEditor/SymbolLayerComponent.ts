@@ -5,17 +5,11 @@ import { NodeData, WorkerInputs } from 'rete/types/core/data';
 
 import LayerComponent from './LayerComponent';
 import ColorPickerControl from './ColorPickerControl';
-import SelectControl from './SelectControl';
+import SelectControl, { genOpts } from './SelectControl';
 import InputControl from './InputControl';
 import SliderAndExpressionControl from './SliderAndExpressionControl';
 import SwitchControl from './SwitchControl';
 import InputNumberControl from './InputNumberControl';
-
-const genOpts = (arr: string[]) =>
-  arr.map((item) => ({
-    value: item,
-    label: item,
-  }));
 
 const layoutProperties = {
   'icon-image': {
