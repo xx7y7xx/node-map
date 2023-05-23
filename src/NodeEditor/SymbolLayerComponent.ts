@@ -10,11 +10,37 @@ import InputControl from './InputControl';
 import SliderAndExpressionControl from './SliderAndExpressionControl';
 import SwitchControl from './SwitchControl';
 import InputNumberControl from './InputNumberControl';
+import LineDashArrayControl from './LineDashArrayControl';
 
 const layoutProperties = {
+  'icon-allow-overlap': { defaultValue: true, control: SwitchControl },
+  // Optional enum. One of "center", "left", "right", "top", "bottom", "top-left", "top-right", "bottom-left", "bottom-right". Defaults to "center". Requires icon-image.
+  'icon-anchor': {
+    defaultValue: 'center',
+    control: SelectControl,
+    props: {
+      options: genOpts([
+        'center',
+        'left',
+        'right',
+        'top',
+        'bottom',
+        'top-left',
+        'top-right',
+        'bottom-left',
+        'bottom-right',
+      ]),
+    },
+  },
+  'icon-ignore-placement': { defaultValue: true, control: SwitchControl },
   'icon-image': {
     defaultValue: 'airport-15', // sprite from https://docs.mapbox.com/help/glossary/sprite/
     control: InputControl,
+  },
+  // Optional array of numbers. Defaults to [0,0]. Requires icon-image.
+  'icon-offset': {
+    defaultValue: [0, 0],
+    control: LineDashArrayControl,
   },
   'icon-rotate': { defaultValue: 90, control: InputNumberControl },
   // one of map, viewport, auto
@@ -25,8 +51,11 @@ const layoutProperties = {
       options: genOpts(['map', 'viewport', 'auto']),
     },
   },
-  'icon-allow-overlap': { defaultValue: true, control: SwitchControl },
-  'icon-ignore-placement': { defaultValue: true, control: SwitchControl },
+  // Optional number greater than or equal to 0. Units in factor of the original icon size. Defaults to 1. Requires icon-image.
+  'icon-size': {
+    defaultValue: 1,
+    control: InputNumberControl,
+  },
 
   // Optional enum. One of "point", "line", "line-center". Defaults to "point".
   'symbol-placement': {
