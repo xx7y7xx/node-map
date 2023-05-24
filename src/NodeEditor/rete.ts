@@ -34,6 +34,7 @@ import MapLayerV3Component from './MapLayerV3Component';
 // import MapLineLayerComponent from './MapLineLayerComponent';
 // import TurfLineStringComponent from './TurfLineStringComponent';
 import { clearMap, loadConfig, reteContextMenuOptions } from './helpers';
+import ImageComponent from './ImageComponent';
 
 type WindowNodeMapProp = {
   editor?: NodeEditor;
@@ -80,6 +81,7 @@ export async function createEditor(container: HTMLDivElement) {
     [RemoteDataComponent.key]: new RemoteDataComponent(),
     [MapComponent.key]: new MapComponent(),
     // mapMarkersComponent,
+    [ImageComponent.key]: new ImageComponent(),
     [GeoJSONSourceComponent.key]: new GeoJSONSourceComponent(),
     [LineLayerComponent.key]: new LineLayerComponent(),
     [FillLayerComponent.key]: new FillLayerComponent(),

@@ -36,6 +36,7 @@ const layoutProperties = {
   'icon-image': {
     defaultValue: 'airport-15', // sprite from https://docs.mapbox.com/help/glossary/sprite/
     control: InputControl,
+    input: true,
   },
   // Optional array of numbers. Defaults to [0,0]. Requires icon-image.
   'icon-offset': {
