@@ -28,10 +28,10 @@ export default function MenuDropdown() {
             e.preventDefault();
             return clearEditorAndMapConfirm();
           }
-          case 'KeyX': {
-            e.preventDefault();
-            return setIsModalOpen(true);
-          }
+          // case 'KeyX': {
+          //   e.preventDefault();
+          //   return setIsModalOpen(true);
+          // }
           default:
             console.debug('no key action', e.code);
         }
