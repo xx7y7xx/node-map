@@ -40,7 +40,7 @@ export default class EvalCodeComponent extends Component {
       .addControl(
         new DivControl(
           `evalScriptLabel[node${node.id}]`,
-          `Eval Script(node:${node.id}): Please use variable "input".`,
+          `Eval Script(node:${node.id})`,
         ),
       )
       .addControl(new EvalCodeControl(this.editor, CONTROL_KEY_CODE_BOX, node));

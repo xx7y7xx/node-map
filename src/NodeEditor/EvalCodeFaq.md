@@ -1,15 +1,17 @@
 # EvalCode Node FAQ
 
+Eval Script: Please use variable `input`.
+
 ## Input Example
-      
+
 Input is any JSON object `[[103,1],[103,1]]` or `{foo:'bar'}`.
-      
+
 ## How to write transform
-      
+
 Only write the function body in the text box, think about the function is:
 
 ```js
-function EvalCode (input, deps) {
+function EvalCode(input, deps) {
   const output = doSomething(input);
   return output;
 }
