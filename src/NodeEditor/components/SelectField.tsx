@@ -10,6 +10,7 @@ export default function SelectField({
   onChange,
   visible,
   disabled,
+  ...selectProps
 }: {
   label: string;
   style: CSSProperties;
@@ -45,6 +46,7 @@ export default function SelectField({
             // When double clicking in this text box, the node should not move
             e.stopPropagation();
           }}
+          {...selectProps}
         />
       </Col>
     </Row>
