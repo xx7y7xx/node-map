@@ -12,6 +12,7 @@ import CodeEditor from 'NodeEditor/components/CodeEditor';
 type ControlInternalProps = {
   code: string;
   errMsg: string;
+  result: string;
   onChange: (code: string) => void;
 };
 
@@ -60,12 +61,14 @@ export default class EvalCodeControl extends Control {
       node.data[key] = {
         code: '',
         errMsg: '',
+        result: '',
       };
     }
 
     this.props = {
       code: initialCode,
       errMsg: '',
+      result: '',
       onChange: (v) => {
         this.setKeyVal('code', v);
         this.emitter.trigger('process');
@@ -86,7 +89,7 @@ export default class EvalCodeControl extends Control {
     }
   }
 
-  setKeyVal(key: 'code' | 'errMsg', val: string) {
+  setKeyVal(key: 'code' | 'errMsg' | 'result', val: string) {
     (this.props as ControlInternalProps)[key] = val;
     this.putData(this.key, {
       ...(this.getData(this.key) as EvalCodeControlNodeData),
@@ -130,6 +133,7 @@ export default class EvalCodeControl extends Control {
         this.showError(err);
       }
     }
+    this.showResult(JSON.stringify(fnOut));
 
     return fnOut;
   }
@@ -138,11 +142,13 @@ export default class EvalCodeControl extends Control {
     if (err instanceof Error) {
       this.setKeyVal('errMsg', `Failed to eval: ${err.message}`);
     }
-    this.rerender();
+  }
+
+  showResult(result: string) {
+    this.setKeyVal('result', result);
   }
 
   hideError() {
     this.setKeyVal('errMsg', '');
-    this.rerender();
   }
 }

@@ -1,12 +1,12 @@
 // @ts-nocheck
 
 import React, { useState } from 'react';
-import { Button, Modal } from 'antd';
+import { Button, Col, Modal, Row } from 'antd';
+import ReactJson from 'react-json-view';
 
 import ReactSimpleCodeEditor from './ReactSimpleCodeEditor';
 
-export default function CodeEditor(props) {
-  const { code, onChange, errMsg } = props;
+export default function CodeEditor({ code, onChange, errMsg, result }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const showModal = () => {
     setIsModalOpen(true);
@@ -24,14 +24,21 @@ export default function CodeEditor(props) {
       </Button>
       <Modal
         title="Code Editor"
-        width={800}
+        width={1200}
         open={isModalOpen}
         onOk={handleOk}
         onCancel={handleCancel}>
-        {/* <AntdTextArea code={code} onChange={onChange} /> */}
-        <ReactSimpleCodeEditor code={code} onChange={onChange} />
-        <br />
-        {errMsg}
+        <Row>
+          <Col span={16}>
+            {/* <AntdTextArea code={code} onChange={onChange} /> */}
+            <ReactSimpleCodeEditor code={code} onChange={onChange} />
+            <br />
+          </Col>
+          <Col span={8}>
+            {errMsg}
+            {result && <ReactJson src={JSON.parse(result)} />}
+          </Col>
+        </Row>
       </Modal>
     </div>
   );
