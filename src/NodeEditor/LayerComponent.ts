@@ -32,6 +32,32 @@ type Properties = {
   [key: string]: Item;
 };
 
+const convertTextField = (textField: string) => {
+  const inputBoxStr = textField || '';
+  if (!inputBoxStr.startsWith('[')) {
+    return textField;
+  }
+  return JSON.parse(inputBoxStr);
+};
+
+// get the property value from node's saved data or data from input connections
+const getPropertyValue = (
+  key: string,
+  node: NodeData,
+  inputs: WorkerInputs,
+) => {
+  // TODO
+  if (key === 'text-field') {
+    return convertTextField(node.data[key] as string);
+  }
+
+  if (inputs[key] && inputs[key][0]) {
+    return inputs[key][0];
+  }
+
+  return node.data[key];
+};
+
 export default abstract class LayerComponent extends Component {
   static inputKey = INPUT_KEY;
 
@@ -126,31 +152,33 @@ export default abstract class LayerComponent extends Component {
     }
     console.debug('LayerComponent sourceId exists', sourceId);
 
-    this.addOrUpdateLayer(sourceId, node);
+    this.addOrUpdateLayer(sourceId, node, inputs);
   }
 
-  addOrUpdateLayer(sourceId: string, node: NodeData) {
+  // if layer created already, only update this layer
+  addOrUpdateLayer(sourceId: string, node: NodeData, inputs: WorkerInputs) {
     const map = window.mapbox;
     // const { layerId } = node.data;
     const layerId = node.data.layerId as string;
 
     if (map.getLayer(layerId)) {
       console.debug('LayerComponent layer exists', layerId);
+
+      // set filter
       map.setFilter(layerId, node.data.filter as string[]);
 
+      // set layer properties
       Object.keys(this.layoutProperties).forEach((key) => {
-        if (key === 'text-field') {
-          map.setLayoutProperty(
-            layerId,
-            key,
-            this.convertTextField(node.data[key] as string),
-          ); // TODO
-        } else {
-          map.setLayoutProperty(layerId, key, node.data[key]);
-        }
+        map.setLayoutProperty(
+          layerId,
+          key,
+          getPropertyValue(key, node, inputs),
+        );
       });
+
+      // set paint properties
       Object.keys(this.paintProperties).forEach((key) => {
-        map.setPaintProperty(layerId, key, node.data[key]);
+        map.setPaintProperty(layerId, key, getPropertyValue(key, node, inputs));
       });
     } else {
       console.debug('LayerComponent layer doesnt exist', layerId);
@@ -158,25 +186,20 @@ export default abstract class LayerComponent extends Component {
         id: layerId,
         type: this.type, // 'line',
         source: sourceId,
-        // layout: {
-        //   'line-join': 'round',
-        //   'line-cap': 'round',
-        // },
         layout: {
+          // 'line-join': 'round',
+          // 'line-cap': 'round',
           ...Object.keys(this.layoutProperties).reduce(
             (a, v) => ({
               ...a,
-              [v]:
-                v === 'text-field'
-                  ? this.convertTextField(node.data[v] as string)
-                  : node.data[v],
+              [v]: getPropertyValue(v, node, inputs),
             }),
             {},
           ),
         },
         paint: {
           ...Object.keys(this.paintProperties).reduce(
-            (a, v) => ({ ...a, [v]: node.data[v] }),
+            (a, v) => ({ ...a, [v]: getPropertyValue(v, node, inputs) }),
             {},
           ),
         },
@@ -187,13 +210,5 @@ export default abstract class LayerComponent extends Component {
       console.debug('LayerComponent add layer', config);
       window.mapbox.addLayer(config as AnyLayer);
     }
-  }
-
-  convertTextField(textField: string) {
-    const inputBoxStr = textField || '';
-    if (!inputBoxStr.startsWith('[')) {
-      return textField;
-    }
-    return JSON.parse(inputBoxStr);
   }
 }
