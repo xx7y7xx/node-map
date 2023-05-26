@@ -1,12 +1,22 @@
-// @ts-nocheck
-
 import React, { useState } from 'react';
 import { Button, Col, Modal, Row } from 'antd';
 import ReactJson from 'react-json-view';
 
 import ReactSimpleCodeEditor from './ReactSimpleCodeEditor';
 
-export default function CodeEditor({ code, onChange, errMsg, result }) {
+type PropsType = {
+  code: string;
+  onChange: (code: string) => void;
+  errMsg: string;
+  result: string;
+};
+
+export default function CodeEditor({
+  code,
+  onChange,
+  errMsg,
+  result,
+}: PropsType) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const showModal = () => {
     setIsModalOpen(true);
@@ -30,7 +40,6 @@ export default function CodeEditor({ code, onChange, errMsg, result }) {
         onCancel={handleCancel}>
         <Row>
           <Col span={16}>
-            {/* <AntdTextArea code={code} onChange={onChange} /> */}
             <ReactSimpleCodeEditor code={code} onChange={onChange} />
             <br />
           </Col>

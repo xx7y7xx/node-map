@@ -1,13 +1,10 @@
-// import React from 'react';
 import { Control, Node, NodeEditor } from 'rete';
 import axios from 'axios';
 import * as turf from '@turf/turf';
 import lodash from 'lodash';
 import papaparse from 'papaparse';
 
-// import AntdTextArea from 'NodeEditor/components/AntdTextArea';
 import CodeEditor from 'NodeEditor/components/CodeEditor';
-// import ReactSimpleCodeEditor from './ReactSimpleCodeEditor';
 
 type ControlInternalProps = {
   code: string;
