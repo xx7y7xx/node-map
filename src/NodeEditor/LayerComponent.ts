@@ -6,8 +6,10 @@ import InputControl from './InputControl';
 import ExpressionControl from './ExpressionControl';
 import { stringSocket } from './UploadCsvComponent';
 import { genLayer } from './helpers';
+import LayerNode from './LayerNode';
 
 const INPUT_KEY = 'sourceId';
+export const CONTROL_KEY_LAYER_ID = 'layerId';
 
 declare global {
   interface Window {
@@ -58,6 +60,10 @@ const getPropertyValue = (
   return node.data[key];
 };
 
+type ComponentData = {
+  component: any;
+};
+
 export default abstract class LayerComponent extends Component {
   static inputKey = INPUT_KEY;
 
@@ -69,10 +75,17 @@ export default abstract class LayerComponent extends Component {
 
   abstract layerBuilder(node: Node): Promise<null>;
 
+  constructor(name: string) {
+    super(name);
+
+    // this.data is declared in Component class as "unknown" type
+    (this.data as ComponentData).component = LayerNode;
+  }
+
   async builder(node: Node) {
     // Initial the layer ID input box with value
-    if (!node.data.layerId) {
-      node.data.layerId = genLayer();
+    if (!node.data[CONTROL_KEY_LAYER_ID]) {
+      node.data[CONTROL_KEY_LAYER_ID] = genLayer();
     }
 
     await this.layerBuilder(node);
@@ -81,8 +94,8 @@ export default abstract class LayerComponent extends Component {
     node
       .addInput(new Rete.Input(INPUT_KEY, 'sourceId', stringSocket))
       .addControl(
-        new InputControl(this.editor, 'layerId', node, {
-          label: 'layerId',
+        new InputControl(this.editor, CONTROL_KEY_LAYER_ID, node, {
+          label: 'Layer ID',
           disabled: true,
         }),
       )
@@ -134,7 +147,7 @@ export default abstract class LayerComponent extends Component {
     console.debug('LayerComponent worker', node, inputs);
 
     const sourceId = inputs[INPUT_KEY][0] as string;
-    const layerId = node.data.layerId as string;
+    const layerId = node.data[CONTROL_KEY_LAYER_ID] as string;
 
     this.layerWorker(node, inputs, outputs, ...args);
 
@@ -152,14 +165,17 @@ export default abstract class LayerComponent extends Component {
     }
     console.debug('LayerComponent sourceId exists', sourceId);
 
-    this.addOrUpdateLayer(sourceId, node, inputs);
+    this.addOrUpdateLayer(sourceId, layerId, node, inputs);
   }
 
   // if layer created already, only update this layer
-  addOrUpdateLayer(sourceId: string, node: NodeData, inputs: WorkerInputs) {
+  addOrUpdateLayer(
+    sourceId: string,
+    layerId: string,
+    node: NodeData,
+    inputs: WorkerInputs,
+  ) {
     const map = window.mapbox;
-    // const { layerId } = node.data;
-    const layerId = node.data.layerId as string;
 
     if (map.getLayer(layerId)) {
       console.debug('LayerComponent layer exists', layerId);
