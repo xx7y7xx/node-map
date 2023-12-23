@@ -1,5 +1,7 @@
 import JsonComponent, { CONTROL_KEY, OUTPUT_KEY } from '../../JsonComponent';
-import MapLayerV3Component, { INPUT_KEY } from '../../MapLayerV3Component';
+import MapSourceAndLayerV3Component, {
+  INPUT_KEY,
+} from '../../MapSourceAndLayerV3Component';
 import geojson from './data.json';
 
 const jsonNodeExample = async () => {
@@ -19,7 +21,7 @@ const jsonNodeExample = async () => {
     },
   );
   const mapLayerV3Node = await (
-    m.get(MapLayerV3Component.key) as MapLayerV3Component
+    m.get(MapSourceAndLayerV3Component.key) as MapSourceAndLayerV3Component
   ).createNode();
 
   mapLayerV3Node.position = [300, -100];

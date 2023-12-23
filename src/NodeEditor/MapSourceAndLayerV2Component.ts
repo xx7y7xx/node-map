@@ -1,8 +1,10 @@
+// @ts-nocheck2
+
 import Rete, { Node, Component } from 'rete';
 
 import { objectSocket } from './JsonComponent';
-// import ColorPickerControl from './ColorPickerControl';
-// import SliderControl from './SliderControl';
+import ColorPickerControl from './ColorPickerControl';
+import SliderControl from './SliderControl';
 import InputControl from './InputControl';
 import MapControl from './MapControl';
 import { genSourceId } from './helpers';
@@ -12,30 +14,30 @@ import { FeatureCollection } from 'geojson';
 // const LAYER_ID = 'nm-line-string-layer';
 // const LAYER_ID_POINT = 'nm-point-layer';
 export const INPUT_KEY = 'geojson';
-// const CONTROL_KEY_LINE_COLOR = 'controlKeyLineColor';
-// const CONTROL_KEY_LINE_WIDTH = 'controlKeyLineWidth';
-// const CONTROL_KEY_COLOR_BASE_ON_FIELD = 'controlKeyColorBaseOnField';
+const CONTROL_KEY_LINE_COLOR = 'controlKeyLineColor';
+const CONTROL_KEY_LINE_WIDTH = 'controlKeyLineWidth';
+const CONTROL_KEY_COLOR_BASE_ON_FIELD = 'controlKeyColorBaseOnField';
 // const CONTROL_KEY_GEOJSON = 'controlKeyGeojson';
 const CONTROL_KEY_SOURCE_ID = 'controlKeySourceId';
 const CONTROL_KEY_MAP = 'controlKeyMap';
 
-const KEY = 'Map Layer V3 Node';
+const KEY = 'Map Source And Layer V2';
 
 /**
- * Show all the input controls and other controls on the right side Drawer component
- * MapLayerV3Component = GeoJSONSourceComponent + LineLayerComponent
+ * Show all the input control and other controls on the node
+ * MapSourceAndLayerV2Component = GeoJSONSourceComponent + LineLayerComponent
  * The data stored in this node:
  * ```json
  * {
  *   "controlKeyMap": {
- *      "lineColor": "#000",
+ *     "lineColor": "#000",
  *     "lineWidth": 1,
  *     "colorBaseOnField": ""
  *   }
  * }
  * ```
  */
-export default class MapLayerV3Component extends Component {
+export default class MapSourceAndLayerV2Component extends Component {
   constructor() {
     super(KEY);
   }
@@ -43,7 +45,10 @@ export default class MapLayerV3Component extends Component {
   static key = KEY;
 
   async builder(node: Node) {
-    if (!this.editor) return;
+    if (!this.editor) {
+      console.error('[NM] FATAL: editor is invalid!');
+      return;
+    }
 
     const input = new Rete.Input(INPUT_KEY, 'GeoJSON', objectSocket);
 
@@ -54,26 +59,39 @@ export default class MapLayerV3Component extends Component {
 
     node
       .addInput(input)
-      // .addControl(new ColorPickerControl(this.editor, CONTROL_KEY_LINE_COLOR, node, { label: 'color' }))
-      // .addControl(new SliderControl(this.editor, CONTROL_KEY_LINE_WIDTH, node, { label: 'line-width' }))
-      // .addControl(new InputControl(this.editor, CONTROL_KEY_COLOR_BASE_ON_FIELD, node, { label: 'Color base on field' }))
+      .addControl(
+        new ColorPickerControl(this.editor, CONTROL_KEY_LINE_COLOR, node, {
+          label: 'color',
+        }),
+      )
+      .addControl(
+        new SliderControl(this.editor, CONTROL_KEY_LINE_WIDTH, node, {
+          label: 'line-width',
+        }),
+      )
+      .addControl(
+        new InputControl(this.editor, CONTROL_KEY_COLOR_BASE_ON_FIELD, node, {
+          label: 'Color base on field',
+        }),
+      )
       // .addControl(new TextControl(this.editor, CONTROL_KEY_GEOJSON, node, true))
       .addControl(
         new InputControl(this.editor, CONTROL_KEY_SOURCE_ID, node, {
           label: 'sourceId',
-          visible: false,
+          disabled: true,
         }),
       )
       .addControl(
         new MapControl(this.editor, CONTROL_KEY_MAP, {
           sourceId: node.data[CONTROL_KEY_SOURCE_ID] as string,
           defaultValue: node.data[CONTROL_KEY_MAP],
+          // visible: false,
         }),
       );
   }
 
   worker(node: NodeData, inputs: WorkerInputs) {
-    console.debug('MapLayerV3Component worker', node, inputs);
+    console.debug('MapSourceAndLayerV2Component worker', node, inputs);
     // inputs[INPUT_KEY]=[] // no data
     // inputs[INPUT_KEY]=[[[103.8254528,1.2655414]]]
     const geojson = inputs[INPUT_KEY][0] as FeatureCollection;
@@ -82,11 +100,11 @@ export default class MapLayerV3Component extends Component {
       .find((n) => n.id === node.id)
       ?.controls.get(CONTROL_KEY_MAP) as MapControl;
 
-    // const lineCfg = {
-    //   lineColor: node.data[CONTROL_KEY_LINE_COLOR],
-    //   lineWidth: node.data[CONTROL_KEY_LINE_WIDTH],
-    //   colorBaseOnField: node.data[CONTROL_KEY_COLOR_BASE_ON_FIELD],
-    // };
+    const lineCfg = {
+      lineColor: node.data[CONTROL_KEY_LINE_COLOR],
+      lineWidth: node.data[CONTROL_KEY_LINE_WIDTH],
+      colorBaseOnField: node.data[CONTROL_KEY_COLOR_BASE_ON_FIELD],
+    };
 
     if (!geojson) {
       // no data input, maybe link disconnect
@@ -97,6 +115,6 @@ export default class MapLayerV3Component extends Component {
       return;
     }
 
-    mapCtrl.setAllData(geojson);
+    mapCtrl.setAllDataWithStyle(geojson, lineCfg);
   }
 }

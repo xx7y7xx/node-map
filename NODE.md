@@ -32,11 +32,12 @@ Render map with input data source ID.
 
 Render map with input data source ID.
 
-### Map Layer V2 Node
+### Map Source And Layer V2 Node
 
 Render map with input GeoJSON data.
 
 Examples:
-* Simple - https://xx7y7xx.github.io/node-map/?load=/node-map/examples/simple.json
-* World countries - https://xx7y7xx.github.io/node-map/?load=/node-map/examples/world.json (https://github.com/johan/world.geo.json)
-* Point label - https://xx7y7xx.github.io/node-map/?load=/node-map/examples/point-label.json
+
+- Simple - https://xx7y7xx.github.io/node-map/?load=/node-map/examples/simple.json
+- World countries - https://xx7y7xx.github.io/node-map/?load=/node-map/examples/world.json (https://github.com/johan/world.geo.json)
+- Point label - https://xx7y7xx.github.io/node-map/?load=/node-map/examples/point-label.json
