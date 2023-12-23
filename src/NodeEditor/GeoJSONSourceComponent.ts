@@ -26,7 +26,7 @@ const defaultClusterRadius = 50;
 
 /**
  * API - https://docs.mapbox.com/mapbox-gl-js/api/sources/#geojsonsource
- * Input1: GeoJSON
+ * Input1: JSON (GeoJSON)
  * Input2: URL
  * Output: sourceId
  *
@@ -70,7 +70,7 @@ export default class GeoJSONSourceComponent extends Component {
       node.data.clusterRadius = defaultClusterRadius;
     }
 
-    const input = new Rete.Input(INPUT_KEY, 'GeoJSON', objectSocket);
+    const input = new Rete.Input(INPUT_KEY, 'JSON', objectSocket);
     const output = new Rete.Output(OUTPUT_KEY, 'sourceId', stringSocket);
 
     node

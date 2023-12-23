@@ -15,7 +15,7 @@ export default class TurfLineStringComponent extends Rete.Component {
 
   builder(node) {
     const input = new Rete.Input(INPUT_KEY, 'coordinatesArray', objectSocket);
-    const output = new Rete.Output(OUTPUT_KEY, 'GeoJSON', objectSocket);
+    const output = new Rete.Output(OUTPUT_KEY, 'JSON', objectSocket);
 
     return node.addInput(input).addOutput(output);
   }

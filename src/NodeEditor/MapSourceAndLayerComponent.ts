@@ -50,7 +50,7 @@ export default class MapSourceAndLayerComponent extends Component {
       return;
     }
 
-    const input = new Rete.Input(INPUT_KEY, 'GeoJSON', objectSocket);
+    const input = new Rete.Input(INPUT_KEY, 'JSON', objectSocket);
 
     // Initial the source ID input box with value
     if (!node.data[CONTROL_KEY_SOURCE_ID]) {
