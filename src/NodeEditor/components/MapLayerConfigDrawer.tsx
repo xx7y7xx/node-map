@@ -12,7 +12,7 @@ export const INLINE = 'inline';
  *
  * @param {*} props
  * @param {('modal'|'inline')} props.mode Default is "modal", will show a button, and click to show modal, another is "inline", will show all input box in node directly
- * @param {string} props.sourceId This is readonly, generated from MapSourceAndLayerV3Component
+ * @param {string} props.sourceId This is readonly, generated from MapSourceAndLayerComponent
  * @returns
  */
 export default function MapLayerConfigDrawer({

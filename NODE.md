@@ -32,7 +32,7 @@ Render map with input data source ID.
 
 Render map with input data source ID.
 
-### Map Source And Layer V3 Node
+### Map Source And Layer Node
 
 Render map with input GeoJSON data.
 

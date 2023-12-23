@@ -29,7 +29,7 @@ import LineLayerComponent from './LineLayerComponent';
 import FillLayerComponent from './FillLayerComponent';
 import CircleLayerComponent from './CircleLayerComponent';
 import SymbolLayerComponent from './SymbolLayerComponent';
-import MapSourceAndLayerV3Component from './MapSourceAndLayerV3Component';
+import MapSourceAndLayerComponent from './MapSourceAndLayerComponent';
 // import MapLineLayerComponent from './MapLineLayerComponent';
 // import TurfLineStringComponent from './TurfLineStringComponent';
 import { clearMap, loadConfig, reteContextMenuOptions } from './helpers';
@@ -85,7 +85,7 @@ export async function createEditor(container: HTMLDivElement) {
     [FillLayerComponent.key]: new FillLayerComponent(),
     [CircleLayerComponent.key]: new CircleLayerComponent(),
     [SymbolLayerComponent.key]: new SymbolLayerComponent(),
-    [MapSourceAndLayerV3Component.key]: new MapSourceAndLayerV3Component(),
+    [MapSourceAndLayerComponent.key]: new MapSourceAndLayerComponent(),
     // mapLineLayerComponent,
     // turfLineStringComponent,
   };

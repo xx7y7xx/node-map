@@ -19,11 +19,13 @@ export const INPUT_KEY = 'geojson';
 const CONTROL_KEY_SOURCE_ID = 'controlKeySourceId';
 const CONTROL_KEY_MAP = 'controlKeyMap';
 
-const KEY = 'Map Source And Layer V3';
+const KEY = 'Map Source And Layer';
 
 /**
+ * This node includes both map source and map layer
+ * MapSourceAndLayerComponent = GeoJSONSourceComponent + LineLayerComponent
+ *
  * Show all the input controls and other controls on the right side Drawer component
- * MapSourceAndLayerV3Component = GeoJSONSourceComponent + LineLayerComponent
  * The data stored in this node:
  * ```json
  * {
@@ -35,7 +37,7 @@ const KEY = 'Map Source And Layer V3';
  * }
  * ```
  */
-export default class MapSourceAndLayerV3Component extends Component {
+export default class MapSourceAndLayerComponent extends Component {
   constructor() {
     super(KEY);
   }
@@ -76,7 +78,7 @@ export default class MapSourceAndLayerV3Component extends Component {
   }
 
   worker(node: NodeData, inputs: WorkerInputs) {
-    console.debug('MapSourceAndLayerV3Component worker', node, inputs);
+    console.debug('MapSourceAndLayerComponent worker', node, inputs);
     // inputs[INPUT_KEY]=[] // no data
     // inputs[INPUT_KEY]=[[[103.8254528,1.2655414]]]
     const geojson = inputs[INPUT_KEY][0] as FeatureCollection;
