@@ -135,7 +135,7 @@ export default function MenuDropdown() {
     },
     {
       key: 'clear-editor',
-      label: <a onClick={handleClean}>Clear Node Map</a>,
+      label: <a onClick={handleClean}>Clear Node Map (Command+L)</a>,
       icon: <FolderOpenOutlined />,
     },
   ];

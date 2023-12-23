@@ -29,7 +29,6 @@ import LineLayerComponent from './LineLayerComponent';
 import FillLayerComponent from './FillLayerComponent';
 import CircleLayerComponent from './CircleLayerComponent';
 import SymbolLayerComponent from './SymbolLayerComponent';
-// import MapSourceAndLayerV2Component from './MapSourceAndLayerV2Component';
 import MapSourceAndLayerV3Component from './MapSourceAndLayerV3Component';
 // import MapLineLayerComponent from './MapLineLayerComponent';
 // import TurfLineStringComponent from './TurfLineStringComponent';
@@ -55,7 +54,6 @@ export async function createEditor(container: HTMLDivElement) {
   // const uploadCsvComponent = new UploadCsvComponent();
   // const remoteDataComponent = new RemoteDataComponent();
   // const mapMarkersComponent = new MapMarkersComponent();
-  // const mapSourceAndLayerV2Component = new MapSourceAndLayerV2Component();
   // const mapLineLayerComponent = new MapLineLayerComponent();
   // const turfLineStringComponent = new TurfLineStringComponent();
 
@@ -87,7 +85,6 @@ export async function createEditor(container: HTMLDivElement) {
     [FillLayerComponent.key]: new FillLayerComponent(),
     [CircleLayerComponent.key]: new CircleLayerComponent(),
     [SymbolLayerComponent.key]: new SymbolLayerComponent(),
-    // mapSourceAndLayerV2Component,
     [MapSourceAndLayerV3Component.key]: new MapSourceAndLayerV3Component(),
     // mapLineLayerComponent,
     // turfLineStringComponent,
