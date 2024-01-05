@@ -2,6 +2,15 @@ import Rete, { Component, Node } from 'rete';
 import JsonControl from './JsonControl';
 import { NodeData, WorkerInputs, WorkerOutputs } from 'rete/types/core/data';
 
+/**
+ * This type in Javascript can be:
+ * - string: JSON.parse("abc")
+ * - number: JSON.parse(123)
+ * - boolean: JSON.parse(true)
+ * - null: JSON.parse(null)
+ * - object: JSON.parse("[1,2,3]")
+ * So it's a dynamic type
+ */
 export const objectSocket = new Rete.Socket('Object value');
 
 export const KEY = 'JSON';

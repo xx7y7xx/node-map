@@ -5,6 +5,7 @@ import { AnyLayer, Layer, Map } from 'mapbox-gl';
 import InputControl from './InputControl';
 import ExpressionControl from './ExpressionControl';
 import { stringSocket } from './UploadCsvComponent';
+import { objectSocket } from './JsonComponent';
 import { genLayer } from './helpers';
 import LayerNode from './LayerNode';
 
@@ -122,7 +123,8 @@ export default abstract class LayerComponent extends Component {
       });
 
       if (allProperties[key].input) {
-        const input = new Rete.Input(key, key, stringSocket);
+        // use objectSocket type so we can get input from a JSON node
+        const input = new Rete.Input(key, key, objectSocket);
         input.addControl(_control);
         node.addInput(input);
       } else {

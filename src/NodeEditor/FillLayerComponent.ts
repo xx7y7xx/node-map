@@ -12,6 +12,7 @@ const paintProperties = {
   'fill-color': {
     defaultValue: '#000000',
     control: ColorPickerAndExpressionControl,
+    input: true,
   },
   'fill-opacity': {
     defaultValue: 1,
