@@ -5,8 +5,13 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 
 import { imageIdArrow, ARROW_URL } from '../constants';
 
+/**
+ * How to get token:
+ * 1. Try to search on GitHut: https://github.com/search?q=mapboxgl.accessToken&type=code
+ * 2. Get one from search result, it is now: https://github.com/sosbrumadinho/brumadinho_location/blob/b9a94fd9295ba5759b93ba7def584c1f39b7dde0/brumadinho_heatmap/public/js/map.js#L3
+ */
 mapboxgl.accessToken =
-  'pk.eyJ1Ijoibm90YWxlbWVzYSIsImEiOiJjazhiOTZnb2gwM3NxM2ZucGp1Z21mNjZ0In0.Z4nS6wdB4WzflkDItyXSIQ';
+  'pk.eyJ1Ijoiam9zZWJlemVycmEiLCJhIjoiY2pyazVtdDA5MDE5czQ0cmdsNnFjZjVsdiJ9.g3x0Z17jXKFjfYEc2ivxsg';
 
 declare global {
   interface Window {
