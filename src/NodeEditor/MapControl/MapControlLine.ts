@@ -1,6 +1,6 @@
 import { NodeEditor, Control } from 'rete';
-import mapboxgl, {
-  GeoJSONSource,
+import {
+  /*mapboxgl,*/ GeoJSONSource,
   LngLatBoundsLike,
   MapLayerMouseEvent,
 } from 'mapbox-gl';
@@ -9,7 +9,7 @@ import * as turf from '@turf/turf';
 // import { imageIdArrow } from 'constants.js';
 import MapLayerConfigDrawer from '../components/MapLayerConfigDrawer';
 import { DEFAULT_LINE_COLOR, DEFAULT_LINE_WIDTH } from './constants';
-import { fillColor, isEmpty } from './helpers';
+import { /*fillColor,*/ isEmpty } from './helpers';
 import { Feature, FeatureCollection } from 'geojson';
 
 type ControlInternalProps = {
@@ -187,7 +187,7 @@ export default class MapControlLine extends Control {
   initImgLayer() {
     console.debug('initImgLayer');
 
-    const map = window.mapbox;
+    // const map = window.mapbox;
 
     // // console.log('image exists?', map.hasImage(imageIdArrow));
     // if (map.getLayer(this.layerIdArrow)) {
@@ -250,13 +250,11 @@ export default class MapControlLine extends Control {
   }
 
   _mapHideOrShowImgLayerAccordingToData(geojson: FeatureCollection | Feature) {
-    const map = window.mapbox;
-
+    // const map = window.mapbox;
     // if (!map.getLayer(this.layerIdArrow)) {
     //   console.debug('img layer not ready yet');
     //   return;
     // }
-
     // // * When first feature in collection is not line string, then no show arrow image
     // // * When the feature is not line string, then no show arrow image
     // if (geojson.type === 'FeatureCollection') {
@@ -270,7 +268,6 @@ export default class MapControlLine extends Control {
     //     return;
     //   }
     // }
-
     // map.setLayoutProperty(this.layerIdArrow, 'visibility', 'visible');
   }
 
@@ -343,39 +340,33 @@ export default class MapControlLine extends Control {
   }
 
   mouseEventPopup() {
-    const map = window.mapbox;
-    // Create a popup, but don't add it to the map yet.
-    const popup = new mapboxgl.Popup({
-      closeButton: false,
-      closeOnClick: false,
-    });
-
+    // const map = window.mapbox;
+    // // Create a popup, but don't add it to the map yet.
+    // const popup = new mapboxgl.Popup({
+    //   closeButton: false,
+    //   closeOnClick: false,
+    // });
     // // Show popup when mouse on a circle
     // map.on('mouseenter', this.layerIdPoint, (e) => {
     //   // Change the cursor style as a UI indicator.
     //   map.getCanvas().style.cursor = 'pointer';
-
     //   if (e.features[0].geometry.type !== 'Point') {
     //     // Only show popup for Point
     //     return;
     //   }
-
     //   // Copy coordinates array.
     //   const coordinates = e.features[0].geometry.coordinates.slice();
     //   const { description } = e.features[0].properties;
-
     //   // Ensure that if the map is zoomed out such that multiple
     //   // copies of the feature are visible, the popup appears
     //   // over the copy being pointed to.
     //   while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
     //     coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
     //   }
-
     //   // Populate the popup and set its coordinates
     //   // based on the feature found.
     //   popup.setLngLat(coordinates).setHTML(description).addTo(map);
     // });
-
     // map.on('mouseleave', this.layerIdPoint, () => {
     //   map.getCanvas().style.cursor = '';
     //   popup.remove();
