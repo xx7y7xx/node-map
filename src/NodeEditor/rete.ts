@@ -30,7 +30,6 @@ import FillLayerComponent from './FillLayerComponent';
 import CircleLayerComponent from './CircleLayerComponent';
 import SymbolLayerComponent from './SymbolLayerComponent';
 import MapSourceAndLayerComponent from './MapSourceAndLayerComponent';
-// import MapLineLayerComponent from './MapLineLayerComponent';
 // import TurfLineStringComponent from './TurfLineStringComponent';
 import { clearMap, loadConfig, reteContextMenuOptions } from './helpers';
 import ImageComponent from './ImageComponent';
@@ -54,7 +53,6 @@ export async function createEditor(container: HTMLDivElement) {
   // const uploadCsvComponent = new UploadCsvComponent();
   // const remoteDataComponent = new RemoteDataComponent();
   // const mapMarkersComponent = new MapMarkersComponent();
-  // const mapLineLayerComponent = new MapLineLayerComponent();
   // const turfLineStringComponent = new TurfLineStringComponent();
 
   const editor = new Rete.NodeEditor(NODE_EDITOR_ID, container);
@@ -86,7 +84,6 @@ export async function createEditor(container: HTMLDivElement) {
     [CircleLayerComponent.key]: new CircleLayerComponent(),
     [SymbolLayerComponent.key]: new SymbolLayerComponent(),
     [MapSourceAndLayerComponent.key]: new MapSourceAndLayerComponent(),
-    // mapLineLayerComponent,
     // turfLineStringComponent,
   };
   window.___nodeMap.allComponents = allComponents;
