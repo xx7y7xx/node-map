@@ -60,7 +60,10 @@ class LayerNode extends Node {
             />
           ))}
 
-        <Collapse defaultActiveKey={defaultActiveKey} onChange={this.onChange}>
+        <Collapse
+          size="small"
+          defaultActiveKey={defaultActiveKey}
+          onChange={this.onChange}>
           <Panel header="Layer Properties" key="1">
             {/* Controls(properties) */}
             {controls
