@@ -32,10 +32,6 @@ Render map with input data source ID.
 
 Render map with input data source ID.
 
-### Map Source And Layer Node
-
-Render map with input GeoJSON data.
-
 Examples:
 
 - Simple - https://xx7y7xx.github.io/node-map/?load=/node-map/examples/simple.json

@@ -22,6 +22,8 @@ const CONTROL_KEY_MAP = 'controlKeyMap';
 const KEY = 'Map Source And Layer';
 
 /**
+ * DEPRECATED - https://docs.google.com/document/d/1B2U0rhs68pzb5RwncYiNAriuFrRGE4rAgbuaMEobt60/edit#heading=h.7kgmuuq6f6h2
+ *
  * This node includes both map source and map layer
  * MapSourceAndLayerComponent = GeoJSONSourceComponent + LineLayerComponent
  *
