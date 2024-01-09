@@ -2,8 +2,7 @@ import GeoJSONSourceComponent, {
   CONTROL_KEY_SOURCE_ID,
 } from 'NodeEditor/GeoJSONSourceComponent';
 import MapComponent, {
-  CONTROL_KEY_LAT,
-  CONTROL_KEY_LNG,
+  CONTROL_KEY_LNGLAT,
   CONTROL_KEY_ZOOM,
 } from 'NodeEditor/MapComponent';
 import RemoteDataComponent from 'NodeEditor/RemoteDataComponent';
@@ -20,8 +19,7 @@ const jsonNodeExample = async () => {
   const m = editor.components;
 
   const mapNode = await (m.get(MapComponent.key) as MapComponent).createNode({
-    [CONTROL_KEY_LNG]: -103.5917,
-    [CONTROL_KEY_LAT]: 40.6699,
+    [CONTROL_KEY_LNGLAT]: [-103.5917, 40.6699],
     [CONTROL_KEY_ZOOM]: 3,
   });
   const remoteDataNode = await (

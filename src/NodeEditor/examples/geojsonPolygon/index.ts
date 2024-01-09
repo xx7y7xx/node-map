@@ -1,7 +1,6 @@
 import FillLayerComponent from 'NodeEditor/FillLayerComponent';
 import MapComponent, {
-  CONTROL_KEY_LAT,
-  CONTROL_KEY_LNG,
+  CONTROL_KEY_LNGLAT,
   CONTROL_KEY_ZOOM,
 } from 'NodeEditor/MapComponent';
 import JsonComponent, { CONTROL_KEY, OUTPUT_KEY } from '../../JsonComponent';
@@ -22,8 +21,7 @@ export default async function Example() {
   const m = editor?.components;
 
   const mapNode = await (m.get(MapComponent.key) as MapComponent).createNode({
-    [CONTROL_KEY_LNG]: -68.137343,
-    [CONTROL_KEY_LAT]: 45.137451,
+    [CONTROL_KEY_LNGLAT]: [-68.137343, 45.137451],
     [CONTROL_KEY_ZOOM]: 5,
   });
   const jsonNode = await (m.get(JsonComponent.key) as JsonComponent).createNode(

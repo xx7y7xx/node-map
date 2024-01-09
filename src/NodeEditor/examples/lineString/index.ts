@@ -3,8 +3,7 @@ import GeoJSONSourceComponent, {
 } from 'NodeEditor/GeoJSONSourceComponent';
 import LineLayerComponent from 'NodeEditor/LineLayerComponent';
 import MapComponent, {
-  CONTROL_KEY_LAT,
-  CONTROL_KEY_LNG,
+  CONTROL_KEY_LNGLAT,
   CONTROL_KEY_ZOOM,
 } from 'NodeEditor/MapComponent';
 import JsonComponent, { CONTROL_KEY, OUTPUT_KEY } from '../../JsonComponent';
@@ -20,8 +19,7 @@ const jsonNodeExample = async () => {
   const m = editor.components;
 
   const mapNode = await (m.get(MapComponent.key) as MapComponent).createNode({
-    [CONTROL_KEY_LNG]: -122.486052,
-    [CONTROL_KEY_LAT]: 37.830348,
+    [CONTROL_KEY_LNGLAT]: [-122.486052, 37.830348],
     [CONTROL_KEY_ZOOM]: 14,
   });
   const jsonNode = await (m.get(JsonComponent.key) as JsonComponent).createNode(

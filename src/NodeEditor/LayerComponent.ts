@@ -8,6 +8,7 @@ import { stringSocket } from './UploadCsvComponent';
 import { objectSocket } from './JsonComponent';
 import { genLayer } from './helpers';
 import LayerNode from './LayerNode';
+import { getPropertyValue } from './nodeHelpers';
 
 const INPUT_KEY = 'sourceId';
 export const CONTROL_KEY_LAYER_ID = 'layerId';
@@ -33,32 +34,6 @@ type Item = {
 };
 type Properties = {
   [key: string]: Item;
-};
-
-const convertTextField = (textField: string) => {
-  const inputBoxStr = textField || '';
-  if (!inputBoxStr.startsWith('[')) {
-    return textField;
-  }
-  return JSON.parse(inputBoxStr);
-};
-
-// get the property value from node's saved data or data from input connections
-const getPropertyValue = (
-  key: string,
-  node: NodeData,
-  inputs: WorkerInputs,
-) => {
-  // TODO
-  if (key === 'text-field') {
-    return convertTextField(node.data[key] as string);
-  }
-
-  if (inputs[key] && inputs[key][0]) {
-    return inputs[key][0];
-  }
-
-  return node.data[key];
 };
 
 type ComponentData = {
@@ -111,6 +86,7 @@ export default abstract class LayerComponent extends Component {
 
     // add layer controls for both paint and layout properties
     Object.keys(allProperties).forEach((key) => {
+      // key is the property name, like 'line-color'
       const { control: Ctrl, defaultValue, props = {} } = allProperties[key];
 
       if (node.data[key] === undefined) {

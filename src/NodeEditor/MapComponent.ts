@@ -1,16 +1,17 @@
-import { Component, Node } from 'rete';
+import Rete, { Component, Node } from 'rete';
+import { LngLatLike } from 'mapbox-gl';
 
-import InputNumberControl from './InputNumberControl';
 import SliderControl from './SliderControl';
 import SelectControl from './SelectControl';
 import InputControl from './InputControl';
 import { NodeData, WorkerInputs, WorkerOutputs } from 'rete/types/core/data';
 import { MapMouseEvent } from 'mapbox-gl';
+import { objectSocket } from './JsonComponent';
+import { getPropertyValue } from './nodeHelpers';
 
 const KEY = 'Map';
 export const CONTROL_KEY_STYLE = 'inputControlStyle';
-export const CONTROL_KEY_LNG = 'inputControlLng';
-export const CONTROL_KEY_LAT = 'inputControlLat';
+export const CONTROL_KEY_LNGLAT = 'inputControlLngLat';
 export const CONTROL_KEY_ZOOM = 'inputControlZoom';
 export const CONTROL_KEY_PROJECTION = 'inputControlProjection';
 const defaultStyle = 'mapbox://styles/mapbox/streets-v12';
@@ -30,16 +31,45 @@ const PROJECTIONS = [
 
 const updateValues = (node: Node) => (event: MapMouseEvent) => {
   const map = event.target;
-  (node.controls.get(CONTROL_KEY_LNG) as InputNumberControl)?.setValue(
-    map?.getCenter().lng,
-  );
-  (node.controls.get(CONTROL_KEY_LAT) as InputNumberControl)?.setValue(
-    map?.getCenter().lat,
+  (node.controls.get(CONTROL_KEY_LNGLAT) as InputControl)?.setValue(
+    `${map?.getCenter().lng},${map?.getCenter().lat}`,
   );
   (node.controls.get(CONTROL_KEY_ZOOM) as SliderControl)?.setValue(
     map?.getZoom(),
   );
 };
+
+const projections = PROJECTIONS.map((item) => ({
+  value: item,
+  label: item,
+}));
+
+const mapProps = [
+  {
+    key: CONTROL_KEY_STYLE,
+    label: 'style',
+    control: InputControl,
+  },
+  {
+    key: CONTROL_KEY_LNGLAT,
+    label: 'lnglat',
+    control: InputControl,
+  },
+  {
+    key: CONTROL_KEY_ZOOM,
+    label: 'zoom',
+    control: SliderControl,
+  },
+  {
+    key: CONTROL_KEY_PROJECTION,
+    label: 'projection',
+    control: SelectControl,
+    props: {
+      style: { width: '150px' },
+      options: projections,
+    },
+  },
+];
 
 /**
  * Control the center and other props of map
@@ -60,11 +90,8 @@ export default class MapComponent extends Component {
     if (node.data[CONTROL_KEY_STYLE] === undefined) {
       node.data[CONTROL_KEY_STYLE] = defaultStyle;
     }
-    if (node.data[CONTROL_KEY_LNG] === undefined) {
-      node.data[CONTROL_KEY_LNG] = 0;
-    }
-    if (node.data[CONTROL_KEY_LAT] === undefined) {
-      node.data[CONTROL_KEY_LAT] = 0;
+    if (node.data[CONTROL_KEY_LNGLAT] === undefined) {
+      node.data[CONTROL_KEY_LNGLAT] = [0, 0];
     }
     if (node.data[CONTROL_KEY_ZOOM] === undefined) {
       node.data[CONTROL_KEY_ZOOM] = defaultZoom;
@@ -74,48 +101,22 @@ export default class MapComponent extends Component {
     window.mapbox.on('zoomend', updateValues(node));
 
     // window.mapbox.jumpTo({
-    //   center: [node.data[CONTROL_KEY_LNG], node.data[CONTROL_KEY_LAT]],
+    //   center: node.data[CONTROL_KEY_LNGLAT] as LngLatLike,
     //   zoom: 10,
     // });
-    window.mapbox.setCenter([
-      node.data[CONTROL_KEY_LNG] as number,
-      node.data[CONTROL_KEY_LAT] as number,
-    ]);
+    window.mapbox.setCenter(node.data[CONTROL_KEY_LNGLAT] as LngLatLike);
     window.mapbox.setZoom(node.data[CONTROL_KEY_ZOOM] as number);
     window.mapbox.setProjection(node.data[CONTROL_KEY_PROJECTION] as string);
 
-    const projections = PROJECTIONS.map((item) => ({
-      value: item,
-      label: item,
-    }));
-    node
-      .addControl(
-        new InputControl(this.editor, CONTROL_KEY_STYLE, node, {
-          label: 'style',
-        }),
-      )
-      .addControl(
-        new InputNumberControl(this.editor!, CONTROL_KEY_LNG, node, {
-          label: 'lng',
-        }),
-      )
-      .addControl(
-        new InputNumberControl(this.editor!, CONTROL_KEY_LAT, node, {
-          label: 'lat',
-        }),
-      )
-      .addControl(
-        new SliderControl(this.editor, CONTROL_KEY_ZOOM, node, {
-          label: 'zoom',
-        }),
-      )
-      .addControl(
-        new SelectControl(this.editor, CONTROL_KEY_PROJECTION, node, {
-          label: 'projection',
-          style: { width: '150px' },
-          options: projections,
-        }),
-      );
+    mapProps.forEach(({ key, label, control: Ctrl, props = {} }) => {
+      const _ctrl = new Ctrl(this.editor!, key, node, {
+        label: label,
+        ...props,
+      });
+      const _input = new Rete.Input(key, key, objectSocket);
+      _input.addControl(_ctrl);
+      node.addInput(_input);
+    });
   }
 
   worker(node: NodeData, inputs: WorkerInputs, outputs: WorkerOutputs) {
@@ -125,7 +126,7 @@ export default class MapComponent extends Component {
     // if (window.mapbox) {
     //   console.debug('[MapComponent] fly to position');
     //   window.mapbox.flyTo({
-    //     center: [node.data[CONTROL_KEY_LNG], node.data[CONTROL_KEY_LAT]],
+    //     center: node.data[CONTROL_KEY_LNGLAT],
     //     zoom: node.data[CONTROL_KEY_ZOOM] || defaultZoom,
     //   });
     // }
@@ -134,9 +135,6 @@ export default class MapComponent extends Component {
     // window.mapbox.setStyle(node.data[CONTROL_KEY_STYLE]);
     window.mapbox.setZoom(node.data[CONTROL_KEY_ZOOM] as number);
     window.mapbox.setProjection(node.data[CONTROL_KEY_PROJECTION] as string);
-    window.mapbox.setCenter([
-      node.data[CONTROL_KEY_LNG] as number,
-      node.data[CONTROL_KEY_LAT] as number,
-    ]);
+    window.mapbox.setCenter(getPropertyValue(CONTROL_KEY_LNGLAT, node, inputs));
   }
 }
