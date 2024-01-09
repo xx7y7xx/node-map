@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Col, Modal, Row } from 'antd';
-import ReactJson from 'react-json-view';
+import JsonView from '@uiw/react-json-view';
 
 import ReactSimpleCodeEditor from './ReactSimpleCodeEditor';
 
@@ -40,12 +40,17 @@ export default function CodeEditor({
         onCancel={handleCancel}>
         <Row>
           <Col span={16}>
-            <ReactSimpleCodeEditor code={code} onChange={onChange} />
-            <br />
+            <code>{`function run(input: any) {`}</code>
+            <div style={{ marginLeft: 10 }}>
+              <ReactSimpleCodeEditor code={code} onChange={onChange} />
+            </div>
+            <code>{`}`}</code>
           </Col>
           <Col span={8}>
-            {errMsg}
-            {result && <ReactJson src={JSON.parse(result)} />}
+            <b>Error</b>: {errMsg || 'No Error'}
+            <br />
+            <b>Return result</b>:
+            {result && <JsonView value={JSON.parse(result)} />}
           </Col>
         </Row>
       </Modal>
