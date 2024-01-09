@@ -7,7 +7,7 @@ import InputControl from './InputControl';
 import { NodeData, WorkerInputs, WorkerOutputs } from 'rete/types/core/data';
 import { MapMouseEvent } from 'mapbox-gl';
 
-const KEY = 'Map Node';
+const KEY = 'Map';
 export const CONTROL_KEY_STYLE = 'inputControlStyle';
 export const CONTROL_KEY_LNG = 'inputControlLng';
 export const CONTROL_KEY_LAT = 'inputControlLat';
@@ -134,5 +134,9 @@ export default class MapComponent extends Component {
     // window.mapbox.setStyle(node.data[CONTROL_KEY_STYLE]);
     window.mapbox.setZoom(node.data[CONTROL_KEY_ZOOM] as number);
     window.mapbox.setProjection(node.data[CONTROL_KEY_PROJECTION] as string);
+    window.mapbox.setCenter([
+      node.data[CONTROL_KEY_LNG] as number,
+      node.data[CONTROL_KEY_LAT] as number,
+    ]);
   }
 }
