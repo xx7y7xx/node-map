@@ -4,6 +4,7 @@ import InputField from './components/InputField';
 type ControlInternalProps = {
   value: string;
   onChange: (value: string) => void;
+  // ... the props passing into InputField not list here
 };
 
 export default class InputControl extends Control {

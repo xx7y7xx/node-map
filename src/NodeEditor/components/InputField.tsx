@@ -1,5 +1,16 @@
 import React from 'react';
-import { Col, Input, Row } from 'antd';
+import { Col, Input, Row, Tooltip } from 'antd';
+import { QuestionCircleOutlined } from '@ant-design/icons';
+
+type InputFieldProps = {
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+  visible: boolean;
+  disabled: boolean;
+  // Show tooltip when hovering on label
+  tooltip?: string;
+};
 
 export default function InputField({
   label,
@@ -7,20 +18,20 @@ export default function InputField({
   onChange,
   visible,
   disabled,
-}: {
-  label: string;
-  value: string;
-  onChange: (value: string) => void;
-  visible: boolean;
-  disabled: boolean;
-}) {
+  tooltip,
+}: InputFieldProps) {
   if (!visible) {
     return null;
   }
   return (
     <Row style={{ margin: '4px 0px' }}>
       <Col span={12} style={{ lineHeight: '24px' }}>
-        {label}
+        {label}{' '}
+        {tooltip && (
+          <Tooltip title={tooltip}>
+            <QuestionCircleOutlined />
+          </Tooltip>
+        )}
       </Col>
       <Col span={12}>
         <Input

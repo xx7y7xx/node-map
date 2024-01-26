@@ -52,8 +52,11 @@ const mapProps = [
   },
   {
     key: CONTROL_KEY_LNGLAT,
-    label: 'lnglat',
+    label: 'lngLat',
     control: InputControl,
+    props: {
+      tooltip: 'The center of map, type is array, e.g. [103,1]',
+    },
   },
   {
     key: CONTROL_KEY_ZOOM,
@@ -113,7 +116,7 @@ export default class MapComponent extends Component {
         label: label,
         ...props,
       });
-      const _input = new Rete.Input(key, key, objectSocket);
+      const _input = new Rete.Input(key, label, objectSocket);
       _input.addControl(_ctrl);
       node.addInput(_input);
     });
