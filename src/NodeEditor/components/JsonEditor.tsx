@@ -22,7 +22,7 @@ export default function JsonEditor({
   };
   return (
     <div>
-      <Button type="primary" onClick={showModal}>
+      <Button type="primary" size="small" onClick={showModal}>
         Open JSON Editor
       </Button>
       <Modal

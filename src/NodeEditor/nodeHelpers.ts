@@ -1,4 +1,7 @@
+import Rete, { Node } from 'rete';
 import { NodeData, WorkerInputs } from 'rete/types/core/data'; // eslint-disable-line import/no-unresolved
+
+import { objectSocket } from './JsonComponent';
 
 export const convertTextField = (textField: string) => {
   const inputBoxStr = textField || '';
@@ -25,3 +28,28 @@ export const getPropertyValue = (
 
   return node.data[key];
 };
+
+export const inputControlFactory =
+  (editor: any, node: Node) =>
+  (inputItem: {
+    key: string;
+    label: string;
+    control: any;
+    defaultValue?: any;
+    props?: any;
+  }) => {
+    const { key, label, control: Ctrl, props = {} } = inputItem;
+
+    // set default value on node data
+    if (inputItem.defaultValue) {
+      node.data[key] = inputItem.defaultValue;
+    }
+
+    const ct = new Ctrl(editor!, key, node, {
+      label: label,
+      ...props,
+    });
+    const inp = new Rete.Input(key, label, objectSocket);
+    inp.addControl(ct);
+    node.addInput(inp);
+  };

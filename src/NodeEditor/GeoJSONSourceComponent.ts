@@ -1,28 +1,79 @@
 import Rete, { Node, Component } from 'rete';
-// import * as turf from '@turf/turf';
-
-import { objectSocket } from './JsonComponent';
-import { stringSocket } from './UploadCsvComponent';
-import InputControl from './InputControl';
-import SwitchControl from './SwitchControl';
-import InputNumberControl from './InputNumberControl';
-import { genSourceId } from './helpers';
+import { NodeData, WorkerInputs, WorkerOutputs } from 'rete/types/core/data';
 import {
   GeoJSONSource,
   GeoJSONSourceOptions,
   MapSourceDataEvent,
 } from 'mapbox-gl';
-import { NodeData, WorkerInputs, WorkerOutputs } from 'rete/types/core/data';
 import { FeatureCollection } from 'geojson';
+// import * as turf from '@turf/turf';
+
+import { stringSocket } from './UploadCsvComponent';
+import InputControl from './InputControl';
+import SwitchControl from './SwitchControl';
+import InputNumberControl from './InputNumberControl';
+import JsonControl from './JsonControl';
+import { genSourceId } from './helpers';
+import { getPropertyValue, inputControlFactory } from './nodeHelpers';
 
 const KEY = 'GeoJSONSource';
-const INPUT_KEY = 'json';
 const OUTPUT_KEY = 'sourceId';
 export const CONTROL_KEY_SOURCE_ID = 'controlKeySourceId';
 
 const defaultCluster = false;
 const defaultClusterMaxZoom = 14; // TODO Defaults to one zoom less than maxzoom (so that last zoom features are not clustered).
 const defaultClusterRadius = 50;
+
+// How to name the label
+// 1. map.addSource(id, source) API - https://docs.mapbox.com/mapbox-gl-js/api/map/#map#addsource
+// 2. source definition - https://docs.mapbox.com/style-spec/reference/sources/#geojson
+const geojsonSourceProps = [
+  {
+    key: CONTROL_KEY_SOURCE_ID,
+    label: 'id', // which is the good name? 'id' or 'sourceId'?
+    control: InputControl,
+    props: {
+      tooltip:
+        'The ID of the source to add. Must not conflict with existing sources. Type is string',
+    },
+  },
+  {
+    key: 'source.cluster',
+    label: 'source.cluster',
+    control: SwitchControl,
+    defaultValue: defaultCluster,
+    props: {
+      tooltip:
+        'If the data is a collection of point features, setting this to true clusters the points by radius into groups.',
+    },
+  },
+  {
+    key: 'source.clusterMaxZoom',
+    label: 'source.clusterMaxZoom',
+    defaultValue: defaultClusterMaxZoom,
+    control: InputNumberControl,
+    props: {
+      tooltip: 'Max zoom to cluster points on',
+    },
+  },
+  {
+    key: 'source.clusterRadius',
+    label: 'source.clusterRadius',
+    control: InputNumberControl,
+    defaultValue: defaultClusterRadius,
+    props: {
+      tooltip: 'Radius of each cluster when clustering points (defaults to 50)',
+    },
+  },
+  {
+    key: 'source.data',
+    label: 'source.data',
+    control: JsonControl,
+    props: {
+      tooltip: 'A URL to a GeoJSON file, or inline GeoJSON.',
+    },
+  },
+];
 
 /**
  * API - https://docs.mapbox.com/mapbox-gl-js/api/sources/#geojsonsource
@@ -36,6 +87,15 @@ const defaultClusterRadius = 50;
  *   "<CONTROL_KEY_SOURCE_ID>": "sourceId123"
  * }
  * ```
+ *
+ * The code behind this node
+ * ```js
+ * if (map.getSource(id)) {
+ *   map.getSource(id).setData(geojson)
+ * } else {
+ *   map.addSource(id, source)
+ * }
+ * ```
  */
 export default class GeoJSONSourceComponent extends Component {
   constructor() {
@@ -43,8 +103,6 @@ export default class GeoJSONSourceComponent extends Component {
   }
 
   static key = KEY;
-
-  static inputKey = INPUT_KEY;
 
   static outputKey = OUTPUT_KEY;
 
@@ -60,40 +118,10 @@ export default class GeoJSONSourceComponent extends Component {
     if (!this.nodeIdMap) this.nodeIdMap = {};
     this.nodeIdMap[node.id] = node;
 
-    if (node.data.cluster === undefined) {
-      node.data.cluster = defaultCluster;
-    }
-    if (node.data.clusterMaxZoom === undefined) {
-      node.data.clusterMaxZoom = defaultClusterMaxZoom;
-    }
-    if (node.data.clusterRadius === undefined) {
-      node.data.clusterRadius = defaultClusterRadius;
-    }
+    geojsonSourceProps.forEach(inputControlFactory(this.editor, node));
 
-    const input = new Rete.Input(INPUT_KEY, 'JSON', objectSocket);
     const output = new Rete.Output(OUTPUT_KEY, 'sourceId', stringSocket);
-
-    node
-      .addInput(input)
-      .addOutput(output)
-      .addControl(
-        new InputControl(this.editor, CONTROL_KEY_SOURCE_ID, node, {
-          label: 'sourceId',
-        }),
-      )
-      .addControl(
-        new SwitchControl(this.editor, 'cluster', node, { label: 'cluster' }),
-      )
-      .addControl(
-        new InputNumberControl(this.editor, 'clusterMaxZoom', node, {
-          label: 'clusterMaxZoom',
-        }),
-      ) // Max zoom to cluster points on
-      .addControl(
-        new InputNumberControl(this.editor, 'clusterRadius', node, {
-          label: 'clusterRadius',
-        }),
-      ); // Radius of each cluster when clustering points (defaults to 50)
+    node.addOutput(output);
 
     // Initial the source ID input box with value
     if (
@@ -134,9 +162,9 @@ export default class GeoJSONSourceComponent extends Component {
     return this.nodeIdMap[node.id].data[CONTROL_KEY_SOURCE_ID];
   }
 
-  getNodeDataByKey(node: NodeData, key: string) {
-    return this.nodeIdMap[node.id].data[key];
-  }
+  // getNodeDataByKey(node: NodeData, key: string) {
+  //   return this.nodeIdMap[node.id].data[key];
+  // }
 
   setSourceId(node: Node, val: string) {
     this.nodeIdMap[node.id].data[CONTROL_KEY_SOURCE_ID] = val;
@@ -144,9 +172,13 @@ export default class GeoJSONSourceComponent extends Component {
 
   worker(node: NodeData, inputs: WorkerInputs, outputs: WorkerOutputs) {
     console.debug('GeoJSONSourceComponent worker', node, inputs, outputs);
-    // inputs.json=[] // no data
-    // inputs.json=[[[103.8254528,1.2655414]]]
-    const geojson = inputs[INPUT_KEY][0] as FeatureCollection;
+
+    let geojson: FeatureCollection;
+    if (inputs['source.data'] && inputs['source.data'][0]) {
+      geojson = inputs['source.data'][0] as FeatureCollection;
+    } else {
+      geojson = (node.data['source.data'] as any).obj as FeatureCollection;
+    }
 
     if (!geojson) {
       // no data input, maybe link disconnect
@@ -157,10 +189,14 @@ export default class GeoJSONSourceComponent extends Component {
     console.debug('GeoJSONSourceComponent output sourceId', sourceId);
     outputs[OUTPUT_KEY] = sourceId;
 
-    this.addOrUpdateSource(geojson, node);
+    this.addOrUpdateSource(geojson, node, inputs);
   }
 
-  addOrUpdateSource(geojson: FeatureCollection, node: NodeData) {
+  addOrUpdateSource(
+    geojson: FeatureCollection,
+    node: NodeData,
+    inputs: WorkerInputs,
+  ) {
     console.debug('GeoJSONSourceComponent addOrUpdateSource', geojson, node);
     const map = window.mapbox;
 
@@ -182,20 +218,20 @@ export default class GeoJSONSourceComponent extends Component {
       // TODO maybe have performance issues when replacing whole style
       const style = map.getStyle();
       (style.sources[sourceId] as GeoJSONSourceOptions).cluster =
-        this.getNodeDataByKey(node, 'cluster');
+        getPropertyValue('source.cluster', node, inputs);
       (style.sources[sourceId] as GeoJSONSourceOptions).clusterMaxZoom =
-        this.getNodeDataByKey(node, 'clusterMaxZoom');
+        getPropertyValue('source.clusterMaxZoom', node, inputs);
       (style.sources[sourceId] as GeoJSONSourceOptions).clusterRadius =
-        this.getNodeDataByKey(node, 'clusterRadius');
+        getPropertyValue('source.clusterRadius', node, inputs);
       map.setStyle(style);
     } else {
       console.debug('GeoJSONSourceComponent source doesnt exist', sourceId);
       window.mapbox.addSource(this.getSourceId(node), {
         type: 'geojson',
         data: geojson,
-        cluster: this.getNodeDataByKey(node, 'cluster'),
-        clusterMaxZoom: this.getNodeDataByKey(node, 'clusterMaxZoom'), // Max zoom to cluster points on
-        clusterRadius: this.getNodeDataByKey(node, 'clusterRadius'), // Radius of each cluster when clustering points (defaults to 50)
+        cluster: getPropertyValue('source.cluster', node, inputs),
+        clusterMaxZoom: getPropertyValue('source.clusterMaxZoom', node, inputs), // Max zoom to cluster points on
+        clusterRadius: getPropertyValue('source.clusterRadius', node, inputs), // Radius of each cluster when clustering points (defaults to 50)
       });
     }
   }

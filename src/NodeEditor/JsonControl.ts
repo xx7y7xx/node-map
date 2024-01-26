@@ -6,6 +6,8 @@ type ControlInternalProps = {
   onChange: (value: string) => void;
 };
 
+// TODO change JsonControl to JsonEditorControl
+
 /**
  * Write JSON in textbox, store both thex original JSON text, and also the object parsed from JSON text
  * Note that the text and object may not the same when text failed to parse to a valid object, e.g. text="{"

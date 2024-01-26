@@ -32,7 +32,7 @@ export default function CodeEditor({
   };
   return (
     <div>
-      <Button type="primary" onClick={showModal}>
+      <Button type="primary" size="small" onClick={showModal}>
         Open Code Editor
       </Button>
       <Modal

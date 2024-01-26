@@ -1,4 +1,4 @@
-import Rete, { Component, Node } from 'rete';
+import { Component, Node } from 'rete';
 import { LngLatLike } from 'mapbox-gl';
 
 import SliderControl from './SliderControl';
@@ -6,8 +6,7 @@ import SelectControl from './SelectControl';
 import InputControl from './InputControl';
 import { NodeData, WorkerInputs, WorkerOutputs } from 'rete/types/core/data';
 import { MapMouseEvent } from 'mapbox-gl';
-import { objectSocket } from './JsonComponent';
-import { getPropertyValue } from './nodeHelpers';
+import { getPropertyValue, inputControlFactory } from './nodeHelpers';
 
 const KEY = 'Map';
 export const CONTROL_KEY_STYLE = 'inputControlStyle';
@@ -112,15 +111,7 @@ export default class MapComponent extends Component {
     window.mapbox.setZoom(node.data[CONTROL_KEY_ZOOM] as number);
     window.mapbox.setProjection(node.data[CONTROL_KEY_PROJECTION] as string);
 
-    mapProps.forEach(({ key, label, control: Ctrl, props = {} }) => {
-      const _ctrl = new Ctrl(this.editor!, key, node, {
-        label: label,
-        ...props,
-      });
-      const _input = new Rete.Input(key, label, objectSocket);
-      _input.addControl(_ctrl);
-      node.addInput(_input);
-    });
+    mapProps.forEach(inputControlFactory(this.editor, node));
   }
 
   worker(node: NodeData, inputs: WorkerInputs, outputs: WorkerOutputs) {

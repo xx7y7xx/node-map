@@ -120,7 +120,7 @@ const jsonNodeExample = async () => {
 
   editor.connect(
     remoteDataNode.outputs.get(RemoteDataComponent.outputKey)!,
-    geojsonSourceNode.inputs.get(GeoJSONSourceComponent.inputKey)!,
+    geojsonSourceNode.inputs.get('source.data')!,
   );
   editor.connect(
     geojsonSourceNode.outputs.get(GeoJSONSourceComponent.outputKey)!,
