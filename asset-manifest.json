@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/node-map/static/css/main.20d708fa.css",
+    "main.js": "/node-map/static/js/main.3a85e639.js",
+    "static/media/EvalCodeFaq.md": "/node-map/static/media/EvalCodeFaq.83143a9d78c1b5a61db3.md",
+    "index.html": "/node-map/index.html",
+    "main.20d708fa.css.map": "/node-map/static/css/main.20d708fa.css.map",
+    "main.3a85e639.js.map": "/node-map/static/js/main.3a85e639.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.20d708fa.css",
+    "static/js/main.3a85e639.js"
+  ]
+}
