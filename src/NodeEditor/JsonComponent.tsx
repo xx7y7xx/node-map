@@ -1,5 +1,5 @@
 import Rete, { Component, Node } from 'rete';
-import JsonControl from './JsonControl';
+import JsonEditorControl from './JsonEditorControl';
 import { NodeData, WorkerInputs, WorkerOutputs } from 'rete/types/core/data';
 
 /**
@@ -41,7 +41,7 @@ export default class JsonComponent extends Component {
       return;
     }
     node
-      .addControl(new JsonControl(this.editor, CONTROL_KEY, node))
+      .addControl(new JsonEditorControl(this.editor, CONTROL_KEY, node))
       .addOutput(new Rete.Output(OUTPUT_KEY, 'JSON', objectSocket));
   }
 

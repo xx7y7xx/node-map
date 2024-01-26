@@ -7,7 +7,7 @@ import TextControl from './TextControl';
 import { numSocket } from './NumComponent';
 import { textSocket } from './TextComponent';
 import { objectSocket } from './JsonComponent';
-import JsonControl from './JsonControl';
+import JsonEditorControl from './JsonEditorControl';
 
 export default class AddComponent extends Rete.Component {
   constructor() {
@@ -25,7 +25,7 @@ export default class AddComponent extends Rete.Component {
     inp1.addControl(new NumControl(this.editor, 'num1', node));
     inp2.addControl(new NumControl(this.editor, 'num2', node));
     inp3.addControl(new TextControl(this.editor, 'text1', node));
-    inp4.addControl(new JsonControl(this.editor, 'text1', node));
+    inp4.addControl(new JsonEditorControl(this.editor, 'text1', node));
 
     return node
       .addInput(inp1)

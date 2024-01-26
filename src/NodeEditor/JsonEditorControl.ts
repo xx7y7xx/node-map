@@ -6,8 +6,6 @@ type ControlInternalProps = {
   onChange: (value: string) => void;
 };
 
-// TODO change JsonControl to JsonEditorControl
-
 /**
  * Write JSON in textbox, store both thex original JSON text, and also the object parsed from JSON text
  * Note that the text and object may not the same when text failed to parse to a valid object, e.g. text="{"
@@ -19,7 +17,7 @@ type ControlInternalProps = {
  * }
  * ```
  */
-export default class JsonControl extends Control {
+export default class JsonEditorControl extends Control {
   static component = JsonEditor;
 
   emitter: NodeEditor;
@@ -36,7 +34,7 @@ export default class JsonControl extends Control {
     super(key);
     this.emitter = emitter;
     this.key = key;
-    this.component = JsonControl.component;
+    this.component = JsonEditorControl.component;
 
     this.props = {
       onChange: (text) => {
@@ -62,7 +60,7 @@ export default class JsonControl extends Control {
         obj = JSON.parse(text);
       } catch (err) {
         console.error(
-          '[JsonControl] Failed to parse textbox content into JSON Object!',
+          '[JsonEditorControl] Failed to parse textbox content into JSON Object!',
           err,
         );
       }

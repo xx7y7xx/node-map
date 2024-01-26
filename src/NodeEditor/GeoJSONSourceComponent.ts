@@ -12,7 +12,7 @@ import { stringSocket } from './UploadCsvComponent';
 import InputControl from './InputControl';
 import SwitchControl from './SwitchControl';
 import InputNumberControl from './InputNumberControl';
-import JsonControl from './JsonControl';
+import JsonEditorControl from './JsonEditorControl';
 import { genSourceId } from './helpers';
 import { getPropertyValue, inputControlFactory } from './nodeHelpers';
 
@@ -68,7 +68,7 @@ const geojsonSourceProps = [
   {
     key: 'source.data',
     label: 'source.data',
-    control: JsonControl,
+    control: JsonEditorControl,
     props: {
       tooltip: 'A URL to a GeoJSON file, or inline GeoJSON.',
     },
