@@ -26,8 +26,8 @@ export default class EvalCodeComponent extends Component {
       return;
     }
 
-    const input = new Rete.Input('json', 'Json', objectSocket);
-    const output = new Rete.Output('json', 'Json', objectSocket);
+    const input = new Rete.Input('json', 'JSON', objectSocket);
+    const output = new Rete.Output('json', 'JSON', objectSocket);
 
     node
       .addInput(input)
