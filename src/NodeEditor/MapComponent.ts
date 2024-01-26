@@ -44,24 +44,15 @@ const projections = PROJECTIONS.map((item) => ({
   label: item,
 }));
 
+// How to name a label, check the param name in https://docs.mapbox.com/mapbox-gl-js/api/map/#map-parameters
 const mapProps = [
   {
-    key: CONTROL_KEY_STYLE,
-    label: 'style',
-    control: InputControl,
-  },
-  {
     key: CONTROL_KEY_LNGLAT,
-    label: 'lngLat',
+    label: 'center',
     control: InputControl,
     props: {
-      tooltip: 'The center of map, type is array, e.g. [103,1]',
+      tooltip: 'The center of map, type is LngLatLike, e.g. [103,1]',
     },
-  },
-  {
-    key: CONTROL_KEY_ZOOM,
-    label: 'zoom',
-    control: SliderControl,
   },
   {
     key: CONTROL_KEY_PROJECTION,
@@ -71,6 +62,16 @@ const mapProps = [
       style: { width: '150px' },
       options: projections,
     },
+  },
+  {
+    key: CONTROL_KEY_STYLE,
+    label: 'style',
+    control: InputControl,
+  },
+  {
+    key: CONTROL_KEY_ZOOM,
+    label: 'zoom',
+    control: SliderControl,
   },
 ];
 
