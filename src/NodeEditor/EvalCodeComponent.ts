@@ -2,15 +2,15 @@ import Rete, { Node, Component } from 'rete';
 
 import { objectSocket } from './JsonComponent';
 import EvalCodeControl from './EvalCodeControl';
-import DivControl from './DivControl';
-import FaqControl from './FaqControl';
+// import DivControl from './DivControl';
+// import FaqControl from './FaqControl';
 import logger from './logger';
-import faq from './EvalCodeFaq.md';
+// import faq from './EvalCodeFaq.md';
 import { NodeData, WorkerInputs, WorkerOutputs } from 'rete/types/core/data';
 
 const KEY = 'EvalCode';
 
-const CONTROL_KEY_FAQ = 'controlKeyFaq';
+// const CONTROL_KEY_FAQ = 'controlKeyFaq';
 const CONTROL_KEY_CODE_BOX = 'controlKeyCodeBox';
 const log = logger('EvalCodeComponent');
 
@@ -32,17 +32,17 @@ export default class EvalCodeComponent extends Component {
     node
       .addInput(input)
       .addOutput(output)
-      .addControl(
-        new FaqControl(this.editor, CONTROL_KEY_FAQ, node, {
-          content: faq,
-        }),
-      )
-      .addControl(
-        new DivControl(
-          `evalScriptLabel[node${node.id}]`,
-          `Eval Script(node:${node.id})`,
-        ),
-      )
+      // .addControl(
+      //   new FaqControl(this.editor, CONTROL_KEY_FAQ, node, {
+      //     content: faq,
+      //   }),
+      // )
+      // .addControl(
+      //   new DivControl(
+      //     `evalScriptLabel[node${node.id}]`,
+      //     `Eval Script(node:${node.id})`,
+      //   ),
+      // )
       .addControl(new EvalCodeControl(this.editor, CONTROL_KEY_CODE_BOX, node));
   }
 

@@ -29,11 +29,11 @@ function Faq() {
       <Drawer
         title="FAQ"
         placement="right"
+        width={600}
         open={visible}
         onClose={() => {
           setVisible(false);
-        }}
-      >
+        }}>
         <Markdown>{content}</Markdown>
       </Drawer>
     </div>
